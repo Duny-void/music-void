@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music Void — Sincronización Musical en Tiempo Real</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-void: #050508;
+      --bg-card: #0c0c14;
+      --bg-elevated: #131320;
+      --border-subtle: rgba(139, 92, 246, 0.18);
+      --accent-primary: #8b5cf6;
+      --accent-glow: rgba(139, 92, 246, 0.35);
+      --accent-hover: #a78bfa;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-void);
+      background-image: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.12) 0%, transparent 60%);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 780px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* Header & Branding */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-orb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      box-shadow: 0 0 14px var(--accent-primary), 0 0 28px var(--accent-glow);
+      animation: pulseOrb 3s infinite ease-in-out;
+    }
+
+    @keyframes pulseOrb {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+
+    .brand h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ffffff, #c4b5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .status-pills {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+    }
+
+    .pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+    }
+
+    .dot-live {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    /* Cards & Controls */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 1.1rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    }
+
+    .row {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 180px;
+      background: var(--bg-elevated);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      padding: 0.7rem 0.95rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+    }
+
+    button {
+      background: var(--accent-primary);
+      color: #fff;
+      border: none;
+      padding: 0.7rem 1.1rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+
+    button.secondary {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+    }
+
+    button.secondary:hover {
+      background: rgba(139, 92, 246, 0.15);
+      border-color: var(--accent-primary);
+    }
+
+    /* Video Wrapper */
+    .player-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+
+    #yt-player {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Overlay para desbloquear Autoplay del navegador */
+    .autoplay-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 5, 8, 0.86);
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.85rem;
+      z-index: 10;
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .autoplay-overlay.hidden {
+      display: none;
+    }
+
+    /* Custom Control Bar */
+    .controls-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-top: 1rem;
+    }
+
+    .timeline-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--bg-elevated);
+      border-radius: 999px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      box-shadow: 0 0 10px var(--accent-primary);
+      cursor: pointer;
+    }
+
+    .actions-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .transport-btns {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .volume-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 170px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--accent-primary);
+      color: var(--text-main);
+      padding: 0.65rem 1rem;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.25s ease;
+      pointer-events: none;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+      .actions-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .volume-group {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-orb"></div>
+        <h1>Music Void</h1>
+      </div>
+      <div class="status-pills">
+        <div class="pill">
+          <span class="dot-live"></span>
+          <span id="listener-count">1 en la sala</span>
+        </div>
+        <div class="pill" id="ping-pill">Ping: -- ms</div>
+      </div>
+    </header>
+
+    <!-- Gestión de Sala Privada -->
+    <section class="card">
+      <div class="row">
+        <input type="text" id="room-input" placeholder="Código de sala (ej. VOID-99)" maxlength="20" />
+        <button id="join-btn" class="secondary">Cambiar Sala</button>
+        <button id="share-btn">Copiar Link de Invitación</button>
+      </div>
+    </section>
+
+    <!-- Selector de Canción / Video de YouTube -->
+    <section class="card">
+      <div class="row">
+        <input type="text" id="youtube-input" placeholder="Pega un link de YouTube o ID de video (ej. dQw4w9WgXcQ)..." />
+        <button id="load-track-btn">Cargar en la Sala</button>
+      </div>
+    </section>
+
+    <!-- Reproductor + Controles Sincronizados -->
+    <section class="card">
+      <div class="player-wrapper">
+        <div id="yt-player"></div>
+        <div id="autoplay-overlay" class="autoplay-overlay">
+          <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 340px;">
+            Haz clic para conectar el motor de audio de tu navegador con la sala en tiempo real.
+          </p>
+          <button id="unlock-audio-btn">Entrar al Void (Activar Audio)</button>
+        </div>
+      </div>
+
+      <div class="controls-bar">
+        <div class="timeline-row">
+          <span id="current-time">00:00</span>
+          <input type="range" id="seek-bar" min="0" max="100" step="0.1" value="0" />
+          <span id="total-time">00:00</span>
+        </div>
+
+        <div class="actions-row">
+          <div class="transport-btns">
+            <button id="play-btn">Reproducir</button>
+            <button id="pause-btn" class="secondary">Pausar</button>
+            <button id="resync-btn" class="secondary">Resincronizar</button>
+          </div>
+
+          <div class="volume-group">
+            <span>Vol</span>
+            <input type="range" id="volume-bar" min="0" max="100" value="80" />
+            <span id="volume-label">80%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast">Enlace copiado al portapapeles</div>
+
+  <!-- Socket.io Client & YouTube IFrame API -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <script>
+    const socket = io();
+
+    // Estado local de sincronización
+    let player = null;
+    let isPlayerReady = false;
+    let audioUnlocked = false;
+    let currentRoomId = '';
+    let serverClockOffset = 0; // Diferencia (ms) entre el reloj del servidor y este dispositivo
+    let isDraggingSeek = false;
+
+    // Prevención de bucles infinitos entre clientes
+    let isRemoteAction = false;
+    let remoteCooldownTimer = null;
+    let pendingRoomState = null;
+
+    // Referencias DOM
+    const roomInput = document.getElementById('room-input');
+    const joinBtn = document.getElementById('join-btn');
+    const shareBtn = document.getElementById('share-btn');
+    const youtubeInput = document.getElementById('youtube-input');
+    const loadTrackBtn = document.getElementById('load-track-btn');
+    const listenerCountEl = document.getElementById('listener-count');
+    const pingPillEl = document.getElementById('ping-pill');
+    const seekBar = document.getElementById('seek-bar');
+    const currentTimeEl = document.getElementById('current-time');
+    const totalTimeEl = document.getElementById('total-time');
+    const playBtn = document.getElementById('play-btn');
+    const pauseBtn = document.getElementById('pause-btn');
+    const resyncBtn = document.getElementById('resync-btn');
+    const volumeBar = document.getElementById('volume-bar');
+    const volumeLabel = document.getElementById('volume-label');
+    const autoplayOverlay = document.getElementById('autoplay-overlay');
+    const unlockAudioBtn = document.getElementById('unlock-audio-btn');
+    const toastEl = document.getElementById('toast');
+
+    // Utilidad para activar el flag de acción remota con ventana de seguridad
+    function lockRemoteAction(durationMs = 650) {
+      isRemoteAction = true;
+      if (remoteCooldownTimer) clearTimeout(remoteCooldownTimer);
+      remoteCooldownTimer = setTimeout(() => {
+        isRemoteAction = false;
+      }, durationMs);
+    }
+
+    // Estima la hora exacta actual del servidor en milisegundos
+    function getServerNow() {
+      return Date.now() + serverClockOffset;
+    }
+
+    // Calcula el segundo exacto sumando la latencia de red transcurrida desde que el servidor emitió el evento
+    function computeCompensatedTime(trackTime, serverTimestamp, isPlaying) {
+      if (!isPlaying || !serverTimestamp) return trackTime;
+      const networkDelaySec = Math.max(0, (getServerNow() - serverTimestamp) / 1000);
+      return trackTime + networkDelaySec;
+    }
+
+    // Calibración periódica de reloj y medición de Ping (RTT)
+    function calibrateClock() {
+      const sentAt = Date.now();
+      socket.emit('sync_clock', sentAt, ({ clientSentAt, serverTime }) => {
+        const receivedAt = Date.now();
+        const rtt = receivedAt - clientSentAt;
+        const oneWayLatency = rtt / 2;
+        serverClockOffset = (serverTime + oneWayLatency) - receivedAt;
+        pingPillEl.textContent = `Ping: ${Math.round(rtt)} ms`;
+      });
+    }
+
+    setInterval(calibrateClock, 5000);
+    socket.on('connect', () => {
+      calibrateClock();
+      initRoomFromUrl();
+    });
+
+    // Determinar código de sala desde ?room=XXXX o generar uno aleatorio
+    function initRoomFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      let room = params.get('room');
+      if (!room) {
+        room = 'VOID-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+        window.history.replaceState({}, '', `?room=${room}`);
+      }
+      currentRoomId = room.toUpperCase();
+      roomInput.value = currentRoomId;
+      socket.emit('join_room', currentRoomId);
+    }
+
+    // Extractor universal de ID de YouTube
+    function extractYouTubeId(input) {
+      const clean = input.trim();
+      if (/^[a-zA-Z0-9_-]{11}$/.test(clean)) return clean;
+      const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+      const match = clean.match(regex);
+      return match ? match[1] : null;
+    }
+
+    // Inicialización de YouTube IFrame API
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('yt-player', {
+        height: '100%',
+        width: '100%',
+        videoId: 'jfKfPfyJRdk',
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          rel: 0,
+          modestbranding: 1,
+          playsinline: 1,
+          disablekb: 1
+        },
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady() {
+      isPlayerReady = true;
+      if (pendingRoomState) {
+        applyRoomState(pendingRoomState);
+        pendingRoomState = null;
+      }
+      setInterval(updateTimelineUI, 250);
+    }
+
+    // Detecta cambios en el reproductor (solo emite al servidor si fue acción local del usuario)
+    function onPlayerStateChange(event) {
+      if (isRemoteAction || !audioUnlocked) return;
+
+      const currentTime = player.getCurrentTime() || 0;
+      if (event.data === YT.PlayerState.PLAYING) {
+        socket.emit('play', { trackTime: currentTime });
+      } else if (event.data === YT.PlayerState.PAUSED) {
+        socket.emit('pause', { trackTime: currentTime });
+      }
+    }
+
+    // Aplicar estado completo de la sala
+    function applyRoomState(state) {
+      if (!isPlayerReady) {
+        pendingRoomState = state;
+        return;
+      }
+
+      lockRemoteAction(800);
+      const targetTime = computeCompensatedTime(state.trackTime, state.serverTimestamp, state.isPlaying);
+
+      const currentVideoUrl = player.getVideoUrl() || '';
+      const currentId = extractYouTubeId(currentVideoUrl);
+
+      if (currentId !== state.videoId) {
+        if (state.isPlaying && audioUnlocked) {
+          player.loadVideoById({ videoId: state.videoId, startSeconds: targetTime });
+        } else {
+          player.cueVideoById({ videoId: state.videoId, startSeconds: targetTime });
+        }
+      } else {
+        player.seekTo(targetTime, true);
+        if (state.isPlaying && audioUnlocked) {
+          player.playVideo();
+        } else {
+          player.pauseVideo();
+        }
+      }
+
+      if (typeof state.volume === 'number') {
+        player.setVolume(state.volume);
+        volumeBar.value = state.volume;
+        volumeLabel.textContent = `${state.volume}%`;
+      }
+    }
+
+    // Listeners de eventos Socket.io
+    socket.on('room_state', (state) => {
+      applyRoomState(state);
+    });
+
+    socket.on('play', ({ trackTime, serverTimestamp }) => {
+      if (!isPlayerReady) return;
+      lockRemoteAction(650);
+      const targetTime = computeCompensatedTime(trackTime, serverTimestamp, true);
+      if (Math.abs(player.getCurrentTime() - targetTime) > 0.25) {
+        player.seekTo(targetTime, true);
+      }
+      if (audioUnlocked) player.playVideo();
+    });
+
+    socket.on('pause', ({ trackTime }) => {
+      if (!isPlayerReady) return;
+      lockRemoteAction(650);
+      player.pauseVideo();
+      if (Math.abs(player.getCurrentTime() - trackTime) > 0.25) {
+        player.seekTo(trackTime, true);
+      }
+    });
+
+    socket.on('seek', ({ trackTime, isPlaying, serverTimestamp }) => {
+      if (!isPlayerReady) return;
+      lockRemoteAction(700);
+      const targetTime = computeCompensatedTime(trackTime, serverTimestamp, isPlaying);
+      player.seekTo(targetTime, true);
+      if (isPlaying && audioUnlocked) {
+        player.playVideo();
+      } else {
+        player.pauseVideo();
+      }
+    });
+
+    socket.on('change_track', ({ videoId, trackTime, isPlaying, serverTimestamp }) => {
+      if (!isPlayerReady) return;
+      lockRemoteAction(900);
+      const targetTime = computeCompensatedTime(trackTime, serverTimestamp, isPlaying);
+      if (isPlaying && audioUnlocked) {
+        player.loadVideoById({ videoId, startSeconds: targetTime });
+      } else {
+        player.cueVideoById({ videoId, startSeconds: targetTime });
+      }
+    });
+
+    socket.on('change_volume', ({ volume }) => {
+      if (!isPlayerReady) return;
+      player.setVolume(volume);
+      volumeBar.value = volume;
+      volumeLabel.textContent = `${volume}%`;
+    });
+
+    socket.on('listener_count', ({ count }) => {
+      listenerCountEl.textContent = count === 1 ? '1 en la sala' : `${count} en la sala`;
+    });
+
+    // Interacciones de la Interfaz (UI)
+    unlockAudioBtn.addEventListener('click', () => {
+      audioUnlocked = true;
+      autoplayOverlay.classList.add('hidden');
+      socket.emit('request_sync');
+    });
+
+    joinBtn.addEventListener('click', () => {
+      const code = roomInput.value.trim().toUpperCase();
+      if (!code) return;
+      currentRoomId = code;
+      window.history.replaceState({}, '', `?room=${currentRoomId}`);
+      socket.emit('join_room', currentRoomId);
+      showToast(`Conectado a la sala ${currentRoomId}`);
+    });
+
+    shareBtn.addEventListener('click', () => {
+      const shareUrl = `${window.location.origin}/?room=${currentRoomId}`;
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        showToast('Enlace de invitación copiado');
+      });
+    });
+
+    loadTrackBtn.addEventListener('click', () => {
+      const videoId = extractYouTubeId(youtubeInput.value);
+      if (!videoId) {
+        showToast('URL o ID de YouTube no válido');
+        return;
+      }
+      socket.emit('change_track', { videoId });
+      youtubeInput.value = '';
+    });
+
+    playBtn.addEventListener('click', () => {
+      if (!isPlayerReady) return;
+      const nowTime = player.getCurrentTime() || 0;
+      lockRemoteAction(500);
+      player.playVideo();
+      socket.emit('play', { trackTime: nowTime });
+    });
+
+    pauseBtn.addEventListener('click', () => {
+      if (!isPlayerReady) return;
+      const nowTime = player.getCurrentTime() || 0;
+      lockRemoteAction(500);
+      player.pauseVideo();
+      socket.emit('pause', { trackTime: nowTime });
+    });
+
+    resyncBtn.addEventListener('click', () => {
+      calibrateClock();
+      socket.emit('request_sync');
+      showToast('Sincronizado con el reloj del servidor');
+    });
+
+    seekBar.addEventListener('input', () => {
+      isDraggingSeek = true;
+      const duration = player ? player.getDuration() : 0;
+      const previewTime = (seekBar.value / 100) * duration;
+      currentTimeEl.textContent = formatTime(previewTime);
+    });
+
+    seekBar.addEventListener('change', () => {
+      if (!isPlayerReady) return;
+      const duration = player.getDuration() || 0;
+      const newTime = (seekBar.value / 100) * duration;
+      const currentlyPlaying = player.getPlayerState() === YT.PlayerState.PLAYING;
+
+      lockRemoteAction(650);
+      player.seekTo(newTime, true);
+      socket.emit('seek', { trackTime: newTime, isPlaying: currentlyPlaying });
+      isDraggingSeek = false;
+    });
+
+    volumeBar.addEventListener('input', () => {
+      const vol = Number(volumeBar.value);
+      volumeLabel.textContent = `${vol}%`;
+      if (isPlayerReady) player.setVolume(vol);
+      socket.emit('change_volume', { volume: vol });
+    });
+
+    function updateTimelineUI() {
+      if (!isPlayerReady || isDraggingSeek || typeof player.getDuration !== 'function') return;
+      const duration = player.getDuration() || 0;
+      const current = player.getCurrentTime() || 0;
+      if (duration > 0) {
+        seekBar.value = ((current / duration) * 100).toFixed(2);
+        currentTimeEl.textContent = formatTime(current);
+        totalTimeEl.textContent = formatTime(duration);
+      }
+    }
+
+    function formatTime(sec) {
+      const s = Math.max(0, Math.floor(sec));
+      const mins = Math.floor(s / 60);
+      const rem = s % 60;
+      return `${String(mins).padStart(2, '0')}:${String(rem).padStart(2, '0')}`;
+    }
+
+    function showToast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      setTimeout(() => toastEl.classList.remove('show'), 2600);
+    }
+  </script>
+</body>
+</html>
