@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Music Void — Sincronización Musical en Tiempo Real</title>
+  <title>Music Void — Escucha Sincronizada en Tiempo Real</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-void: #050508;
-      --bg-card: #0c0c14;
-      --bg-elevated: #131320;
+      --bg-card: #0b0b12;
+      --bg-elevated: #12121e;
+      --bg-hover: #19192a;
       --border-subtle: rgba(139, 92, 246, 0.18);
       --accent-primary: #8b5cf6;
       --accent-glow: rgba(139, 92, 246, 0.35);
@@ -20,6 +21,7 @@
       --text-muted: #9ca3af;
       --text-dim: #6b7280;
       --success: #10b981;
+      --danger: #ef4444;
     }
 
     * {
@@ -30,31 +32,31 @@
 
     body {
       background-color: var(--bg-void);
-      background-image: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.12) 0%, transparent 60%);
+      background-image: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.12) 0%, transparent 65%);
       color: var(--text-main);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1.5rem 1rem 3rem;
+      padding: 1.25rem 1rem 2.5rem;
     }
 
-    .container {
+    .app-shell {
       width: 100%;
-      max-width: 780px;
+      max-width: 1180px;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.1rem;
     }
 
-    /* Header & Branding */
+    /* Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 0.85rem;
       padding-bottom: 0.75rem;
       border-bottom: 1px solid var(--border-subtle);
     }
@@ -66,8 +68,8 @@
     }
 
     .brand-orb {
-      width: 14px;
-      height: 14px;
+      width: 13px;
+      height: 13px;
       border-radius: 50%;
       background: var(--accent-primary);
       box-shadow: 0 0 14px var(--accent-primary), 0 0 28px var(--accent-glow);
@@ -75,12 +77,12 @@
     }
 
     @keyframes pulseOrb {
-      0%, 100% { transform: scale(1); opacity: 0.9; }
-      50% { transform: scale(1.2); opacity: 1; }
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.22); opacity: 1; }
     }
 
     .brand h1 {
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -89,12 +91,11 @@
       -webkit-text-fill-color: transparent;
     }
 
-    .status-pills {
+    .header-right {
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
+      flex-wrap: wrap;
     }
 
     .pill {
@@ -105,6 +106,8 @@
       display: flex;
       align-items: center;
       gap: 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
       color: var(--text-muted);
     }
 
@@ -116,30 +119,43 @@
       box-shadow: 0 0 8px var(--success);
     }
 
-    /* Cards & Controls */
+    /* Main Grid Layout */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 1.1rem;
+      align-items: start;
+    }
+
+    .col-left, .col-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 14px;
-      padding: 1.1rem;
+      padding: 1rem;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
     }
 
     .row {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.55rem;
       flex-wrap: wrap;
     }
 
     input[type="text"] {
       flex: 1;
-      min-width: 180px;
+      min-width: 140px;
       background: var(--bg-elevated);
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--text-main);
-      padding: 0.7rem 0.95rem;
-      border-radius: 10px;
-      font-size: 0.9rem;
+      padding: 0.62rem 0.85rem;
+      border-radius: 9px;
+      font-size: 0.86rem;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -153,22 +169,22 @@
       background: var(--accent-primary);
       color: #fff;
       border: none;
-      padding: 0.7rem 1.1rem;
-      border-radius: 10px;
-      font-size: 0.88rem;
+      padding: 0.62rem 0.95rem;
+      border-radius: 9px;
+      font-size: 0.84rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
       white-space: nowrap;
     }
 
     button:hover {
       background: var(--accent-hover);
-      box-shadow: 0 0 16px var(--accent-glow);
+      box-shadow: 0 0 14px var(--accent-glow);
     }
 
     button.secondary {
@@ -178,40 +194,131 @@
     }
 
     button.secondary:hover {
-      background: rgba(139, 92, 246, 0.15);
+      background: rgba(139, 92, 246, 0.16);
       border-color: var(--accent-primary);
     }
 
-    /* Video Wrapper */
+    button.sm {
+      padding: 0.4rem 0.65rem;
+      font-size: 0.76rem;
+      border-radius: 7px;
+    }
+
+    /* Buscador Integrado de YouTube */
+    .search-results {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 290px;
+      overflow-y: auto;
+      padding-right: 0.25rem;
+    }
+
+    .search-results.empty {
+      display: none;
+    }
+
+    .search-item {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: var(--bg-elevated);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.5rem;
+      border-radius: 10px;
+      transition: background 0.15s;
+    }
+
+    .search-item:hover {
+      background: var(--bg-hover);
+    }
+
+    .search-thumb {
+      width: 68px;
+      height: 40px;
+      border-radius: 6px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #000;
+    }
+
+    .search-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .search-title {
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .search-sub {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      margin-top: 0.1rem;
+    }
+
+    .search-actions {
+      display: flex;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    /* Video Player + Floating Reactions */
     .player-wrapper {
       position: relative;
       width: 100%;
-      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      padding-top: 56.25%;
       background: #000;
-      border-radius: 12px;
+      border-radius: 11px;
       overflow: hidden;
       border: 1px solid var(--border-subtle);
     }
 
     #yt-player {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
     }
 
-    /* Overlay para desbloquear Autoplay del navegador */
+    .reactions-stage {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 8;
+    }
+
+    .floating-emoji {
+      position: absolute;
+      bottom: 12px;
+      font-size: 1.75rem;
+      animation: floatUp 2.4s ease-out forwards;
+      filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6));
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.7); opacity: 0; }
+      15% { transform: translateY(-20px) scale(1.1); opacity: 1; }
+      100% { transform: translateY(-220px) scale(0.95); opacity: 0; }
+    }
+
     .autoplay-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(5, 5, 8, 0.86);
+      background: rgba(5, 5, 8, 0.88);
       backdrop-filter: blur(6px);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.85rem;
+      gap: 0.8rem;
       z-index: 10;
       text-align: center;
       padding: 1.5rem;
@@ -221,20 +328,52 @@
       display: none;
     }
 
-    /* Custom Control Bar */
+    .now-playing-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.8rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .now-playing-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .reaction-bar {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .reaction-btn {
+      background: var(--bg-elevated);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      padding: 0.3rem 0.5rem;
+      font-size: 0.95rem;
+      border-radius: 8px;
+    }
+
+    /* Controls Bar */
     .controls-bar {
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
-      margin-top: 1rem;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
     }
 
     .timeline-row {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.65rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
     }
 
@@ -252,11 +391,11 @@
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 14px;
-      height: 14px;
+      width: 13px;
+      height: 13px;
       border-radius: 50%;
       background: var(--accent-primary);
-      box-shadow: 0 0 10px var(--accent-primary);
+      box-shadow: 0 0 8px var(--accent-primary);
       cursor: pointer;
     }
 
@@ -265,22 +404,111 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 0.6rem;
     }
 
     .transport-btns {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
+      flex-wrap: wrap;
     }
 
     .volume-group {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      width: 170px;
-      font-size: 0.82rem;
+      gap: 0.45rem;
+      width: 155px;
+      font-size: 0.78rem;
       color: var(--text-muted);
+    }
+
+    /* Columna Derecha: Fila de Reproducción & Chat */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.7rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .queue-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      max-height: 230px;
+      overflow-y: auto;
+    }
+
+    .queue-empty {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      text-align: center;
+      padding: 1.1rem 0.5rem;
+    }
+
+    .queue-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--bg-elevated);
+      padding: 0.45rem 0.6rem;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .queue-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .queue-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .queue-sub {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    /* Chat */
+    .chat-messages {
+      height: 240px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      padding: 0.5rem;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 9px;
+      margin-bottom: 0.65rem;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .chat-msg {
+      font-size: 0.81rem;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .chat-user {
+      font-weight: 600;
+      color: var(--accent-hover);
+      margin-right: 0.35rem;
+    }
+
+    .chat-time {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      margin-left: 0.35rem;
     }
 
     .toast {
@@ -290,13 +518,14 @@
       background: var(--bg-elevated);
       border: 1px solid var(--accent-primary);
       color: var(--text-main);
-      padding: 0.65rem 1rem;
+      padding: 0.6rem 0.95rem;
       border-radius: 10px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       opacity: 0;
       transform: translateY(10px);
       transition: all 0.25s ease;
       pointer-events: none;
+      z-index: 50;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
     }
 
@@ -305,27 +534,25 @@
       transform: translateY(0);
     }
 
-    @media (max-width: 600px) {
-      .actions-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .volume-group {
-        width: 100%;
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <div class="app-shell">
     <!-- Header -->
     <header>
       <div class="brand">
         <div class="brand-orb"></div>
         <h1>Music Void</h1>
       </div>
-      <div class="status-pills">
+
+      <div class="header-right">
+        <input type="text" id="username-input" placeholder="Tu alias" style="max-width: 130px; padding: 0.38rem 0.65rem; font-size: 0.78rem;" />
         <div class="pill">
           <span class="dot-live"></span>
           <span id="listener-count">1 en la sala</span>
@@ -334,102 +561,165 @@
       </div>
     </header>
 
-    <!-- Gestión de Sala Privada -->
-    <section class="card">
-      <div class="row">
-        <input type="text" id="room-input" placeholder="Código de sala (ej. VOID-99)" maxlength="20" />
-        <button id="join-btn" class="secondary">Cambiar Sala</button>
-        <button id="share-btn">Copiar Link de Invitación</button>
-      </div>
-    </section>
+    <div class="main-grid">
+      <!-- COLUMNA IZQUIERDA: Sala, Buscador Integrado y Reproductor -->
+      <div class="col-left">
+        <!-- Sala Privada -->
+        <section class="card">
+          <div class="row">
+            <input type="text" id="room-input" placeholder="Código de sala (ej. VOID-99)" maxlength="20" />
+            <button id="join-btn" class="secondary">Cambiar Sala</button>
+            <button id="share-btn">Copiar Link de Invitación</button>
+          </div>
+        </section>
 
-    <!-- Selector de Canción / Video de YouTube -->
-    <section class="card">
-      <div class="row">
-        <input type="text" id="youtube-input" placeholder="Pega un link de YouTube o ID de video (ej. dQw4w9WgXcQ)..." />
-        <button id="load-track-btn">Cargar en la Sala</button>
-      </div>
-    </section>
+        <!-- Buscador de YouTube Integrado + Soporte de URL directa -->
+        <section class="card">
+          <div class="row">
+            <input type="text" id="search-input" placeholder="Busca una canción en YouTube o pega un link directo..." />
+            <button id="search-btn">Buscar / Cargar</button>
+            <button id="close-search-btn" class="secondary" style="display: none;">Cerrar</button>
+          </div>
+          <div id="search-results" class="search-results empty"></div>
+        </section>
 
-    <!-- Reproductor + Controles Sincronizados -->
-    <section class="card">
-      <div class="player-wrapper">
-        <div id="yt-player"></div>
-        <div id="autoplay-overlay" class="autoplay-overlay">
-          <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 340px;">
-            Haz clic para conectar el motor de audio de tu navegador con la sala en tiempo real.
-          </p>
-          <button id="unlock-audio-btn">Entrar al Void (Activar Audio)</button>
-        </div>
-      </div>
-
-      <div class="controls-bar">
-        <div class="timeline-row">
-          <span id="current-time">00:00</span>
-          <input type="range" id="seek-bar" min="0" max="100" step="0.1" value="0" />
-          <span id="total-time">00:00</span>
-        </div>
-
-        <div class="actions-row">
-          <div class="transport-btns">
-            <button id="play-btn">Reproducir</button>
-            <button id="pause-btn" class="secondary">Pausar</button>
-            <button id="resync-btn" class="secondary">Resincronizar</button>
+        <!-- Reproductor Principal -->
+        <section class="card">
+          <div class="player-wrapper">
+            <div id="yt-player"></div>
+            <div id="reactions-stage" class="reactions-stage"></div>
+            <div id="autoplay-overlay" class="autoplay-overlay">
+              <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 340px;">
+                Haz clic para conectar el motor de audio de tu navegador con la sala en tiempo real.
+              </p>
+              <button id="unlock-audio-btn">Entrar al Void (Activar Audio)</button>
+            </div>
           </div>
 
-          <div class="volume-group">
-            <span>Vol</span>
-            <input type="range" id="volume-bar" min="0" max="100" value="80" />
-            <span id="volume-label">80%</span>
+          <div class="now-playing-banner">
+            <div class="now-playing-title" id="now-playing-title">Cargando pista...</div>
+            <div class="reaction-bar">
+              <button class="reaction-btn" data-emoji="🔥">🔥</button>
+              <button class="reaction-btn" data-emoji="💜">💜</button>
+              <button class="reaction-btn" data-emoji="🎧">🎧</button>
+              <button class="reaction-btn" data-emoji="⚡">⚡</button>
+              <button class="reaction-btn" data-emoji="✨">✨</button>
+            </div>
           </div>
-        </div>
+
+          <div class="controls-bar">
+            <div class="timeline-row">
+              <span id="current-time">00:00</span>
+              <input type="range" id="seek-bar" min="0" max="100" step="0.1" value="0" />
+              <span id="total-time">00:00</span>
+            </div>
+
+            <div class="actions-row">
+              <div class="transport-btns">
+                <button id="play-btn">Reproducir</button>
+                <button id="pause-btn" class="secondary">Pausar</button>
+                <button id="next-btn" class="secondary">Siguiente ⏭</button>
+                <button id="resync-btn" class="secondary">Resincronizar</button>
+              </div>
+
+              <div class="volume-group">
+                <span>Vol</span>
+                <input type="range" id="volume-bar" min="0" max="100" value="80" />
+                <span id="volume-label">80%</span>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
+
+      <!-- COLUMNA DERECHA: Fila de Reproducción & Chat -->
+      <div class="col-right">
+        <!-- Playlist / Fila Colaborativa -->
+        <section class="card">
+          <div class="section-header">
+            <span>Fila de Reproducción</span>
+            <span id="queue-count">0 pistas</span>
+          </div>
+          <div id="queue-list" class="queue-list">
+            <div class="queue-empty">La fila está vacía. Busca una canción para añadirla.</div>
+          </div>
+        </section>
+
+        <!-- Chat en Tiempo Real -->
+        <section class="card">
+          <div class="section-header">
+            <span>Chat de la Sala</span>
+          </div>
+          <div id="chat-messages" class="chat-messages"></div>
+          <form id="chat-form" class="row">
+            <input type="text" id="chat-input" placeholder="Escribe un mensaje..." maxlength="280" autocomplete="off" />
+            <button type="submit">Enviar</button>
+          </form>
+        </section>
+      </div>
+    </div>
   </div>
 
-  <div id="toast" class="toast">Enlace copiado al portapapeles</div>
+  <div id="toast" class="toast">Listo</div>
 
-  <!-- Socket.io Client & YouTube IFrame API -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://www.youtube.com/iframe_api"></script>
 
   <script>
     const socket = io();
 
-    // Estado local de sincronización
+    // Estado de sincronización
     let player = null;
     let isPlayerReady = false;
     let audioUnlocked = false;
     let currentRoomId = '';
-    let serverClockOffset = 0; // Diferencia (ms) entre el reloj del servidor y este dispositivo
+    let currentVideoId = 'jfKfPfyJRdk';
+    let serverClockOffset = 0;
     let isDraggingSeek = false;
-
-    // Prevención de bucles infinitos entre clientes
     let isRemoteAction = false;
     let remoteCooldownTimer = null;
     let pendingRoomState = null;
 
     // Referencias DOM
+    const usernameInput = document.getElementById('username-input');
     const roomInput = document.getElementById('room-input');
     const joinBtn = document.getElementById('join-btn');
     const shareBtn = document.getElementById('share-btn');
-    const youtubeInput = document.getElementById('youtube-input');
-    const loadTrackBtn = document.getElementById('load-track-btn');
+    const searchInput = document.getElementById('search-input');
+    const searchBtn = document.getElementById('search-btn');
+    const closeSearchBtn = document.getElementById('close-search-btn');
+    const searchResultsEl = document.getElementById('search-results');
     const listenerCountEl = document.getElementById('listener-count');
     const pingPillEl = document.getElementById('ping-pill');
+    const nowPlayingTitleEl = document.getElementById('now-playing-title');
     const seekBar = document.getElementById('seek-bar');
     const currentTimeEl = document.getElementById('current-time');
     const totalTimeEl = document.getElementById('total-time');
     const playBtn = document.getElementById('play-btn');
     const pauseBtn = document.getElementById('pause-btn');
+    const nextBtn = document.getElementById('next-btn');
     const resyncBtn = document.getElementById('resync-btn');
     const volumeBar = document.getElementById('volume-bar');
     const volumeLabel = document.getElementById('volume-label');
     const autoplayOverlay = document.getElementById('autoplay-overlay');
     const unlockAudioBtn = document.getElementById('unlock-audio-btn');
+    const reactionsStage = document.getElementById('reactions-stage');
+    const queueListEl = document.getElementById('queue-list');
+    const queueCountEl = document.getElementById('queue-count');
+    const chatMessagesEl = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
     const toastEl = document.getElementById('toast');
 
-    // Utilidad para activar el flag de acción remota con ventana de seguridad
+    // Alias de usuario persistente en localStorage
+    const savedName = localStorage.getItem('mv_username') || `Void-${Math.floor(100 + Math.random() * 900)}`;
+    usernameInput.value = savedName;
+    usernameInput.addEventListener('change', () => {
+      const clean = usernameInput.value.trim().slice(0, 22) || savedName;
+      usernameInput.value = clean;
+      localStorage.setItem('mv_username', clean);
+    });
+
     function lockRemoteAction(durationMs = 650) {
       isRemoteAction = true;
       if (remoteCooldownTimer) clearTimeout(remoteCooldownTimer);
@@ -438,19 +728,16 @@
       }, durationMs);
     }
 
-    // Estima la hora exacta actual del servidor en milisegundos
     function getServerNow() {
       return Date.now() + serverClockOffset;
     }
 
-    // Calcula el segundo exacto sumando la latencia de red transcurrida desde que el servidor emitió el evento
     function computeCompensatedTime(trackTime, serverTimestamp, isPlaying) {
       if (!isPlaying || !serverTimestamp) return trackTime;
       const networkDelaySec = Math.max(0, (getServerNow() - serverTimestamp) / 1000);
       return trackTime + networkDelaySec;
     }
 
-    // Calibración periódica de reloj y medición de Ping (RTT)
     function calibrateClock() {
       const sentAt = Date.now();
       socket.emit('sync_clock', sentAt, ({ clientSentAt, serverTime }) => {
@@ -468,7 +755,6 @@
       initRoomFromUrl();
     });
 
-    // Determinar código de sala desde ?room=XXXX o generar uno aleatorio
     function initRoomFromUrl() {
       const params = new URLSearchParams(window.location.search);
       let room = params.get('room');
@@ -478,24 +764,23 @@
       }
       currentRoomId = room.toUpperCase();
       roomInput.value = currentRoomId;
-      socket.emit('join_room', currentRoomId);
+      socket.emit('join_room', { roomId: currentRoomId, username: usernameInput.value });
     }
 
-    // Extractor universal de ID de YouTube
     function extractYouTubeId(input) {
-      const clean = input.trim();
+      const clean = (input || '').trim();
       if (/^[a-zA-Z0-9_-]{11}$/.test(clean)) return clean;
       const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
       const match = clean.match(regex);
       return match ? match[1] : null;
     }
 
-    // Inicialización de YouTube IFrame API
+    // YouTube IFrame API
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('yt-player', {
         height: '100%',
         width: '100%',
-        videoId: 'jfKfPfyJRdk',
+        videoId: currentVideoId,
         playerVars: {
           autoplay: 0,
           controls: 0,
@@ -520,8 +805,11 @@
       setInterval(updateTimelineUI, 250);
     }
 
-    // Detecta cambios en el reproductor (solo emite al servidor si fue acción local del usuario)
     function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.ENDED) {
+        socket.emit('track_ended', { endedVideoId: currentVideoId });
+        return;
+      }
       if (isRemoteAction || !audioUnlocked) return;
 
       const currentTime = player.getCurrentTime() || 0;
@@ -532,7 +820,6 @@
       }
     }
 
-    // Aplicar estado completo de la sala
     function applyRoomState(state) {
       if (!isPlayerReady) {
         pendingRoomState = state;
@@ -540,16 +827,18 @@
       }
 
       lockRemoteAction(800);
+      const track = state.track || { videoId: 'jfKfPfyJRdk', title: 'Lofi Radio' };
+      currentVideoId = track.videoId;
+      nowPlayingTitleEl.textContent = `${track.title}${track.author ? ' — ' + track.author : ''}`;
+
       const targetTime = computeCompensatedTime(state.trackTime, state.serverTimestamp, state.isPlaying);
+      const loadedId = extractYouTubeId(player.getVideoUrl() || '');
 
-      const currentVideoUrl = player.getVideoUrl() || '';
-      const currentId = extractYouTubeId(currentVideoUrl);
-
-      if (currentId !== state.videoId) {
+      if (loadedId !== track.videoId) {
         if (state.isPlaying && audioUnlocked) {
-          player.loadVideoById({ videoId: state.videoId, startSeconds: targetTime });
+          player.loadVideoById({ videoId: track.videoId, startSeconds: targetTime });
         } else {
-          player.cueVideoById({ videoId: state.videoId, startSeconds: targetTime });
+          player.cueVideoById({ videoId: track.videoId, startSeconds: targetTime });
         }
       } else {
         player.seekTo(targetTime, true);
@@ -565,12 +854,13 @@
         volumeBar.value = state.volume;
         volumeLabel.textContent = `${state.volume}%`;
       }
+
+      if (Array.isArray(state.queue)) renderQueue(state.queue);
+      if (Array.isArray(state.chatHistory)) renderChatHistory(state.chatHistory);
     }
 
-    // Listeners de eventos Socket.io
-    socket.on('room_state', (state) => {
-      applyRoomState(state);
-    });
+    // Eventos Socket.io
+    socket.on('room_state', applyRoomState);
 
     socket.on('play', ({ trackTime, serverTimestamp }) => {
       if (!isPlayerReady) return;
@@ -603,15 +893,22 @@
       }
     });
 
-    socket.on('change_track', ({ videoId, trackTime, isPlaying, serverTimestamp }) => {
-      if (!isPlayerReady) return;
+    socket.on('change_track', ({ track, trackTime, isPlaying, serverTimestamp }) => {
+      if (!isPlayerReady || !track?.videoId) return;
       lockRemoteAction(900);
+      currentVideoId = track.videoId;
+      nowPlayingTitleEl.textContent = `${track.title}${track.author ? ' — ' + track.author : ''}`;
+
       const targetTime = computeCompensatedTime(trackTime, serverTimestamp, isPlaying);
       if (isPlaying && audioUnlocked) {
-        player.loadVideoById({ videoId, startSeconds: targetTime });
+        player.loadVideoById({ videoId: track.videoId, startSeconds: targetTime });
       } else {
-        player.cueVideoById({ videoId, startSeconds: targetTime });
+        player.cueVideoById({ videoId: track.videoId, startSeconds: targetTime });
       }
+    });
+
+    socket.on('queue_updated', ({ queue }) => {
+      renderQueue(queue || []);
     });
 
     socket.on('change_volume', ({ volume }) => {
@@ -625,7 +922,199 @@
       listenerCountEl.textContent = count === 1 ? '1 en la sala' : `${count} en la sala`;
     });
 
-    // Interacciones de la Interfaz (UI)
+    socket.on('chat_message', (msg) => {
+      appendChatMessage(msg);
+    });
+
+    socket.on('reaction', ({ emoji }) => {
+      spawnFloatingEmoji(emoji);
+    });
+
+    // ==========================================
+    // BUSCADOR INTEGRADO DE YOUTUBE EN LA MISMA PESTAÑA
+    // ==========================================
+    async function handleSearchOrDirectUrl() {
+      const raw = searchInput.value.trim();
+      if (!raw) return;
+
+      // Si el usuario pegó directamente un link o ID de YouTube, cargarlo al instante
+      const directId = extractYouTubeId(raw);
+      if (directId && (raw.includes('youtube.com') || raw.includes('youtu.be') || raw.length === 11)) {
+        socket.emit('change_track', {
+          videoId: directId,
+          title: `YouTube Track (${directId})`,
+          author: usernameInput.value
+        });
+        searchInput.value = '';
+        showToast('Pista cargada directamente en la sala');
+        return;
+      }
+
+      // Búsqueda integrada sin salir de la pestaña
+      searchBtn.disabled = true;
+      searchBtn.textContent = 'Buscando...';
+
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(raw)}`);
+        const data = await res.json();
+        renderSearchResults(data.results || []);
+      } catch (e) {
+        showToast('Error al buscar en YouTube');
+      } finally {
+        searchBtn.disabled = false;
+        searchBtn.textContent = 'Buscar / Cargar';
+      }
+    }
+
+    function renderSearchResults(results) {
+      searchResultsEl.innerHTML = '';
+      if (!results.length) {
+        searchResultsEl.classList.add('empty');
+        closeSearchBtn.style.display = 'none';
+        showToast('No se encontraron resultados');
+        return;
+      }
+
+      searchResultsEl.classList.remove('empty');
+      closeSearchBtn.style.display = 'inline-flex';
+
+      results.forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'search-item';
+        row.innerHTML = `
+          <img class="search-thumb" src="${item.thumbnail}" alt="thumb" />
+          <div class="search-meta">
+            <div class="search-title"></div>
+            <div class="search-sub"></div>
+          </div>
+          <div class="search-actions">
+            <button class="sm play-now-btn">▶ Ahora</button>
+            <button class="sm secondary add-queue-btn">+ Fila</button>
+          </div>
+        `;
+
+        row.querySelector('.search-title').textContent = item.title;
+        row.querySelector('.search-sub').textContent = `${item.author} • ${item.duration}`;
+
+        row.querySelector('.play-now-btn').addEventListener('click', () => {
+          socket.emit('change_track', item);
+          showToast(`Reproduciendo: ${item.title}`);
+        });
+
+        row.querySelector('.add-queue-btn').addEventListener('click', () => {
+          socket.emit('queue_add', { ...item, addedBy: usernameInput.value });
+          showToast('Añadida a la fila de reproducción');
+        });
+
+        searchResultsEl.appendChild(row);
+      });
+    }
+
+    searchBtn.addEventListener('click', handleSearchOrDirectUrl);
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleSearchOrDirectUrl();
+    });
+
+    closeSearchBtn.addEventListener('click', () => {
+      searchResultsEl.classList.add('empty');
+      searchResultsEl.innerHTML = '';
+      closeSearchBtn.style.display = 'none';
+    });
+
+    // ==========================================
+    // RENDERIZADO DE LA FILA / PLAYLIST
+    // ==========================================
+    function renderQueue(queue) {
+      queueCountEl.textContent = queue.length === 1 ? '1 pista' : `${queue.length} pistas`;
+      queueListEl.innerHTML = '';
+
+      if (queue.length === 0) {
+        queueListEl.innerHTML = '<div class="queue-empty">La fila está vacía. Busca una canción para añadirla.</div>';
+        return;
+      }
+
+      queue.forEach((item, idx) => {
+        const el = document.createElement('div');
+        el.className = 'queue-item';
+        el.innerHTML = `
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-dim);">${idx + 1}</span>
+          <div class="queue-info">
+            <div class="queue-title"></div>
+            <div class="queue-sub"></div>
+          </div>
+          <button class="sm secondary remove-btn" title="Quitar de la fila">✕</button>
+        `;
+        el.querySelector('.queue-title').textContent = item.title;
+        el.querySelector('.queue-sub').textContent = `${item.author} • por ${item.addedBy || 'Oyente'}`;
+        el.querySelector('.remove-btn').addEventListener('click', () => {
+          socket.emit('queue_remove', { id: item.id });
+        });
+        queueListEl.appendChild(el);
+      });
+    }
+
+    // ==========================================
+    // CHAT & REACCIONES FLOTANTES
+    // ==========================================
+    function renderChatHistory(history) {
+      chatMessagesEl.innerHTML = '';
+      history.forEach(appendChatMessage);
+    }
+
+    function appendChatMessage(msg) {
+      const div = document.createElement('div');
+      div.className = 'chat-msg';
+
+      const userSpan = document.createElement('span');
+      userSpan.className = 'chat-user';
+      userSpan.textContent = `${msg.username}:`;
+
+      const textSpan = document.createElement('span');
+      textSpan.textContent = msg.text;
+
+      const timeSpan = document.createElement('span');
+      timeSpan.className = 'chat-time';
+      const date = new Date(msg.timestamp || Date.now());
+      timeSpan.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      div.appendChild(userSpan);
+      div.appendChild(textSpan);
+      div.appendChild(timeSpan);
+
+      chatMessagesEl.appendChild(div);
+      chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+    }
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text) return;
+      socket.emit('chat_message', {
+        username: usernameInput.value,
+        text
+      });
+      chatInput.value = '';
+    });
+
+    document.querySelectorAll('.reaction-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const emoji = btn.getAttribute('data-emoji');
+        socket.emit('send_reaction', { emoji, username: usernameInput.value });
+      });
+    });
+
+    function spawnFloatingEmoji(emoji) {
+      const el = document.createElement('div');
+      el.className = 'floating-emoji';
+      el.textContent = emoji;
+      el.style.left = `${12 + Math.random() * 76}%`;
+      reactionsStage.appendChild(el);
+      setTimeout(() => el.remove(), 2400);
+    }
+
+    // ==========================================
+    // CONTROLES DE REPRODUCCIÓN Y SALA
+    // ==========================================
     unlockAudioBtn.addEventListener('click', () => {
       audioUnlocked = true;
       autoplayOverlay.classList.add('hidden');
@@ -637,7 +1126,7 @@
       if (!code) return;
       currentRoomId = code;
       window.history.replaceState({}, '', `?room=${currentRoomId}`);
-      socket.emit('join_room', currentRoomId);
+      socket.emit('join_room', { roomId: currentRoomId, username: usernameInput.value });
       showToast(`Conectado a la sala ${currentRoomId}`);
     });
 
@@ -646,16 +1135,6 @@
       navigator.clipboard.writeText(shareUrl).then(() => {
         showToast('Enlace de invitación copiado');
       });
-    });
-
-    loadTrackBtn.addEventListener('click', () => {
-      const videoId = extractYouTubeId(youtubeInput.value);
-      if (!videoId) {
-        showToast('URL o ID de YouTube no válido');
-        return;
-      }
-      socket.emit('change_track', { videoId });
-      youtubeInput.value = '';
     });
 
     playBtn.addEventListener('click', () => {
@@ -672,6 +1151,10 @@
       lockRemoteAction(500);
       player.pauseVideo();
       socket.emit('pause', { trackTime: nowTime });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      socket.emit('next_track');
     });
 
     resyncBtn.addEventListener('click', () => {
@@ -727,7 +1210,7 @@
     function showToast(msg) {
       toastEl.textContent = msg;
       toastEl.classList.add('show');
-      setTimeout(() => toastEl.classList.remove('show'), 2600);
+      setTimeout(() => toastEl.classList.remove('show'), 2500);
     }
   </script>
 </body>
