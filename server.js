@@ -2,7 +2,14 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const { Server } = require('socket.io');
-const yts = require('yt-search');
+
+// Carga segura de yt-search (con fallback en caso de que no esté instalado aún)
+let yts = null;
+try {
+  yts = require('yt-search');
+} catch (err) {
+  console.warn('[Seal Void] Aviso: paquete "yt-search" no detectado. Ejecuta: npm install yt-search');
+}
 
 const app = express();
 const server = http.createServer(app);
@@ -13,32 +20,39 @@ const io = new Server(server, {
   }
 });
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ==========================================
-// 1. ENDPOINT HEALTH-CHECK (Evita que Render duerma)
+// ENDPOINT DE HEALTH-CHECK (Render / Uptime)
 // ==========================================
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'ok',
-    service: 'Music Void',
-    uptime: Math.floor(process.uptime()),
+    app: 'Seal Void',
+    uptime: process.uptime(),
     timestamp: Date.now()
   });
 });
 
 // ==========================================
-// 2. BUSCADOR INTEGRADO DE YOUTUBE (Sin API Key)
+// ENDPOINT DE BÚSQUEDA DE YOUTUBE (yt-search)
 // ==========================================
 app.get('/api/search', async (req, res) => {
   const query = (req.query.q || '').trim();
   if (!query) {
-    return res.status(400).json({ error: 'Escribe el nombre de una canción o artista' });
+    return res.status(400).json({ error: 'Debes proporcionar un término de búsqueda.' });
+  }
+
+  if (!yts) {
+    return res.status(503).json({
+      error: 'El módulo yt-search no está instalado en el servidor. Ejecuta npm install yt-search.'
+    });
   }
 
   try {
     const result = await yts(query);
-    const videos = (result.videos || []).slice(0, 8).map((v) => ({
+    const videos = (result.videos || []).slice(0, 6).map((v) => ({
       videoId: v.videoId,
       title: v.title,
       author: v.author?.name || 'YouTube',
@@ -46,15 +60,16 @@ app.get('/api/search', async (req, res) => {
       thumbnail: v.thumbnail
     }));
     res.json({ results: videos });
-  } catch (err) {
-    console.error('[Search Error]:', err.message);
-    res.status(500).json({ error: 'No se pudo completar la búsqueda en YouTube' });
+  } catch (error) {
+    console.error('[Seal Void] Error en búsqueda de YouTube:', error);
+    res.status(500).json({ error: 'Error al buscar videos en YouTube.' });
   }
 });
 
 // ==========================================
-// 3. ESTADO DE SALAS Y MOTOR DE SINCRONIZACIÓN
+// ESTADO EN MEMORIA DE SALAS (Single Source of Truth)
 // ==========================================
+// roomId -> { videoId, title, isPlaying, trackTime, lastUpdatedAt, volume, queue: [], sessionStartedAt }
 const rooms = new Map();
 
 function getEffectiveTrackTime(room) {
@@ -63,35 +78,25 @@ function getEffectiveTrackTime(room) {
   return room.trackTime + elapsedSeconds;
 }
 
-function advanceQueue(roomId) {
-  if (!rooms.has(roomId)) return;
-  const room = rooms.get(roomId);
-  if (room.queue.length === 0) return;
-
-  const nextTrack = room.queue.shift();
-  const now = Date.now();
-
-  room.currentTrack = nextTrack;
-  room.trackTime = 0;
-  room.isPlaying = true;
-  room.lastUpdatedAt = now;
-  room.lastAutoAdvanceAt = now;
-
-  io.to(roomId).emit('change_track', {
-    track: room.currentTrack,
-    trackTime: 0,
-    isPlaying: true,
-    serverTimestamp: now
-  });
-
-  io.to(roomId).emit('queue_updated', { queue: room.queue });
+function buildSyncPayload(roomId, room) {
+  return {
+    roomId,
+    videoId: room.videoId,
+    title: room.title,
+    isPlaying: room.isPlaying,
+    trackTime: getEffectiveTrackTime(room),
+    volume: room.volume,
+    queue: room.queue,
+    sessionStartedAt: room.sessionStartedAt,
+    serverTimestamp: Date.now()
+  };
 }
 
 io.on('connection', (socket) => {
   let currentRoom = null;
-  let currentUsername = 'Oyente';
+  let userAlias = 'Foquita';
 
-  // Calibración de reloj estilo NTP
+  // 1. Calibración de reloj NTP
   socket.on('sync_clock', (clientSentAt, callback) => {
     if (typeof callback === 'function') {
       callback({
@@ -101,16 +106,14 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Unirse a una sala privada
+  // 2. Unirse o crear sala privada
   socket.on('join_room', (payload) => {
     const rawRoom = typeof payload === 'string' ? payload : payload?.roomId;
-    const rawName = typeof payload === 'object' ? payload?.username : null;
+    const rawAlias = typeof payload === 'object' && payload?.alias ? payload.alias : null;
 
     if (!rawRoom || typeof rawRoom !== 'string') return;
-    const cleanRoomId = rawRoom.trim().toUpperCase().slice(0, 20);
-    if (rawName && typeof rawName === 'string' && rawName.trim()) {
-      currentUsername = rawName.trim().slice(0, 22);
-    }
+    const cleanRoomId = rawRoom.trim().toUpperCase().slice(0, 24);
+    if (rawAlias) userAlias = String(rawAlias).trim().slice(0, 25);
 
     if (currentRoom && currentRoom !== cleanRoomId) {
       socket.leave(currentRoom);
@@ -122,39 +125,47 @@ io.on('connection', (socket) => {
 
     if (!rooms.has(currentRoom)) {
       rooms.set(currentRoom, {
-        currentTrack: {
-          videoId: 'jfKfPfyJRdk',
-          title: 'lofi hip hop radio - beats to relax/study to',
-          author: 'Lofi Girl',
-          thumbnail: 'https://i.ytimg.com/vi/jfKfPfyJRdk/hqdefault.jpg'
-        },
+        videoId: 'jfKfPfyJRdk',
+        title: 'Lofi Hip Hop Radio - Beats to Relax/Study to',
         isPlaying: false,
         trackTime: 0,
         lastUpdatedAt: Date.now(),
-        lastAutoAdvanceAt: 0,
         volume: 80,
         queue: [],
-        chatHistory: []
+        sessionStartedAt: Date.now()
       });
     }
 
     const room = rooms.get(currentRoom);
+    const statePayload = buildSyncPayload(currentRoom, room);
 
-    socket.emit('room_state', {
-      roomId: currentRoom,
-      track: room.currentTrack,
-      isPlaying: room.isPlaying,
-      trackTime: getEffectiveTrackTime(room),
-      volume: room.volume,
-      queue: room.queue,
-      chatHistory: room.chatHistory,
-      serverTimestamp: Date.now()
+    // Emitir tanto 'sync-state' como 'room_state' para compatibilidad total
+    socket.emit('sync-state', statePayload);
+    socket.emit('room_state', statePayload);
+
+    // Notificar en el chat de la sala
+    io.to(currentRoom).emit('chat-message', {
+      type: 'system',
+      text: `🦭 ${userAlias} entró al nidito (${currentRoom})`,
+      timestamp: Date.now()
     });
 
     updateRoomListeners(currentRoom);
   });
 
-  // Controles de transporte: PLAY, PAUSE, SEEK
+  // 3. Solicitud explícita de sincronización ('sync-state' / 'request_sync')
+  const handleSyncRequest = () => {
+    if (!currentRoom || !rooms.has(currentRoom)) return;
+    const room = rooms.get(currentRoom);
+    const payload = buildSyncPayload(currentRoom, room);
+    socket.emit('sync-state', payload);
+    socket.emit('room_state', payload);
+  };
+
+  socket.on('sync-state', handleSyncRequest);
+  socket.on('request_sync', handleSyncRequest);
+
+  // 4. PLAY
   socket.on('play', (data) => {
     if (!currentRoom || !rooms.has(currentRoom)) return;
     const room = rooms.get(currentRoom);
@@ -170,6 +181,7 @@ io.on('connection', (socket) => {
     });
   });
 
+  // 5. PAUSE
   socket.on('pause', (data) => {
     if (!currentRoom || !rooms.has(currentRoom)) return;
     const room = rooms.get(currentRoom);
@@ -185,6 +197,7 @@ io.on('connection', (socket) => {
     });
   });
 
+  // 6. SEEK
   socket.on('seek', (data) => {
     if (!currentRoom || !rooms.has(currentRoom)) return;
     const room = rooms.get(currentRoom);
@@ -201,79 +214,112 @@ io.on('connection', (socket) => {
     });
   });
 
-  // Reproducir canción inmediatamente
+  // 7. CAMBIAR CANCIÓN DIRECTAMENTE
   socket.on('change_track', (data) => {
     if (!currentRoom || !rooms.has(currentRoom) || !data?.videoId) return;
     const room = rooms.get(currentRoom);
     const now = Date.now();
 
-    room.currentTrack = {
-      videoId: data.videoId,
-      title: data.title || `Track (${data.videoId})`,
-      author: data.author || 'YouTube',
-      thumbnail: data.thumbnail || `https://i.ytimg.com/vi/${data.videoId}/hqdefault.jpg`
-    };
+    room.videoId = data.videoId;
+    room.title = data.title || `YouTube Track (${data.videoId})`;
     room.trackTime = 0;
     room.isPlaying = true;
     room.lastUpdatedAt = now;
 
     io.to(currentRoom).emit('change_track', {
-      track: room.currentTrack,
+      videoId: room.videoId,
+      title: room.title,
       trackTime: 0,
       isPlaying: true,
       serverTimestamp: now
     });
+
+    io.to(currentRoom).emit('chat-message', {
+      type: 'system',
+      text: `🎵 Reproduciendo ahora: ${room.title}`,
+      timestamp: now
+    });
   });
 
-  // ==========================================
-  // 4. GESTIÓN DE FILA / PLAYLIST COLABORATIVA
-  // ==========================================
-  socket.on('queue_add', (data) => {
-    if (!currentRoom || !rooms.has(currentRoom) || !data?.videoId) return;
+  // 8. AÑADIR A LA COLA (add-queue)
+  socket.on('add-queue', (item) => {
+    if (!currentRoom || !rooms.has(currentRoom) || !item?.videoId) return;
     const room = rooms.get(currentRoom);
 
-    const item = {
+    const trackItem = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      videoId: data.videoId,
-      title: data.title || `Video (${data.videoId})`,
-      author: data.author || 'YouTube',
-      duration: data.duration || '',
-      thumbnail: data.thumbnail || `https://i.ytimg.com/vi/${data.videoId}/hqdefault.jpg`,
-      addedBy: data.addedBy || currentUsername
+      videoId: item.videoId,
+      title: item.title || `Pista (${item.videoId})`,
+      author: item.author || 'YouTube',
+      duration: item.duration || '',
+      thumbnail: item.thumbnail || `https://i.ytimg.com/vi/${item.videoId}/hqdefault.jpg`,
+      addedBy: item.addedBy || userAlias
     };
 
-    room.queue.push(item);
-    io.to(currentRoom).emit('queue_updated', { queue: room.queue });
+    room.queue.push(trackItem);
+
+    io.to(currentRoom).emit('queue-updated', {
+      queue: room.queue
+    });
+
+    io.to(currentRoom).emit('chat-message', {
+      type: 'system',
+      text: `➕ Añadido a la cola: "${trackItem.title}"`,
+      timestamp: Date.now()
+    });
   });
 
-  socket.on('queue_remove', ({ id }) => {
-    if (!currentRoom || !rooms.has(currentRoom)) return;
-    const room = rooms.get(currentRoom);
-    room.queue = room.queue.filter((item) => item.id !== id);
-    io.to(currentRoom).emit('queue_updated', { queue: room.queue });
-  });
-
-  socket.on('next_track', () => {
-    if (!currentRoom || !rooms.has(currentRoom)) return;
-    advanceQueue(currentRoom);
-  });
-
-  // Cuando termina un video en el cliente, avanzar a la siguiente en cola (con filtro anti-duplicados)
-  socket.on('track_ended', ({ endedVideoId }) => {
+  // 9. SALTAR CANCIÓN / PASAR A LA SIGUIENTE EN COLA (skip)
+  socket.on('skip', () => {
     if (!currentRoom || !rooms.has(currentRoom)) return;
     const room = rooms.get(currentRoom);
     const now = Date.now();
 
-    if (
-      room.currentTrack.videoId === endedVideoId &&
-      now - room.lastAutoAdvanceAt > 3000 &&
-      room.queue.length > 0
-    ) {
-      advanceQueue(currentRoom);
+    if (room.queue.length > 0) {
+      const nextTrack = room.queue.shift();
+      room.videoId = nextTrack.videoId;
+      room.title = nextTrack.title;
+      room.trackTime = 0;
+      room.isPlaying = true;
+      room.lastUpdatedAt = now;
+
+      io.to(currentRoom).emit('change_track', {
+        videoId: room.videoId,
+        title: room.title,
+        trackTime: 0,
+        isPlaying: true,
+        serverTimestamp: now
+      });
+
+      io.to(currentRoom).emit('queue-updated', {
+        queue: room.queue
+      });
+
+      io.to(currentRoom).emit('chat-message', {
+        type: 'system',
+        text: `⏭️ Siguiente en la cola: "${room.title}"`,
+        timestamp: now
+      });
+    } else {
+      // Si no hay cola, pausamos al final
+      room.isPlaying = false;
+      room.lastUpdatedAt = now;
+      io.to(currentRoom).emit('pause', {
+        trackTime: room.trackTime,
+        serverTimestamp: now
+      });
     }
   });
 
-  // Control de volumen compartido
+  // Eliminar un elemento específico de la cola
+  socket.on('remove-queue', (trackUid) => {
+    if (!currentRoom || !rooms.has(currentRoom)) return;
+    const room = rooms.get(currentRoom);
+    room.queue = room.queue.filter((t) => t.id !== trackUid);
+    io.to(currentRoom).emit('queue-updated', { queue: room.queue });
+  });
+
+  // 10. VOLUMEN
   socket.on('change_volume', (data) => {
     if (!currentRoom || !rooms.has(currentRoom)) return;
     const room = rooms.get(currentRoom);
@@ -282,61 +328,60 @@ io.on('connection', (socket) => {
     socket.to(currentRoom).emit('change_volume', { volume: vol });
   });
 
-  // ==========================================
-  // 5. CHAT EN TIEMPO REAL Y REACCIONES FLOTANTES
-  // ==========================================
-  socket.on('chat_message', (data) => {
-    if (!currentRoom || !rooms.has(currentRoom)) return;
-    const text = (data?.text || '').trim().slice(0, 280);
-    if (!text) return;
+  // 11. CHAT BILATERAL EN TIEMPO REAL
+  socket.on('chat-message', (data) => {
+    if (!currentRoom || !data?.text) return;
+    const cleanText = String(data.text).trim().slice(0, 500);
+    if (!cleanText) return;
 
-    const sender = (data?.username || currentUsername || 'Oyente').trim().slice(0, 22);
-    currentUsername = sender;
+    const senderName = data.senderName ? String(data.senderName).trim().slice(0, 25) : userAlias;
+    userAlias = senderName;
 
-    const msg = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      username: sender,
-      text,
+    io.to(currentRoom).emit('chat-message', {
+      type: 'user',
+      senderId: socket.id,
+      senderName,
+      text: cleanText,
       timestamp: Date.now()
-    };
-
-    const room = rooms.get(currentRoom);
-    room.chatHistory.push(msg);
-    if (room.chatHistory.length > 50) room.chatHistory.shift();
-
-    io.to(currentRoom).emit('chat_message', msg);
+    });
   });
 
-  socket.on('send_reaction', (data) => {
-    if (!currentRoom || !rooms.has(currentRoom)) return;
-    const allowed = ['🔥', '💜', '🎧', '⚡', '✨', '🚀'];
-    const emoji = allowed.includes(data?.emoji) ? data.emoji : '💜';
+  // 12. BESITO / ABRAZO EN TIEMPO REAL ('enviar-besito')
+  socket.on('enviar-besito', (data) => {
+    if (!currentRoom) return;
+    const senderName = data?.senderName || userAlias;
 
+    io.to(currentRoom).emit('recibir-besito', {
+      senderId: socket.id,
+      senderName,
+      timestamp: Date.now()
+    });
+
+    io.to(currentRoom).emit('chat-message', {
+      type: 'system',
+      text: `💖 ${senderName} envió una lluvia de besitos y foquitas 🦭✨`,
+      timestamp: Date.now()
+    });
+  });
+
+  // 13. BARRA DE REACCIONES DE FOQUITAS EN TIEMPO REAL
+  socket.on('reaction', (data) => {
+    if (!currentRoom || !data?.emoji) return;
     io.to(currentRoom).emit('reaction', {
-      emoji,
-      username: (data?.username || currentUsername).slice(0, 22),
-      id: Math.random().toString(36).slice(2, 9)
+      emoji: String(data.emoji).slice(0, 12),
+      senderId: socket.id,
+      timestamp: Date.now()
     });
   });
 
-  // Resincronización manual
-  socket.on('request_sync', () => {
-    if (!currentRoom || !rooms.has(currentRoom)) return;
-    const room = rooms.get(currentRoom);
-    socket.emit('room_state', {
-      roomId: currentRoom,
-      track: room.currentTrack,
-      isPlaying: room.isPlaying,
-      trackTime: getEffectiveTrackTime(room),
-      volume: room.volume,
-      queue: room.queue,
-      chatHistory: room.chatHistory,
-      serverTimestamp: Date.now()
-    });
-  });
-
+  // Desconexión
   socket.on('disconnect', () => {
     if (currentRoom) {
+      io.to(currentRoom).emit('chat-message', {
+        type: 'system',
+        text: `🐾 ${userAlias} salió momentáneamente de la sala`,
+        timestamp: Date.now()
+      });
       updateRoomListeners(currentRoom);
     }
   });
@@ -349,11 +394,15 @@ function updateRoomListeners(roomId) {
   if (count === 0) {
     rooms.delete(roomId);
   } else {
-    io.to(roomId).emit('listener_count', { count });
+    const room = rooms.get(roomId);
+    io.to(roomId).emit('listener_count', {
+      count,
+      sessionStartedAt: room ? room.sessionStartedAt : Date.now()
+    });
   }
 }
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`[Music Void v2] Servidor activo en el puerto ${PORT}`);
+  console.log(`🦭 [Seal Void] Servidor íntimo activo en el puerto ${PORT}`);
 });

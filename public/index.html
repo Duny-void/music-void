@@ -3,25 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Music Void — Escucha Sincronizada en Tiempo Real</title>
+  <meta name="description" content="Seal Void — Nuestro espacio íntimo y sincronizado para escuchar música juntitos." />
+  <meta name="theme-color" content="#09080f" />
+  <title>Seal Void 🦭💜 — Nuestro Espacio Musical</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-void: #050508;
-      --bg-card: #0b0b12;
-      --bg-elevated: #12121e;
-      --bg-hover: #19192a;
-      --border-subtle: rgba(139, 92, 246, 0.18);
+      --bg-deep: #09080f;
+      --bg-card: rgba(16, 13, 28, 0.78);
+      --bg-elevated: rgba(28, 22, 48, 0.85);
+      --bg-glass: rgba(20, 15, 35, 0.65);
+      --border-violet: rgba(167, 139, 250, 0.24);
+      --border-soft: rgba(255, 255, 255, 0.09);
       --accent-primary: #8b5cf6;
-      --accent-glow: rgba(139, 92, 246, 0.35);
+      --accent-pink: #ec4899;
       --accent-hover: #a78bfa;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --text-dim: #6b7280;
-      --success: #10b981;
-      --danger: #ef4444;
+      --accent-glow: rgba(139, 92, 246, 0.42);
+      --text-main: #f5f3ff;
+      --text-muted: #c4b5fd;
+      --text-dim: #9ca3af;
+      --success: #34d399;
     }
 
     * {
@@ -30,254 +33,254 @@
       padding: 0;
     }
 
+    /* 1. FONDO MIXTO: perrito.jpg + Overlay Dark Violet + Blur sutil */
     body {
-      background-color: var(--bg-void);
-      background-image: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.12) 0%, transparent 65%);
+      background-color: var(--bg-deep);
+      background-image:
+        linear-gradient(135deg, rgba(9, 8, 15, 0.88) 0%, rgba(45, 17, 85, 0.82) 100%),
+        url('/perrito.jpg');
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       color: var(--text-main);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1.25rem 1rem 2.5rem;
+      overflow-x: hidden;
+      position: relative;
     }
 
-    .app-shell {
-      width: 100%;
-      max-width: 1180px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.1rem;
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    /* Header */
+    .app-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 1.25rem 1.25rem 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* CABECERA Y BRANDING SEAL VOID */
     header {
+      background: var(--bg-card);
+      border: 1px solid var(--border-violet);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 20px;
+      padding: 0.95rem 1.35rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 0.85rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid var(--border-subtle);
+      gap: 1rem;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.85rem;
     }
 
-    .brand-orb {
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: var(--accent-primary);
-      box-shadow: 0 0 14px var(--accent-primary), 0 0 28px var(--accent-glow);
-      animation: pulseOrb 3s infinite ease-in-out;
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.45rem;
+      box-shadow: 0 0 20px var(--accent-glow);
+      animation: gentleFloat 3.5s ease-in-out infinite;
     }
 
-    @keyframes pulseOrb {
-      0%, 100% { transform: scale(1); opacity: 0.85; }
-      50% { transform: scale(1.22); opacity: 1; }
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-4px) rotate(4deg); }
     }
 
-    .brand h1 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: linear-gradient(90deg, #ffffff, #c4b5fd);
+    .brand-titles h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      background: linear-gradient(90deg, #ffffff, #e9d5ff, #f9a8d4);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .header-right {
+    .brand-titles p {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      opacity: 0.9;
+    }
+
+    .status-cluster {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
       flex-wrap: wrap;
+      gap: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
     }
 
     .pill {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      padding: 0.35rem 0.7rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-violet);
+      padding: 0.42rem 0.8rem;
       border-radius: 999px;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--text-muted);
+      gap: 0.45rem;
+      color: var(--text-main);
+    }
+
+    .pill.together-timer {
+      background: linear-gradient(90deg, rgba(139, 92, 246, 0.22), rgba(236, 72, 153, 0.22));
+      border-color: rgba(236, 72, 153, 0.45);
+      color: #fce7f3;
+      font-weight: 600;
     }
 
     .dot-live {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--success);
-      box-shadow: 0 0 8px var(--success);
+      box-shadow: 0 0 10px var(--success);
     }
 
-    /* Main Grid Layout */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1.55fr 1fr;
-      gap: 1.1rem;
-      align-items: start;
-    }
-
-    .col-left, .col-right {
-      display: flex;
-      flex-direction: column;
-      gap: 1.1rem;
-    }
-
-    .card {
+    /* BARRA DE SALA Y PERFIL */
+    .room-bar {
       background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      padding: 1rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+      border: 1px solid var(--border-violet);
+      backdrop-filter: blur(14px);
+      border-radius: 18px;
+      padding: 0.9rem 1.15rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .row {
+    .room-inputs {
       display: flex;
-      gap: 0.55rem;
       flex-wrap: wrap;
+      gap: 0.6rem;
+      flex: 1;
     }
 
     input[type="text"] {
-      flex: 1;
-      min-width: 140px;
       background: var(--bg-elevated);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-violet);
       color: var(--text-main);
-      padding: 0.62rem 0.85rem;
-      border-radius: 9px;
-      font-size: 0.86rem;
+      padding: 0.68rem 0.95rem;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-family: inherit;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: all 0.2s ease;
     }
 
     input[type="text"]:focus {
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+      border-color: var(--accent-hover);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
     }
 
     button {
-      background: var(--accent-primary);
+      background: linear-gradient(135deg, var(--accent-primary), #7c3aed);
       color: #fff;
       border: none;
-      padding: 0.62rem 0.95rem;
-      border-radius: 9px;
-      font-size: 0.84rem;
+      padding: 0.68rem 1.05rem;
+      border-radius: 12px;
+      font-size: 0.86rem;
       font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
-      transition: all 0.18s ease;
+      transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
       white-space: nowrap;
     }
 
     button:hover {
-      background: var(--accent-hover);
-      box-shadow: 0 0 14px var(--accent-glow);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px var(--accent-glow);
+    }
+
+    button:active {
+      transform: translateY(0);
     }
 
     button.secondary {
       background: var(--bg-elevated);
+      border: 1px solid var(--border-violet);
       color: var(--text-main);
-      border: 1px solid var(--border-subtle);
     }
 
     button.secondary:hover {
-      background: rgba(139, 92, 246, 0.16);
-      border-color: var(--accent-primary);
+      background: rgba(139, 92, 246, 0.22);
+      border-color: var(--accent-hover);
     }
 
-    button.sm {
-      padding: 0.4rem 0.65rem;
-      font-size: 0.76rem;
-      border-radius: 7px;
+    button.besito-btn {
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      box-shadow: 0 0 18px rgba(236, 72, 153, 0.45);
+      font-weight: 700;
     }
 
-    /* Buscador Integrado de YouTube */
-    .search-results {
-      margin-top: 0.75rem;
+    button.besito-btn:hover {
+      box-shadow: 0 0 25px rgba(236, 72, 153, 0.75);
+      transform: scale(1.03);
+    }
+
+    /* LAYOUT PRINCIPAL DE 2 COLUMNAS */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-violet);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 20px;
+      padding: 1.15rem;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+    }
+
+    .left-col, .right-col {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      max-height: 290px;
-      overflow-y: auto;
-      padding-right: 0.25rem;
+      gap: 1.15rem;
     }
 
-    .search-results.empty {
-      display: none;
-    }
-
-    .search-item {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      background: var(--bg-elevated);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 0.5rem;
-      border-radius: 10px;
-      transition: background 0.15s;
-    }
-
-    .search-item:hover {
-      background: var(--bg-hover);
-    }
-
-    .search-thumb {
-      width: 68px;
-      height: 40px;
-      border-radius: 6px;
-      object-fit: cover;
-      flex-shrink: 0;
-      background: #000;
-    }
-
-    .search-meta {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .search-title {
-      font-size: 0.83rem;
-      font-weight: 600;
-      color: var(--text-main);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .search-sub {
-      font-size: 0.73rem;
-      color: var(--text-muted);
-      margin-top: 0.1rem;
-    }
-
-    .search-actions {
-      display: flex;
-      gap: 0.35rem;
-      flex-shrink: 0;
-    }
-
-    /* Video Player + Floating Reactions */
+    /* REPRODUCTOR DE VIDEO */
     .player-wrapper {
       position: relative;
       width: 100%;
       padding-top: 56.25%;
-      background: #000;
-      border-radius: 11px;
+      background: #05040a;
+      border-radius: 16px;
       overflow: hidden;
-      border: 1px solid var(--border-subtle);
+      border: 1px solid var(--border-violet);
     }
 
     #yt-player {
@@ -287,38 +290,16 @@
       height: 100%;
     }
 
-    .reactions-stage {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 8;
-    }
-
-    .floating-emoji {
-      position: absolute;
-      bottom: 12px;
-      font-size: 1.75rem;
-      animation: floatUp 2.4s ease-out forwards;
-      filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6));
-    }
-
-    @keyframes floatUp {
-      0% { transform: translateY(0) scale(0.7); opacity: 0; }
-      15% { transform: translateY(-20px) scale(1.1); opacity: 1; }
-      100% { transform: translateY(-220px) scale(0.95); opacity: 0; }
-    }
-
     .autoplay-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(5, 5, 8, 0.88);
-      backdrop-filter: blur(6px);
+      background: rgba(9, 8, 15, 0.88);
+      backdrop-filter: blur(8px);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.8rem;
+      gap: 0.9rem;
       z-index: 10;
       text-align: center;
       padding: 1.5rem;
@@ -328,52 +309,133 @@
       display: none;
     }
 
+    /* 4. INDICADOR MUSICAL DINÁMICO: FOKITA DJ vs DORMIDA */
     .now-playing-banner {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 0.75rem;
-      margin-top: 0.8rem;
-      padding-bottom: 0.65rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-violet);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .now-playing-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text-main);
+    .track-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .track-badge {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-hover);
+      font-weight: 700;
+    }
+
+    .track-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #fff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .reaction-bar {
+    .seal-status-stage {
+      position: relative;
+      width: 78px;
+      height: 78px;
+      flex-shrink: 0;
       display: flex;
-      gap: 0.3rem;
+      align-items: center;
+      justify-content: center;
+      background: rgba(139, 92, 246, 0.12);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      border-radius: 16px;
     }
 
-    .reaction-btn {
-      background: var(--bg-elevated);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      padding: 0.3rem 0.5rem;
-      font-size: 0.95rem;
-      border-radius: 8px;
+    .seal-status-img {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      user-select: none;
     }
 
-    /* Controls Bar */
+    .seal-dj-dance {
+      animation: sealDjGroove 0.75s infinite alternate ease-in-out;
+    }
+
+    @keyframes sealDjGroove {
+      0% { transform: translateY(0) rotate(-6deg) scale(1); }
+      50% { transform: translateY(-6px) rotate(0deg) scale(1.05); }
+      100% { transform: translateY(0) rotate(6deg) scale(1); }
+    }
+
+    .seal-sleep-calm {
+      animation: sealSleepBreathe 3.2s infinite ease-in-out;
+      filter: brightness(0.92);
+    }
+
+    @keyframes sealSleepBreathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04) translateY(-2px); }
+    }
+
+    .zzz-container {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      pointer-events: none;
+    }
+
+    .zzz-particle {
+      position: absolute;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.72rem;
+      color: #ddd6fe;
+      opacity: 0;
+      animation: floatZzz 2.6s infinite ease-out;
+    }
+
+    .zzz-particle:nth-child(2) {
+      animation-delay: 0.85s;
+      font-size: 0.85rem;
+    }
+
+    .zzz-particle:nth-child(3) {
+      animation-delay: 1.7s;
+      font-size: 0.65rem;
+    }
+
+    @keyframes floatZzz {
+      0% { transform: translate(0, 8px) scale(0.8); opacity: 0; }
+      30% { opacity: 0.95; }
+      100% { transform: translate(12px, -22px) scale(1.15); opacity: 0; }
+    }
+
+    /* CONTROLES DEL REPRODUCTOR */
     .controls-bar {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-      margin-top: 0.75rem;
+      gap: 0.9rem;
+      margin-top: 0.95rem;
     }
 
     .timeline-row {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.75rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
     }
 
@@ -382,7 +444,7 @@
       appearance: none;
       width: 100%;
       height: 6px;
-      background: var(--bg-elevated);
+      background: rgba(255, 255, 255, 0.14);
       border-radius: 999px;
       outline: none;
       cursor: pointer;
@@ -391,11 +453,11 @@
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 13px;
-      height: 13px;
+      width: 15px;
+      height: 15px;
       border-radius: 50%;
-      background: var(--accent-primary);
-      box-shadow: 0 0 8px var(--accent-primary);
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-primary));
+      box-shadow: 0 0 10px var(--accent-primary);
       cursor: pointer;
     }
 
@@ -404,129 +466,429 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 0.6rem;
+      gap: 0.65rem;
     }
 
     .transport-btns {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       gap: 0.45rem;
-      flex-wrap: wrap;
     }
 
     .volume-group {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
-      width: 155px;
-      font-size: 0.78rem;
+      gap: 0.5rem;
+      width: 165px;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
 
-    /* Columna Derecha: Fila de Reproducción & Chat */
-    .section-header {
+    /* 6. BARRA DE REACCIONES DE FOQUITAS Y BOTÓN DE BESITO */
+    .reactions-strip {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.7rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      color: var(--text-muted);
-      text-transform: uppercase;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.95rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--border-soft);
     }
 
-    .queue-list {
+    .seal-reactions-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .react-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-violet);
+      padding: 0.48rem 0.78rem;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.2s;
+    }
+
+    .react-btn:hover {
+      background: rgba(139, 92, 246, 0.28);
+      transform: translateY(-2px) scale(1.06);
+    }
+
+    /* BUSCADOR YT + FILA DE REPRODUCCIÓN (QUEUE) */
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-results, .queue-list {
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
+      gap: 0.55rem;
+      margin-top: 0.8rem;
       max-height: 230px;
       overflow-y: auto;
+      padding-right: 0.25rem;
     }
 
-    .queue-empty {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      text-align: center;
-      padding: 1.1rem 0.5rem;
-    }
-
-    .queue-item {
+    .media-item {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.75rem;
       background: var(--bg-elevated);
-      padding: 0.45rem 0.6rem;
-      border-radius: 9px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 0.5rem 0.65rem;
+      transition: border-color 0.2s;
     }
 
-    .queue-info {
+    .media-item:hover {
+      border-color: var(--accent-hover);
+    }
+
+    .media-thumb {
+      width: 60px;
+      height: 38px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .media-info {
       flex: 1;
       min-width: 0;
     }
 
-    .queue-title {
-      font-size: 0.8rem;
-      font-weight: 500;
+    .media-title {
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: #fff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .queue-sub {
-      font-size: 0.7rem;
+    .media-sub {
+      font-size: 0.72rem;
       color: var(--text-dim);
     }
 
-    /* Chat */
+    .media-actions {
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    .btn-mini {
+      padding: 0.38rem 0.62rem;
+      font-size: 0.75rem;
+      border-radius: 8px;
+    }
+
+    /* 5. CHAT ESTILO MENSAJERÍA (ALINEACIÓN BILATERAL) */
+    .chat-card {
+      display: flex;
+      flex-direction: column;
+      height: 560px;
+    }
+
     .chat-messages {
-      height: 240px;
+      flex: 1;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
-      padding: 0.5rem;
-      background: rgba(0, 0, 0, 0.25);
-      border-radius: 9px;
-      margin-bottom: 0.65rem;
-      border: 1px solid rgba(255, 255, 255, 0.04);
+      gap: 0.65rem;
+      padding: 0.65rem 0.4rem;
+      scroll-behavior: smooth;
     }
 
-    .chat-msg {
-      font-size: 0.81rem;
-      line-height: 1.35;
+    .msg-row {
+      display: flex;
+      flex-direction: column;
+      max-width: 82%;
+      animation: msgPop 0.2s ease-out;
+    }
+
+    @keyframes msgPop {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Mensajes propios -> Derecha */
+    .msg-row.self {
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+
+    .msg-row.self .msg-bubble {
+      background: rgba(139, 92, 246, 0.8);
+      color: #ffffff;
+      border-radius: 16px 16px 4px 16px;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+    }
+
+    /* Mensajes de la pareja -> Izquierda */
+    .msg-row.other {
+      align-self: flex-start;
+      align-items: flex-start;
+    }
+
+    .msg-row.other .msg-bubble {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(167, 139, 250, 0.32);
+      color: var(--text-main);
+      border-radius: 16px 16px 16px 4px;
+    }
+
+    /* Mensajes de sistema -> Centrados */
+    .msg-row.system {
+      align-self: center;
+      max-width: 92%;
+      text-align: center;
+    }
+
+    .msg-row.system .msg-system-text {
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      padding: 0.2rem 0.6rem;
+    }
+
+    .msg-meta {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+      padding: 0 0.25rem;
+    }
+
+    .msg-bubble {
+      padding: 0.6rem 0.9rem;
+      font-size: 0.88rem;
+      line-height: 1.42;
       word-break: break-word;
     }
 
-    .chat-user {
-      font-weight: 600;
-      color: var(--accent-hover);
-      margin-right: 0.35rem;
+    .chat-input-area {
+      display: flex;
+      gap: 0.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-soft);
+      margin-top: 0.5rem;
     }
 
-    .chat-time {
-      font-size: 0.68rem;
-      color: var(--text-dim);
-      margin-left: 0.35rem;
+    .chat-input-area input {
+      flex: 1;
+    }
+
+    /* 2. ANIMACIÓN DE BIENVENIDA: "FOKITA SALUDO" */
+    .fokita-saludo-stage {
+      position: fixed;
+      bottom: 22px;
+      right: 24px;
+      z-index: 120;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+      transform: translateX(150%) translateY(40px);
+      opacity: 0;
+      transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.45s ease;
+    }
+
+    .fokita-saludo-stage.active {
+      transform: translateX(0) translateY(0);
+      opacity: 1;
+    }
+
+    .saludo-bubble {
+      background: #ffffff;
+      color: #1e1b4b;
+      font-weight: 800;
+      font-size: 0.92rem;
+      padding: 0.55rem 1rem;
+      border-radius: 18px;
+      margin-bottom: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 2px var(--accent-primary);
+      position: relative;
+      transform: scale(0);
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .saludo-bubble.pop-in {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .saludo-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 7px 7px 0;
+      border-style: solid;
+      border-color: #ffffff transparent transparent;
+    }
+
+    .fokita-saludo-img {
+      width: 125px;
+      height: auto;
+      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.6));
+    }
+
+    /* Botón discreto en la orilla para volver a disparar el saludo */
+    .replay-saludo-trigger {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      z-index: 110;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(28, 22, 48, 0.85);
+      border: 1px solid var(--border-violet);
+      color: var(--text-main);
+      font-size: 1.15rem;
+      padding: 0;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+    }
+
+    .replay-saludo-trigger:hover {
+      background: var(--accent-primary);
+      transform: scale(1.1);
+    }
+
+    /* 3. MASCOTA FIJA: "FOKITA COMPAÑERA" */
+    .fokita-companera-widget {
+      position: fixed;
+      bottom: 18px;
+      left: 20px;
+      z-index: 115;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      user-select: none;
+    }
+
+    .companera-bubble {
+      background: linear-gradient(135deg, rgba(30, 24, 54, 0.96), rgba(49, 29, 82, 0.96));
+      border: 1.5px solid var(--accent-hover);
+      color: #fdf4ff;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 0.5rem 0.9rem;
+      border-radius: 16px 16px 16px 4px;
+      margin-bottom: 6px;
+      margin-left: 10px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      position: relative;
+    }
+
+    .companera-bubble.fade-out {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+
+    .companera-avatar-box {
+      position: relative;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fokita-companera-img {
+      width: 92px;
+      height: auto;
+      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.65));
+      transition: transform 0.2s ease;
+    }
+
+    .fokita-companera-img:hover {
+      transform: scale(1.05);
+    }
+
+    .companera-bounce {
+      animation: happySealBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes happySealBounce {
+      0% { transform: scale(1) translateY(0); }
+      35% { transform: scale(1.18, 0.88) translateY(-14px) rotate(-6deg); }
+      70% { transform: scale(0.95, 1.08) translateY(-4px) rotate(5deg); }
+      100% { transform: scale(1) translateY(0); }
+    }
+
+    .companion-heart {
+      position: absolute;
+      font-size: 1.15rem;
+      pointer-events: none;
+      animation: companionHeartRise 1.15s ease-out forwards;
+    }
+
+    @keyframes companionHeartRise {
+      0% { transform: translateY(0) scale(0.6); opacity: 1; }
+      100% { transform: translateY(-65px) scale(1.25); opacity: 0; }
+    }
+
+    /* CAPA DE PARTÍCULAS GLOBALES (BESITOS Y REACCIONES) */
+    .fx-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 200;
+      overflow: hidden;
+    }
+
+    .floating-fx-particle {
+      position: absolute;
+      bottom: -40px;
+      font-size: 1.75rem;
+      animation: riseUpScreen 2.5s ease-out forwards;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+    }
+
+    @keyframes riseUpScreen {
+      0% {
+        transform: translateY(0) translateX(0) scale(0.6) rotate(0deg);
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-105vh) translateX(var(--drift-x, 30px)) scale(1.3) rotate(var(--rot-deg, 18deg));
+        opacity: 0;
+      }
     }
 
     .toast {
       position: fixed;
-      bottom: 1.25rem;
+      top: 1.25rem;
       right: 1.25rem;
+      z-index: 300;
       background: var(--bg-elevated);
-      border: 1px solid var(--accent-primary);
+      border: 1px solid var(--accent-hover);
       color: var(--text-main);
-      padding: 0.6rem 0.95rem;
-      border-radius: 10px;
-      font-size: 0.8rem;
+      padding: 0.7rem 1.1rem;
+      border-radius: 12px;
+      font-size: 0.84rem;
+      font-weight: 600;
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(-12px);
       transition: all 0.25s ease;
       pointer-events: none;
-      z-index: 50;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65);
     }
 
     .toast.show {
@@ -534,25 +896,367 @@
       transform: translateY(0);
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 960px) {
       .main-grid {
         grid-template-columns: 1fr;
       }
+      .chat-card {
+        height: 460px;
+      }
+      .fokita-companera-img {
+        width: 74px;
+      }
     }
+
+    @media (max-width: 768px) {
+  /* 5. Prevención estricta de scroll horizontal y ajuste de fondo en móviles */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    background-attachment: scroll; /* Evita saltos de repintado en navegadores móviles */
+  }
+
+  .app-wrapper {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.75rem 0.65rem 5.5rem;
+    gap: 0.85rem;
+    overflow-x: hidden;
+  }
+
+  /* 1. Layout principal a una sola columna vertical fluida */
+  .main-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    width: 100%;
+  }
+
+  .left-col, .right-col {
+    width: 100%;
+    min-width: 0;
+    gap: 0.85rem;
+  }
+
+  .card, header, .room-bar {
+    padding: 0.85rem;
+    border-radius: 16px;
+    width: 100%;
+  }
+
+  /* Cabecera y píldoras de estado compactas */
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .brand-badge {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+  }
+
+  .brand-titles h1 {
+    font-size: 1.2rem;
+  }
+
+  .brand-titles p {
+    font-size: 0.72rem;
+  }
+
+  .status-cluster {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+  }
+
+  .pill {
+    padding: 0.32rem 0.6rem;
+  }
+
+  /* Barra de sala y botón de besito adaptados al pulgar */
+  .room-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .room-inputs {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .room-inputs input[type="text"] {
+    max-width: 100% !important;
+    width: 100%;
+    font-size: 16px; /* Evita el auto-zoom forzado en iOS/Android al tocar el input */
+  }
+
+  .room-inputs button,
+  button.besito-btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.88rem;
+  }
+
+  /* 2. Reproductor de YouTube al 100% de ancho con Aspect Ratio 16:9 */
+  .player-wrapper {
+    width: 100%;
+    padding-top: 56.25%; /* Mantiene relación 16:9 exacta */
+    border-radius: 12px;
+  }
+
+  #yt-player {
+    width: 100%;
+    height: 100%;
+  }
+
+  .autoplay-overlay {
+    padding: 1rem;
+    gap: 0.6rem;
+  }
+
+  .autoplay-overlay p {
+    font-size: 0.8rem !important;
+  }
+
+  /* Controles del reproductor y reacciones cómodos para pantalla táctil */
+  .now-playing-banner {
+    padding: 0.65rem 0.75rem;
+    gap: 0.65rem;
+    margin-top: 0.75rem;
+  }
+
+  .track-title {
+    font-size: 0.86rem;
+  }
+
+  .actions-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .transport-btns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.45rem;
+    width: 100%;
+  }
+
+  .transport-btns button {
+    width: 100%;
+    padding: 0.65rem 0.5rem;
+    font-size: 0.82rem;
+  }
+
+  .volume-group {
+    width: 100%;
+    padding: 0.2rem 0;
+  }
+
+  .reactions-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .seal-reactions-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .react-btn {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.95rem;
+  }
+
+  /* Buscador y cola sin desbordamientos */
+  #youtube-input {
+    min-width: 100%;
+    font-size: 16px;
+  }
+
+  .media-item {
+    padding: 0.45rem 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .media-thumb {
+    width: 48px;
+    height: 34px;
+  }
+
+  /* 3. Redimensionado de todas las Foquitas (45px - 50px máx) para no estorbar */
+  .seal-status-stage {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+  }
+
+  .seal-status-img,
+  #seal-dj-img,
+  #seal-sleep-img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .zzz-particle {
+    font-size: 0.6rem;
+  }
+
+  /* Fokita Compañera (Esquina inferior izquierda discreta) */
+  .fokita-companera-widget {
+    bottom: 10px;
+    left: 10px;
+    z-index: 95;
+  }
+
+  .fokita-companera-img {
+    width: 48px;
+    height: auto;
+  }
+
+  .companera-bubble {
+    font-size: 0.72rem;
+    padding: 0.32rem 0.65rem;
+    margin-bottom: 4px;
+    margin-left: 4px;
+    max-width: 145px;
+    white-space: normal;
+  }
+
+  /* Fokita Saludo y botón de repetición (Esquina inferior derecha discreta) */
+  .fokita-saludo-stage {
+    bottom: 12px;
+    right: 12px;
+    z-index: 98;
+  }
+
+  .fokita-saludo-img {
+    width: 50px;
+    height: auto;
+  }
+
+  .saludo-bubble {
+    font-size: 0.74rem;
+    padding: 0.35rem 0.7rem;
+    margin-bottom: 5px;
+  }
+
+  .replay-saludo-trigger {
+    width: 36px;
+    height: 36px;
+    bottom: 10px;
+    right: 10px;
+    font-size: 0.95rem;
+  }
+
+  /* 4. Chat bilateral optimizado para lectura y escritura con el pulgar */
+  .chat-card {
+    height: 400px;
+    max-height: 62vh;
+  }
+
+  .chat-messages {
+    padding: 0.5rem 0.25rem;
+    gap: 0.55rem;
+  }
+
+  .msg-row {
+    max-width: 88%;
+  }
+
+  .msg-bubble {
+    font-size: 0.86rem;
+    padding: 0.55rem 0.8rem;
+    line-height: 1.38;
+  }
+
+  .msg-meta {
+    font-size: 0.65rem;
+  }
+
+  .chat-input-area {
+    gap: 0.4rem;
+    padding-top: 0.6rem;
+  }
+
+  .chat-input-area input[type="text"] {
+    font-size: 16px; /* Evita zoom al abrir el teclado virtual */
+    padding: 0.65rem 0.8rem;
+  }
+
+  .chat-input-area button {
+    padding: 0.65rem 0.95rem;
+    font-size: 0.85rem;
+  }
+
+  .toast {
+    left: 0.75rem;
+    right: 0.75rem;
+    top: 0.75rem;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+}
+
   </style>
 </head>
 <body>
 
-  <div class="app-shell">
-    <!-- Header -->
+  <!-- Capa global de partículas para lluvias de besitos y reacciones -->
+  <div id="fx-layer" class="fx-layer"></div>
+
+  <!-- 2. ANIMACIÓN DE BIENVENIDA: FOKITA SALUDO -->
+  <div id="fokita-saludo-stage" class="fokita-saludo-stage" aria-hidden="true">
+    <div id="saludo-bubble" class="saludo-bubble">ola shokorolcito</div>
+    <img
+      src="/fokita-saludo.gif"
+      alt="Fokita saludando"
+      class="fokita-saludo-img"
+      onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><text x=%2250%%22 y=%2255%%22 font-size=%2264%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭👋</text></svg>'"
+    />
+  </div>
+
+  <!-- Botón flotante discreto para volver a disparar "Fokita Saludo" -->
+  <button id="replay-saludo-btn" class="replay-saludo-trigger" title="Volver a ver a la fokita saludando">
+    🐾
+  </button>
+
+  <!-- 3. MASCOTA FIJA: FOKITA COMPAÑERA -->
+  <div id="fokita-companera-widget" class="fokita-companera-widget">
+    <div id="companera-bubble" class="companera-bubble">que limnda eres</div>
+    <div id="companera-avatar-box" class="companera-avatar-box" title="Hazme clic para darte amorcito">
+      <img
+        id="fokita-companera-img"
+        src="/fokita-companera.png"
+        alt="Fokita compañera"
+        class="fokita-companera-img"
+        onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2290%22 height=%2290%22><text x=%2250%%22 y=%2255%%22 font-size=%2254%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭💜</text></svg>'"
+      />
+    </div>
+  </div>
+
+  <div class="app-wrapper">
+    <!-- CABECERA -->
     <header>
       <div class="brand">
-        <div class="brand-orb"></div>
-        <h1>Music Void</h1>
+        <div class="brand-badge">🦭</div>
+        <div class="brand-titles">
+          <h1>Seal Void</h1>
+          <p>Nuestro rincón musical sincronizado al milisegundo</p>
+        </div>
       </div>
 
-      <div class="header-right">
-        <input type="text" id="username-input" placeholder="Tu alias" style="max-width: 130px; padding: 0.38rem 0.65rem; font-size: 0.78rem;" />
+      <div class="status-cluster">
+        <div class="pill together-timer" id="together-timer">
+          <span>💜 Juntitos: 00:00:00</span>
+        </div>
         <div class="pill">
           <span class="dot-live"></span>
           <span id="listener-count">1 en la sala</span>
@@ -561,52 +1265,69 @@
       </div>
     </header>
 
+    <!-- BARRA DE SALA Y APODO -->
+    <section class="room-bar">
+      <div class="room-inputs">
+        <input type="text" id="alias-input" placeholder="Tu apodo (ej. Shokorolcito)" maxlength="22" style="max-width: 195px;" />
+        <input type="text" id="room-input" placeholder="Código de sala (ej. SEAL-LOVE)" maxlength="24" style="max-width: 195px;" />
+        <button id="join-btn" class="secondary">Entrar / Cambiar</button>
+        <button id="share-btn" class="secondary">🔗 Copiar Invitación</button>
+      </div>
+      <button id="enviar-besito-btn" class="besito-btn">
+        💖 Enviar Besito / Abrazo 🦭
+      </button>
+    </section>
+
+    <!-- CONTENIDO PRINCIPAL -->
     <div class="main-grid">
-      <!-- COLUMNA IZQUIERDA: Sala, Buscador Integrado y Reproductor -->
-      <div class="col-left">
-        <!-- Sala Privada -->
-        <section class="card">
-          <div class="row">
-            <input type="text" id="room-input" placeholder="Código de sala (ej. VOID-99)" maxlength="20" />
-            <button id="join-btn" class="secondary">Cambiar Sala</button>
-            <button id="share-btn">Copiar Link de Invitación</button>
-          </div>
-        </section>
-
-        <!-- Buscador de YouTube Integrado + Soporte de URL directa -->
-        <section class="card">
-          <div class="row">
-            <input type="text" id="search-input" placeholder="Busca una canción en YouTube o pega un link directo..." />
-            <button id="search-btn">Buscar / Cargar</button>
-            <button id="close-search-btn" class="secondary" style="display: none;">Cerrar</button>
-          </div>
-          <div id="search-results" class="search-results empty"></div>
-        </section>
-
-        <!-- Reproductor Principal -->
+      <!-- COLUMNA IZQUIERDA: Reproductor, Fokita DJ/Sleep, Controles, Buscador y Cola -->
+      <div class="left-col">
         <section class="card">
           <div class="player-wrapper">
             <div id="yt-player"></div>
-            <div id="reactions-stage" class="reactions-stage"></div>
             <div id="autoplay-overlay" class="autoplay-overlay">
-              <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 340px;">
-                Haz clic para conectar el motor de audio de tu navegador con la sala en tiempo real.
+              <div style="font-size: 2.4rem;">🦭🎧</div>
+              <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 340px;">
+                Haz clic para conectar el audio de tu navegador y sincronizarte en tiempo real con tu persona favorita.
               </p>
-              <button id="unlock-audio-btn">Entrar al Void (Activar Audio)</button>
+              <button id="unlock-audio-btn">Entrar a Seal Void (Activar Audio)</button>
             </div>
           </div>
 
+          <!-- 4. INDICADOR MUSICAL DINÁMICO: FOKITA DJ vs DORMIDA -->
           <div class="now-playing-banner">
-            <div class="now-playing-title" id="now-playing-title">Cargando pista...</div>
-            <div class="reaction-bar">
-              <button class="reaction-btn" data-emoji="🔥">🔥</button>
-              <button class="reaction-btn" data-emoji="💜">💜</button>
-              <button class="reaction-btn" data-emoji="🎧">🎧</button>
-              <button class="reaction-btn" data-emoji="⚡">⚡</button>
-              <button class="reaction-btn" data-emoji="✨">✨</button>
+            <div class="track-meta">
+              <span class="track-badge" id="playback-status-badge">⏸️ En pausa — Fokita mimida</span>
+              <div class="track-title" id="now-playing-title">Lofi Hip Hop Radio - Beats to Relax/Study to</div>
+            </div>
+
+            <div class="seal-status-stage" title="Estado musical de la foquita">
+              <!-- Fokita DJ (Activa en PLAYING) -->
+              <img
+                id="seal-dj-img"
+                src="/fokita-dj.png"
+                alt="Fokita DJ"
+                class="seal-status-img seal-dj-dance"
+                style="display: none;"
+                onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22><text x=%2250%%22 y=%2255%%22 font-size=%2238%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭🎧</text></svg>'"
+              />
+              <!-- Fokita Dormida (Activa en PAUSED / ENDED) -->
+              <img
+                id="seal-sleep-img"
+                src="/fokita-sleep.png"
+                alt="Fokita dormida"
+                class="seal-status-img seal-sleep-calm"
+                onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22><text x=%2250%%22 y=%2255%%22 font-size=%2238%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭💤</text></svg>'"
+              />
+              <div id="zzz-particles" class="zzz-container">
+                <span class="zzz-particle">Z</span>
+                <span class="zzz-particle">z</span>
+                <span class="zzz-particle">z</span>
+              </div>
             </div>
           </div>
 
+          <!-- Controles de transporte -->
           <div class="controls-bar">
             <div class="timeline-row">
               <span id="current-time">00:00</span>
@@ -616,43 +1337,75 @@
 
             <div class="actions-row">
               <div class="transport-btns">
-                <button id="play-btn">Reproducir</button>
-                <button id="pause-btn" class="secondary">Pausar</button>
-                <button id="next-btn" class="secondary">Siguiente ⏭</button>
-                <button id="resync-btn" class="secondary">Resincronizar</button>
+                <button id="play-btn">▶ Reproducir</button>
+                <button id="pause-btn" class="secondary">⏸ Pausar</button>
+                <button id="skip-btn" class="secondary">⏭ Siguiente</button>
+                <button id="resync-btn" class="secondary">🔄 Sincronizar</button>
               </div>
 
               <div class="volume-group">
-                <span>Vol</span>
+                <span>🔊</span>
                 <input type="range" id="volume-bar" min="0" max="100" value="80" />
                 <span id="volume-label">80%</span>
               </div>
             </div>
           </div>
+
+          <!-- 6. BARRA DE REACCIONES DE FOQUITAS -->
+          <div class="reactions-strip">
+            <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Reacciones foquita:</span>
+            <div class="seal-reactions-group">
+              <button class="react-btn" data-emoji="🦭✨">🦭✨</button>
+              <button class="react-btn" data-emoji="🦭💖">🦭💖</button>
+              <button class="react-btn" data-emoji="🦭💤">🦭💤</button>
+              <button class="react-btn" data-emoji="🦭🥺">🦭🥺</button>
+              <button class="react-btn" data-emoji="🦭🎉">🦭🎉</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- BUSCADOR Y CARGA DE MÚSICA + COLA DE REPRODUCCIÓN -->
+        <section class="card">
+          <div class="section-title">
+            <span>🔎 Buscar Canción o Pegar Link de YouTube</span>
+          </div>
+          <div style="display: flex; gap: 0.55rem; flex-wrap: wrap;">
+            <input type="text" id="youtube-input" placeholder="Busca una canción o pega un enlace / ID de YouTube..." style="flex: 1;" />
+            <button id="search-btn" class="secondary">Buscar</button>
+            <button id="load-direct-btn">Reproducir Ya</button>
+            <button id="queue-direct-btn" class="secondary">+ A la Cola</button>
+          </div>
+
+          <!-- Resultados de yt-search -->
+          <div id="search-results" class="search-results" style="display: none;"></div>
+
+          <!-- Cola de reproducción -->
+          <div style="margin-top: 1.1rem;">
+            <div class="section-title">
+              <span>🎶 Cola de Reproducción Sincronizada</span>
+              <span id="queue-count-badge" style="font-size: 0.76rem; color: var(--accent-hover);">0 pistas</span>
+            </div>
+            <div id="queue-list" class="queue-list">
+              <p style="font-size: 0.8rem; color: var(--text-dim); text-align: center; padding: 0.8rem 0;">
+                La cola está vacía. Añade canciones para que suenen una tras otra 💜
+              </p>
+            </div>
+          </div>
         </section>
       </div>
 
-      <!-- COLUMNA DERECHA: Fila de Reproducción & Chat -->
-      <div class="col-right">
-        <!-- Playlist / Fila Colaborativa -->
-        <section class="card">
-          <div class="section-header">
-            <span>Fila de Reproducción</span>
-            <span id="queue-count">0 pistas</span>
+      <!-- COLUMNA DERECHA: CHAT BILATERAL -->
+      <div class="right-col">
+        <section class="card chat-card">
+          <div class="section-title">
+            <span>💬 Nuestro Chat en Tiempo Real</span>
+            <button id="chat-besito-shortcut" class="secondary btn-mini" title="Enviar lluvia de besitos">🐾 Besito</button>
           </div>
-          <div id="queue-list" class="queue-list">
-            <div class="queue-empty">La fila está vacía. Busca una canción para añadirla.</div>
-          </div>
-        </section>
 
-        <!-- Chat en Tiempo Real -->
-        <section class="card">
-          <div class="section-header">
-            <span>Chat de la Sala</span>
-          </div>
           <div id="chat-messages" class="chat-messages"></div>
-          <form id="chat-form" class="row">
-            <input type="text" id="chat-input" placeholder="Escribe un mensaje..." maxlength="280" autocomplete="off" />
+
+          <form id="chat-form" class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Escríbele algo bonito..." autocomplete="off" />
             <button type="submit">Enviar</button>
           </form>
         </section>
@@ -660,66 +1413,298 @@
     </div>
   </div>
 
-  <div id="toast" class="toast">Listo</div>
+  <div id="toast" class="toast">Mensaje</div>
 
+  <!-- Socket.io & YouTube IFrame API -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://www.youtube.com/iframe_api"></script>
 
   <script>
     const socket = io();
 
-    // Estado de sincronización
+    // =====================================================
+    // ESTADO GLOBAL DEL REPRODUCTOR Y SINCRONIZACIÓN
+    // =====================================================
     let player = null;
     let isPlayerReady = false;
     let audioUnlocked = false;
     let currentRoomId = '';
-    let currentVideoId = 'jfKfPfyJRdk';
     let serverClockOffset = 0;
     let isDraggingSeek = false;
+    let sessionStartedAt = Date.now();
+
+    // Flags contra bucles infinitos
     let isRemoteAction = false;
     let remoteCooldownTimer = null;
     let pendingRoomState = null;
 
     // Referencias DOM
-    const usernameInput = document.getElementById('username-input');
+    const aliasInput = document.getElementById('alias-input');
     const roomInput = document.getElementById('room-input');
     const joinBtn = document.getElementById('join-btn');
     const shareBtn = document.getElementById('share-btn');
-    const searchInput = document.getElementById('search-input');
+    const youtubeInput = document.getElementById('youtube-input');
     const searchBtn = document.getElementById('search-btn');
-    const closeSearchBtn = document.getElementById('close-search-btn');
+    const loadDirectBtn = document.getElementById('load-direct-btn');
+    const queueDirectBtn = document.getElementById('queue-direct-btn');
     const searchResultsEl = document.getElementById('search-results');
+    const queueListEl = document.getElementById('queue-list');
+    const queueCountBadge = document.getElementById('queue-count-badge');
+
     const listenerCountEl = document.getElementById('listener-count');
     const pingPillEl = document.getElementById('ping-pill');
-    const nowPlayingTitleEl = document.getElementById('now-playing-title');
+    const togetherTimerEl = document.getElementById('together-timer');
+
     const seekBar = document.getElementById('seek-bar');
     const currentTimeEl = document.getElementById('current-time');
     const totalTimeEl = document.getElementById('total-time');
     const playBtn = document.getElementById('play-btn');
     const pauseBtn = document.getElementById('pause-btn');
-    const nextBtn = document.getElementById('next-btn');
+    const skipBtn = document.getElementById('skip-btn');
     const resyncBtn = document.getElementById('resync-btn');
     const volumeBar = document.getElementById('volume-bar');
     const volumeLabel = document.getElementById('volume-label');
     const autoplayOverlay = document.getElementById('autoplay-overlay');
     const unlockAudioBtn = document.getElementById('unlock-audio-btn');
-    const reactionsStage = document.getElementById('reactions-stage');
-    const queueListEl = document.getElementById('queue-list');
-    const queueCountEl = document.getElementById('queue-count');
+    const toastEl = document.getElementById('toast');
+
+    // Fokita DJ / Sleep DOM
+    const sealDjImg = document.getElementById('seal-dj-img');
+    const sealSleepImg = document.getElementById('seal-sleep-img');
+    const zzzParticles = document.getElementById('zzz-particles');
+    const playbackStatusBadge = document.getElementById('playback-status-badge');
+    const nowPlayingTitle = document.getElementById('now-playing-title');
+
+    // Chat & Reacciones DOM
     const chatMessagesEl = document.getElementById('chat-messages');
     const chatForm = document.getElementById('chat-form');
     const chatInput = document.getElementById('chat-input');
-    const toastEl = document.getElementById('toast');
+    const enviarBesitoBtn = document.getElementById('enviar-besito-btn');
+    const chatBesitoShortcut = document.getElementById('chat-besito-shortcut');
+    const fxLayer = document.getElementById('fx-layer');
 
-    // Alias de usuario persistente en localStorage
-    const savedName = localStorage.getItem('mv_username') || `Void-${Math.floor(100 + Math.random() * 900)}`;
-    usernameInput.value = savedName;
-    usernameInput.addEventListener('change', () => {
-      const clean = usernameInput.value.trim().slice(0, 22) || savedName;
-      usernameInput.value = clean;
-      localStorage.setItem('mv_username', clean);
+    // =====================================================
+    // 2. SECUENCIA ANIMADA: "FOKITA SALUDO" (5 SEGUNDOS)
+    // =====================================================
+    const fokitaSaludoStage = document.getElementById('fokita-saludo-stage');
+    const saludoBubble = document.getElementById('saludo-bubble');
+    const replaySaludoBtn = document.getElementById('replay-saludo-btn');
+    let saludoTimeouts = [];
+
+    function triggerFokitaSaludo() {
+      saludoTimeouts.forEach((t) => clearTimeout(t));
+      saludoTimeouts = [];
+
+      saludoBubble.classList.remove('pop-in');
+      fokitaSaludoStage.classList.add('active');
+
+      // 1. Rebote de entrada y aparición del globo "ola shokorolcito"
+      const t1 = setTimeout(() => {
+        saludoBubble.classList.add('pop-in');
+      }, 380);
+
+      // 2. Permanece visible durante 5 segundos exactos y luego se desvanece
+      const t2 = setTimeout(() => {
+        saludoBubble.classList.remove('pop-in');
+      }, 5380);
+
+      const t3 = setTimeout(() => {
+        fokitaSaludoStage.classList.remove('active');
+      }, 5650);
+
+      saludoTimeouts.push(t1, t2, t3);
+    }
+
+    replaySaludoBtn.addEventListener('click', () => {
+      triggerFokitaSaludo();
     });
 
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedAlias = localStorage.getItem('seal_void_alias');
+      if (savedAlias) aliasInput.value = savedAlias;
+      setTimeout(triggerFokitaSaludo, 500);
+    });
+
+    // =====================================================
+    // 3. MASCOTA FIJA: "FOKITA COMPAÑERA"
+    // =====================================================
+    const companeraPhrases = [
+      'que limnda eres',
+      'muejejej',
+      'bomnita'
+    ];
+    let currentPhraseIndex = 0;
+    const companeraBubble = document.getElementById('companera-bubble');
+    const companeraAvatarBox = document.getElementById('companera-avatar-box');
+    const companeraImg = document.getElementById('fokita-companera-img');
+
+    function changeCompaneraPhrase(forceDifferent = true) {
+      companeraBubble.classList.add('fade-out');
+      setTimeout(() => {
+        let nextIdx = Math.floor(Math.random() * companeraPhrases.length);
+        if (forceDifferent && companeraPhrases.length > 1 && nextIdx === currentPhraseIndex) {
+          nextIdx = (nextIdx + 1) % companeraPhrases.length;
+        }
+        currentPhraseIndex = nextIdx;
+        companeraBubble.textContent = companeraPhrases[currentPhraseIndex];
+        companeraBubble.classList.remove('fade-out');
+      }, 320);
+    }
+
+    // Cambio automático cada 35 segundos
+    setInterval(() => {
+      changeCompaneraPhrase(true);
+    }, 35000);
+
+    // Clic sobre la Fokita Compañera: rebote alegre + 3 corazoncitos + cambio de frase
+    companeraAvatarBox.addEventListener('click', () => {
+      companeraImg.classList.remove('companera-bounce');
+      void companeraImg.offsetWidth; // Reflow para reiniciar animación
+      companeraImg.classList.add('companera-bounce');
+
+      const hearts = ['💜', '💖', '💕'];
+      hearts.forEach((h, i) => {
+        const span = document.createElement('span');
+        span.className = 'companion-heart';
+        span.textContent = h;
+        span.style.left = `${18 + i * 24}px`;
+        span.style.top = '8px';
+        span.style.animationDelay = `${i * 0.12}s`;
+        companeraAvatarBox.appendChild(span);
+        setTimeout(() => span.remove(), 1300);
+      });
+
+      changeCompaneraPhrase(true);
+    });
+
+    // =====================================================
+    // 4. INDICADOR DINÁMICO: FOKITA DJ vs FOKITA DORMIDA
+    // =====================================================
+    function updateSealMusicStatus(isPlaying) {
+      if (isPlaying) {
+        sealDjImg.style.display = 'block';
+        sealSleepImg.style.display = 'none';
+        zzzParticles.style.display = 'none';
+        playbackStatusBadge.textContent = '🎧 Sonando ahora — Fokita DJ en la pista';
+      } else {
+        sealDjImg.style.display = 'none';
+        sealSleepImg.style.display = 'block';
+        zzzParticles.style.display = 'block';
+        playbackStatusBadge.textContent = '💤 En pausa — Fokita mimida';
+      }
+    }
+
+    // =====================================================
+    // 6. CONTADOR DE TIEMPO JUNTOS ("Juntitos: HH:MM:SS")
+    // =====================================================
+    function updateTogetherClock() {
+      const elapsedSec = Math.max(0, Math.floor((Date.now() - sessionStartedAt) / 1000));
+      const hrs = String(Math.floor(elapsedSec / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((elapsedSec % 3600) / 60)).padStart(2, '0');
+      const secs = String(elapsedSec % 60).padStart(2, '0');
+      togetherTimerEl.innerHTML = `<span>💜 Juntitos: ${hrs}:${mins}:${secs}</span>`;
+    }
+    setInterval(updateTogetherClock, 1000);
+
+    // =====================================================
+    // LLUVIA DE BESITOS Y PARTÍCULAS FLOTANTES
+    // =====================================================
+    function spawnFloatingParticles(symbols, count = 26, durationMs = 2500) {
+      const intervalTime = Math.floor(durationMs / count);
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const el = document.createElement('div');
+          el.className = 'floating-fx-particle';
+          el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+          el.style.left = `${Math.random() * 94 + 2}vw`;
+          el.style.setProperty('--drift-x', `${(Math.random() - 0.5) * 140}px`);
+          el.style.setProperty('--rot-deg', `${(Math.random() - 0.5) * 50}deg`);
+          el.style.fontSize = `${1.35 + Math.random() * 1.15}rem`;
+          fxLayer.appendChild(el);
+          setTimeout(() => el.remove(), 2600);
+        }, i * intervalTime);
+      }
+    }
+
+    function sendBesito() {
+      const senderName = aliasInput.value.trim() || 'Tu foquita';
+      localStorage.setItem('seal_void_alias', senderName);
+      socket.emit('enviar-besito', { senderName });
+    }
+
+    enviarBesitoBtn.addEventListener('click', sendBesito);
+    chatBesitoShortcut.addEventListener('click', sendBesito);
+
+    socket.on('recibir-besito', ({ senderName }) => {
+      spawnFloatingParticles(['💖', '🦭', '💕', '✨', '💜', '🐾'], 32, 2500);
+      showToast(`💖 ¡${senderName || 'Tu pareja'} te envió una lluvia de besitos y foquitas!`);
+    });
+
+    document.querySelectorAll('.react-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const emoji = btn.getAttribute('data-emoji');
+        socket.emit('reaction', { emoji });
+      });
+    });
+
+    socket.on('reaction', ({ emoji }) => {
+      spawnFloatingParticles([emoji, '💜', '🦭'], 10, 1200);
+    });
+
+    // =====================================================
+    // 5. CHAT BILATERAL (PROPIOS DERECHA / PAREJA IZQUIERDA)
+    // =====================================================
+    function appendChatMessage(msg) {
+      const row = document.createElement('div');
+
+      if (msg.type === 'system') {
+        row.className = 'msg-row system';
+        const sys = document.createElement('div');
+        sys.className = 'msg-system-text';
+        sys.textContent = msg.text;
+        row.appendChild(sys);
+      } else {
+        const isSelf = msg.senderId === socket.id;
+        row.className = `msg-row ${isSelf ? 'self' : 'other'}`;
+
+        const meta = document.createElement('div');
+        meta.className = 'msg-meta';
+        const timeStr = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        meta.textContent = `${isSelf ? 'Tú' : (msg.senderName || 'Pareja')} • ${timeStr}`;
+
+        const bubble = document.createElement('div');
+        bubble.className = 'msg-bubble';
+        bubble.textContent = msg.text;
+
+        row.appendChild(meta);
+        row.appendChild(bubble);
+      }
+
+      chatMessagesEl.appendChild(row);
+      chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+    }
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text) return;
+      const senderName = aliasInput.value.trim() || 'Foquita';
+      localStorage.setItem('seal_void_alias', senderName);
+
+      socket.emit('chat-message', { text, senderName });
+      chatInput.value = '';
+    });
+
+    socket.on('chat-message', (msg) => {
+      appendChatMessage(msg);
+    });
+
+    // =====================================================
+    // MOTOR DE SINCRONIZACIÓN NTP + YOUTUBE IFRAME API
+    // =====================================================
     function lockRemoteAction(durationMs = 650) {
       isRemoteAction = true;
       if (remoteCooldownTimer) clearTimeout(remoteCooldownTimer);
@@ -750,6 +1735,7 @@
     }
 
     setInterval(calibrateClock, 5000);
+
     socket.on('connect', () => {
       calibrateClock();
       initRoomFromUrl();
@@ -759,28 +1745,29 @@
       const params = new URLSearchParams(window.location.search);
       let room = params.get('room');
       if (!room) {
-        room = 'VOID-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+        room = 'SEAL-' + Math.random().toString(36).substring(2, 6).toUpperCase();
         window.history.replaceState({}, '', `?room=${room}`);
       }
       currentRoomId = room.toUpperCase();
       roomInput.value = currentRoomId;
-      socket.emit('join_room', { roomId: currentRoomId, username: usernameInput.value });
+      const alias = aliasInput.value.trim() || localStorage.getItem('seal_void_alias') || 'Foquita';
+      socket.emit('join_room', { roomId: currentRoomId, alias });
     }
 
     function extractYouTubeId(input) {
-      const clean = (input || '').trim();
+      if (!input) return null;
+      const clean = input.trim();
       if (/^[a-zA-Z0-9_-]{11}$/.test(clean)) return clean;
       const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
       const match = clean.match(regex);
       return match ? match[1] : null;
     }
 
-    // YouTube IFrame API
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('yt-player', {
         height: '100%',
         width: '100%',
-        videoId: currentVideoId,
+        videoId: 'jfKfPfyJRdk',
         playerVars: {
           autoplay: 0,
           controls: 0,
@@ -806,10 +1793,22 @@
     }
 
     function onPlayerStateChange(event) {
-      if (event.data === YT.PlayerState.ENDED) {
-        socket.emit('track_ended', { endedVideoId: currentVideoId });
+      if (event.data === YT.PlayerState.PLAYING) {
+        updateSealMusicStatus(true);
+      } else if (
+        event.data === YT.PlayerState.PAUSED ||
+        event.data === YT.PlayerState.ENDED ||
+        event.data === YT.PlayerState.CUED
+      ) {
+        updateSealMusicStatus(false);
+      }
+
+      // Si termina la canción actual, pasar automáticamente a la siguiente de la cola
+      if (event.data === YT.PlayerState.ENDED && !isRemoteAction) {
+        socket.emit('skip');
         return;
       }
+
       if (isRemoteAction || !audioUnlocked) return;
 
       const currentTime = player.getCurrentTime() || 0;
@@ -821,24 +1820,36 @@
     }
 
     function applyRoomState(state) {
+      if (state.sessionStartedAt) {
+        sessionStartedAt = state.sessionStartedAt;
+        updateTogetherClock();
+      }
+
+      if (state.title) {
+        nowPlayingTitle.textContent = state.title;
+      }
+
+      if (Array.isArray(state.queue)) {
+        renderQueue(state.queue);
+      }
+
+      updateSealMusicStatus(Boolean(state.isPlaying));
+
       if (!isPlayerReady) {
         pendingRoomState = state;
         return;
       }
 
-      lockRemoteAction(800);
-      const track = state.track || { videoId: 'jfKfPfyJRdk', title: 'Lofi Radio' };
-      currentVideoId = track.videoId;
-      nowPlayingTitleEl.textContent = `${track.title}${track.author ? ' — ' + track.author : ''}`;
-
+      lockRemoteAction(850);
       const targetTime = computeCompensatedTime(state.trackTime, state.serverTimestamp, state.isPlaying);
-      const loadedId = extractYouTubeId(player.getVideoUrl() || '');
+      const currentVideoUrl = player.getVideoUrl() || '';
+      const currentId = extractYouTubeId(currentVideoUrl);
 
-      if (loadedId !== track.videoId) {
+      if (currentId !== state.videoId) {
         if (state.isPlaying && audioUnlocked) {
-          player.loadVideoById({ videoId: track.videoId, startSeconds: targetTime });
+          player.loadVideoById({ videoId: state.videoId, startSeconds: targetTime });
         } else {
-          player.cueVideoById({ videoId: track.videoId, startSeconds: targetTime });
+          player.cueVideoById({ videoId: state.videoId, startSeconds: targetTime });
         }
       } else {
         player.seekTo(targetTime, true);
@@ -854,15 +1865,13 @@
         volumeBar.value = state.volume;
         volumeLabel.textContent = `${state.volume}%`;
       }
-
-      if (Array.isArray(state.queue)) renderQueue(state.queue);
-      if (Array.isArray(state.chatHistory)) renderChatHistory(state.chatHistory);
     }
 
-    // Eventos Socket.io
+    socket.on('sync-state', applyRoomState);
     socket.on('room_state', applyRoomState);
 
     socket.on('play', ({ trackTime, serverTimestamp }) => {
+      updateSealMusicStatus(true);
       if (!isPlayerReady) return;
       lockRemoteAction(650);
       const targetTime = computeCompensatedTime(trackTime, serverTimestamp, true);
@@ -873,6 +1882,7 @@
     });
 
     socket.on('pause', ({ trackTime }) => {
+      updateSealMusicStatus(false);
       if (!isPlayerReady) return;
       lockRemoteAction(650);
       player.pauseVideo();
@@ -882,6 +1892,7 @@
     });
 
     socket.on('seek', ({ trackTime, isPlaying, serverTimestamp }) => {
+      updateSealMusicStatus(Boolean(isPlaying));
       if (!isPlayerReady) return;
       lockRemoteAction(700);
       const targetTime = computeCompensatedTime(trackTime, serverTimestamp, isPlaying);
@@ -893,21 +1904,20 @@
       }
     });
 
-    socket.on('change_track', ({ track, trackTime, isPlaying, serverTimestamp }) => {
-      if (!isPlayerReady || !track?.videoId) return;
+    socket.on('change_track', ({ videoId, title, trackTime, isPlaying, serverTimestamp }) => {
+      if (title) nowPlayingTitle.textContent = title;
+      updateSealMusicStatus(Boolean(isPlaying));
+      if (!isPlayerReady) return;
       lockRemoteAction(900);
-      currentVideoId = track.videoId;
-      nowPlayingTitleEl.textContent = `${track.title}${track.author ? ' — ' + track.author : ''}`;
-
       const targetTime = computeCompensatedTime(trackTime, serverTimestamp, isPlaying);
       if (isPlaying && audioUnlocked) {
-        player.loadVideoById({ videoId: track.videoId, startSeconds: targetTime });
+        player.loadVideoById({ videoId, startSeconds: targetTime });
       } else {
-        player.cueVideoById({ videoId: track.videoId, startSeconds: targetTime });
+        player.cueVideoById({ videoId, startSeconds: targetTime });
       }
     });
 
-    socket.on('queue_updated', ({ queue }) => {
+    socket.on('queue-updated', ({ queue }) => {
       renderQueue(queue || []);
     });
 
@@ -918,222 +1928,172 @@
       volumeLabel.textContent = `${volume}%`;
     });
 
-    socket.on('listener_count', ({ count }) => {
+    socket.on('listener_count', ({ count, sessionStartedAt: srvStart }) => {
       listenerCountEl.textContent = count === 1 ? '1 en la sala' : `${count} en la sala`;
+      if (srvStart) sessionStartedAt = srvStart;
     });
 
-    socket.on('chat_message', (msg) => {
-      appendChatMessage(msg);
-    });
-
-    socket.on('reaction', ({ emoji }) => {
-      spawnFloatingEmoji(emoji);
-    });
-
-    // ==========================================
-    // BUSCADOR INTEGRADO DE YOUTUBE EN LA MISMA PESTAÑA
-    // ==========================================
-    async function handleSearchOrDirectUrl() {
-      const raw = searchInput.value.trim();
-      if (!raw) return;
-
-      // Si el usuario pegó directamente un link o ID de YouTube, cargarlo al instante
-      const directId = extractYouTubeId(raw);
-      if (directId && (raw.includes('youtube.com') || raw.includes('youtu.be') || raw.length === 11)) {
-        socket.emit('change_track', {
-          videoId: directId,
-          title: `YouTube Track (${directId})`,
-          author: usernameInput.value
-        });
-        searchInput.value = '';
-        showToast('Pista cargada directamente en la sala');
-        return;
-      }
-
-      // Búsqueda integrada sin salir de la pestaña
-      searchBtn.disabled = true;
+    // =====================================================
+    // BUSCADOR YT-SEARCH Y GESTIÓN DE LA COLA (QUEUE)
+    // =====================================================
+    async function performYouTubeSearch(query) {
+      if (!query) return;
       searchBtn.textContent = 'Buscando...';
-
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(raw)}`);
+        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
         const data = await res.json();
+        if (!res.ok) {
+          showToast(data.error || 'No se pudo buscar');
+          return;
+        }
         renderSearchResults(data.results || []);
-      } catch (e) {
-        showToast('Error al buscar en YouTube');
+      } catch (err) {
+        showToast('Error de red al buscar en YouTube');
       } finally {
-        searchBtn.disabled = false;
-        searchBtn.textContent = 'Buscar / Cargar';
+        searchBtn.textContent = 'Buscar';
       }
     }
 
-    function renderSearchResults(results) {
+    function renderSearchResults(items) {
       searchResultsEl.innerHTML = '';
-      if (!results.length) {
-        searchResultsEl.classList.add('empty');
-        closeSearchBtn.style.display = 'none';
-        showToast('No se encontraron resultados');
+      if (!items.length) {
+        searchResultsEl.style.display = 'none';
         return;
       }
+      searchResultsEl.style.display = 'flex';
 
-      searchResultsEl.classList.remove('empty');
-      closeSearchBtn.style.display = 'inline-flex';
-
-      results.forEach((item) => {
+      items.forEach((item) => {
         const row = document.createElement('div');
-        row.className = 'search-item';
+        row.className = 'media-item';
         row.innerHTML = `
-          <img class="search-thumb" src="${item.thumbnail}" alt="thumb" />
-          <div class="search-meta">
-            <div class="search-title"></div>
-            <div class="search-sub"></div>
+          <img class="media-thumb" src="${item.thumbnail}" alt="thumb" />
+          <div class="media-info">
+            <div class="media-title"></div>
+            <div class="media-sub"></div>
           </div>
-          <div class="search-actions">
-            <button class="sm play-now-btn">▶ Ahora</button>
-            <button class="sm secondary add-queue-btn">+ Fila</button>
+          <div class="media-actions">
+            <button class="btn-mini play-now-res">▶ Ahora</button>
+            <button class="btn-mini secondary add-q-res">+ Cola</button>
           </div>
         `;
+        row.querySelector('.media-title').textContent = item.title;
+        row.querySelector('.media-sub').textContent = `${item.author} • ${item.duration}`;
 
-        row.querySelector('.search-title').textContent = item.title;
-        row.querySelector('.search-sub').textContent = `${item.author} • ${item.duration}`;
-
-        row.querySelector('.play-now-btn').addEventListener('click', () => {
-          socket.emit('change_track', item);
-          showToast(`Reproduciendo: ${item.title}`);
+        row.querySelector('.play-now-res').addEventListener('click', () => {
+          socket.emit('change_track', { videoId: item.videoId, title: item.title });
+          searchResultsEl.style.display = 'none';
         });
 
-        row.querySelector('.add-queue-btn').addEventListener('click', () => {
-          socket.emit('queue_add', { ...item, addedBy: usernameInput.value });
-          showToast('Añadida a la fila de reproducción');
+        row.querySelector('.add-q-res').addEventListener('click', () => {
+          socket.emit('add-queue', {
+            videoId: item.videoId,
+            title: item.title,
+            author: item.author,
+            duration: item.duration,
+            thumbnail: item.thumbnail,
+            addedBy: aliasInput.value.trim() || 'Foquita'
+          });
+          showToast('Añadida a la cola 💜');
         });
 
         searchResultsEl.appendChild(row);
       });
     }
 
-    searchBtn.addEventListener('click', handleSearchOrDirectUrl);
-    searchInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleSearchOrDirectUrl();
-    });
-
-    closeSearchBtn.addEventListener('click', () => {
-      searchResultsEl.classList.add('empty');
-      searchResultsEl.innerHTML = '';
-      closeSearchBtn.style.display = 'none';
-    });
-
-    // ==========================================
-    // RENDERIZADO DE LA FILA / PLAYLIST
-    // ==========================================
     function renderQueue(queue) {
-      queueCountEl.textContent = queue.length === 1 ? '1 pista' : `${queue.length} pistas`;
+      queueCountBadge.textContent = `${queue.length} ${queue.length === 1 ? 'pista' : 'pistas'}`;
       queueListEl.innerHTML = '';
 
-      if (queue.length === 0) {
-        queueListEl.innerHTML = '<div class="queue-empty">La fila está vacía. Busca una canción para añadirla.</div>';
+      if (!queue.length) {
+        queueListEl.innerHTML = `
+          <p style="font-size: 0.8rem; color: var(--text-dim); text-align: center; padding: 0.8rem 0;">
+            La cola está vacía. Añade canciones para que suenen una tras otra 💜
+          </p>
+        `;
         return;
       }
 
       queue.forEach((item, idx) => {
-        const el = document.createElement('div');
-        el.className = 'queue-item';
-        el.innerHTML = `
-          <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-dim);">${idx + 1}</span>
-          <div class="queue-info">
-            <div class="queue-title"></div>
-            <div class="queue-sub"></div>
+        const row = document.createElement('div');
+        row.className = 'media-item';
+        row.innerHTML = `
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted); width: 20px;">#${idx + 1}</span>
+          <img class="media-thumb" src="${item.thumbnail}" alt="thumb" />
+          <div class="media-info">
+            <div class="media-title"></div>
+            <div class="media-sub"></div>
           </div>
-          <button class="sm secondary remove-btn" title="Quitar de la fila">✕</button>
+          <div class="media-actions">
+            <button class="btn-mini secondary remove-q-btn" title="Quitar">✕</button>
+          </div>
         `;
-        el.querySelector('.queue-title').textContent = item.title;
-        el.querySelector('.queue-sub').textContent = `${item.author} • por ${item.addedBy || 'Oyente'}`;
-        el.querySelector('.remove-btn').addEventListener('click', () => {
-          socket.emit('queue_remove', { id: item.id });
+        row.querySelector('.media-title').textContent = item.title;
+        row.querySelector('.media-sub').textContent = `Por: ${item.addedBy || 'Foquita'}`;
+        row.querySelector('.remove-q-btn').addEventListener('click', () => {
+          socket.emit('remove-queue', item.id);
         });
-        queueListEl.appendChild(el);
+        queueListEl.appendChild(row);
       });
     }
 
-    // ==========================================
-    // CHAT & REACCIONES FLOTANTES
-    // ==========================================
-    function renderChatHistory(history) {
-      chatMessagesEl.innerHTML = '';
-      history.forEach(appendChatMessage);
-    }
-
-    function appendChatMessage(msg) {
-      const div = document.createElement('div');
-      div.className = 'chat-msg';
-
-      const userSpan = document.createElement('span');
-      userSpan.className = 'chat-user';
-      userSpan.textContent = `${msg.username}:`;
-
-      const textSpan = document.createElement('span');
-      textSpan.textContent = msg.text;
-
-      const timeSpan = document.createElement('span');
-      timeSpan.className = 'chat-time';
-      const date = new Date(msg.timestamp || Date.now());
-      timeSpan.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-      div.appendChild(userSpan);
-      div.appendChild(textSpan);
-      div.appendChild(timeSpan);
-
-      chatMessagesEl.appendChild(div);
-      chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
-    }
-
-    chatForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const text = chatInput.value.trim();
-      if (!text) return;
-      socket.emit('chat_message', {
-        username: usernameInput.value,
-        text
-      });
-      chatInput.value = '';
+    searchBtn.addEventListener('click', () => {
+      const val = youtubeInput.value.trim();
+      if (!val) return;
+      performYouTubeSearch(val);
     });
 
-    document.querySelectorAll('.reaction-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const emoji = btn.getAttribute('data-emoji');
-        socket.emit('send_reaction', { emoji, username: usernameInput.value });
-      });
+    loadDirectBtn.addEventListener('click', () => {
+      const val = youtubeInput.value.trim();
+      const videoId = extractYouTubeId(val);
+      if (videoId) {
+        socket.emit('change_track', { videoId, title: `YouTube Track (${videoId})` });
+        youtubeInput.value = '';
+      } else {
+        performYouTubeSearch(val);
+      }
     });
 
-    function spawnFloatingEmoji(emoji) {
-      const el = document.createElement('div');
-      el.className = 'floating-emoji';
-      el.textContent = emoji;
-      el.style.left = `${12 + Math.random() * 76}%`;
-      reactionsStage.appendChild(el);
-      setTimeout(() => el.remove(), 2400);
-    }
+    queueDirectBtn.addEventListener('click', () => {
+      const val = youtubeInput.value.trim();
+      const videoId = extractYouTubeId(val);
+      if (!videoId) {
+        performYouTubeSearch(val);
+        return;
+      }
+      socket.emit('add-queue', {
+        videoId,
+        title: `Pista de YouTube (${videoId})`,
+        addedBy: aliasInput.value.trim() || 'Foquita'
+      });
+      youtubeInput.value = '';
+      showToast('Pista añadida a la cola 🦭');
+    });
 
-    // ==========================================
-    // CONTROLES DE REPRODUCCIÓN Y SALA
-    // ==========================================
+    // =====================================================
+    // EVENTOS DE BOTONES DE INTERFAZ Y CONTROLES
+    // =====================================================
     unlockAudioBtn.addEventListener('click', () => {
       audioUnlocked = true;
       autoplayOverlay.classList.add('hidden');
-      socket.emit('request_sync');
+      socket.emit('sync-state');
     });
 
     joinBtn.addEventListener('click', () => {
       const code = roomInput.value.trim().toUpperCase();
       if (!code) return;
+      const alias = aliasInput.value.trim() || 'Foquita';
+      localStorage.setItem('seal_void_alias', alias);
       currentRoomId = code;
       window.history.replaceState({}, '', `?room=${currentRoomId}`);
-      socket.emit('join_room', { roomId: currentRoomId, username: usernameInput.value });
-      showToast(`Conectado a la sala ${currentRoomId}`);
+      socket.emit('join_room', { roomId: currentRoomId, alias });
+      triggerFokitaSaludo();
+      showToast(`Conectados en la sala ${currentRoomId} 🦭💜`);
     });
 
     shareBtn.addEventListener('click', () => {
       const shareUrl = `${window.location.origin}/?room=${currentRoomId}`;
       navigator.clipboard.writeText(shareUrl).then(() => {
-        showToast('Enlace de invitación copiado');
+        showToast('Enlace de nuestra sala copiado al portapapeles 💜');
       });
     });
 
@@ -1142,6 +2102,7 @@
       const nowTime = player.getCurrentTime() || 0;
       lockRemoteAction(500);
       player.playVideo();
+      updateSealMusicStatus(true);
       socket.emit('play', { trackTime: nowTime });
     });
 
@@ -1150,17 +2111,18 @@
       const nowTime = player.getCurrentTime() || 0;
       lockRemoteAction(500);
       player.pauseVideo();
+      updateSealMusicStatus(false);
       socket.emit('pause', { trackTime: nowTime });
     });
 
-    nextBtn.addEventListener('click', () => {
-      socket.emit('next_track');
+    skipBtn.addEventListener('click', () => {
+      socket.emit('skip');
     });
 
     resyncBtn.addEventListener('click', () => {
       calibrateClock();
-      socket.emit('request_sync');
-      showToast('Sincronizado con el reloj del servidor');
+      socket.emit('sync-state');
+      showToast('Sincronizado al milisegundo con tu pareja 🦭✨');
     });
 
     seekBar.addEventListener('input', () => {
@@ -1210,7 +2172,7 @@
     function showToast(msg) {
       toastEl.textContent = msg;
       toastEl.classList.add('show');
-      setTimeout(() => toastEl.classList.remove('show'), 2500);
+      setTimeout(() => toastEl.classList.remove('show'), 2800);
     }
   </script>
 </body>
