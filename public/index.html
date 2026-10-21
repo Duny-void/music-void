@@ -1348,6 +1348,188 @@
         font-size: 0.82rem;
       }
     }
+
+        /* ========================================================
+       SELECTOR DE EMOJIS Y BUSCADOR DE GIFS EN EL CHAT
+       ======================================================== */
+    .chat-card {
+      position: relative;
+    }
+
+    .chat-pickers-anchor {
+      position: relative;
+      width: 100%;
+    }
+
+    .chat-tool-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-wine);
+      color: var(--text-secondary);
+      padding: 0 0.7rem;
+      min-width: 40px;
+      height: 42px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      box-shadow: none;
+      flex-shrink: 0;
+    }
+
+    .chat-tool-btn:hover,
+    .chat-tool-btn.active {
+      background: rgba(190, 18, 60, 0.38);
+      border-color: var(--accent-pink);
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
+
+    .gif-badge-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem !important;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .chat-popover {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      z-index: 60;
+      background: linear-gradient(160deg, rgba(18, 7, 12, 0.97), rgba(38, 10, 22, 0.96));
+      border: 1px solid var(--border-pink);
+      border-radius: 16px;
+      padding: 0.75rem;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.85), 0 0 20px rgba(244, 114, 182, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      animation: popoverSlideUp 0.2s ease-out;
+    }
+
+    .chat-popover.hidden {
+      display: none !important;
+    }
+
+    @keyframes popoverSlideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .popover-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 0.55rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .popover-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.15rem 0.45rem;
+      font-size: 0.85rem;
+      box-shadow: none;
+    }
+
+    .popover-close:hover {
+      background: rgba(190, 18, 60, 0.35);
+      color: var(--text-main);
+    }
+
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 0.35rem;
+      max-height: 175px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-right: 0.2rem;
+    }
+
+    .emoji-item-btn {
+      background: rgba(255, 241, 242, 0.04);
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 0.4rem 0;
+      font-size: 1.25rem;
+      cursor: pointer;
+      box-shadow: none;
+      transition: transform 0.12s ease, background 0.15s ease;
+    }
+
+    .emoji-item-btn:hover {
+      background: rgba(244, 114, 182, 0.2);
+      border-color: var(--border-wine);
+      transform: scale(1.15);
+    }
+
+    .gif-search-row {
+      display: flex;
+      gap: 0.45rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .gif-search-row input[type="text"] {
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.84rem;
+    }
+
+    .gif-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.45rem;
+      max-height: 190px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-right: 0.2rem;
+    }
+
+    .gif-thumb-item {
+      width: 100%;
+      height: 92px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--border-wine);
+      cursor: pointer;
+      background: #0b070a;
+      transition: transform 0.15s ease, border-color 0.2s ease;
+    }
+
+    .gif-thumb-item:hover {
+      border-color: var(--accent-pink);
+      transform: scale(1.03);
+    }
+
+    .chat-gif-image {
+      display: block;
+      max-width: 210px;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-top: 0.15rem;
+      border: 1px solid rgba(244, 114, 182, 0.35);
+    }
+
+    @media (max-width: 768px) {
+      .emoji-grid {
+        grid-template-columns: repeat(6, 1fr);
+        max-height: 155px;
+      }
+      .chat-tool-btn {
+        padding: 0 0.55rem;
+        min-width: 36px;
+        height: 40px;
+      }
+      .chat-gif-image {
+        max-width: 175px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1557,10 +1739,39 @@
 
           <div id="chat-messages" class="chat-messages"></div>
 
+                    <!-- Paneles Emergentes de Emojis y GIFs (Justo debajo de #chat-messages y arriba de #chat-form) -->
+          <div class="chat-pickers-anchor">
+            <!-- Selector de Emojis -->
+            <div id="emoji-popover" class="chat-popover hidden" aria-label="Selector de emojis">
+              <div class="popover-header">
+                <span>🦭 Emojis favoritos</span>
+                <button type="button" id="close-emoji-btn" class="popover-close">✕</button>
+              </div>
+              <div id="emoji-grid" class="emoji-grid"></div>
+            </div>
+
+            <!-- Buscador de GIFs -->
+            <div id="gif-popover" class="chat-popover hidden" aria-label="Buscador de GIFs">
+              <div class="popover-header">
+                <span>🎬 Buscar GIF (fokitas, amor, abrazos...)</span>
+                <button type="button" id="close-gif-btn" class="popover-close">✕</button>
+              </div>
+              <div class="gif-search-row">
+                <input type="text" id="gif-search-input" placeholder="Ej. seal cute, love, hug..." autocomplete="off" />
+                <button type="button" id="gif-search-btn" class="btn-mini">Buscar</button>
+              </div>
+              <div id="gif-results-grid" class="gif-grid"></div>
+            </div>
+          </div>
+
+          <!-- Formulario de entrada del chat con botones 😊 y GIF integrados -->
           <form id="chat-form" class="chat-input-area">
+            <button type="button" id="toggle-emoji-btn" class="chat-tool-btn" title="Insertar Emoji">😊</button>
+            <button type="button" id="toggle-gif-btn" class="chat-tool-btn gif-badge-btn" title="Enviar un GIF">GIF</button>
             <input type="text" id="chat-input" placeholder="Escríbele algo bonito..." autocomplete="off" />
             <button type="submit">Enviar</button>
           </form>
+
         </section>
       </div>
     </div>
@@ -2460,6 +2671,179 @@
       toastEl.classList.add('show');
       setTimeout(() => toastEl.classList.remove('show'), 2800);
     }
+        // =====================================================
+    // SELECTOR DE EMOJIS Y BUSCADOR DE GIFS EN EL CHAT
+    // =====================================================
+    const toggleEmojiBtn = document.getElementById('toggle-emoji-btn');
+    const toggleGifBtn = document.getElementById('toggle-gif-btn');
+    const emojiPopover = document.getElementById('emoji-popover');
+    const gifPopover = document.getElementById('gif-popover');
+    const closeEmojiBtn = document.getElementById('close-emoji-btn');
+    const closeGifBtn = document.getElementById('close-gif-btn');
+    const emojiGrid = document.getElementById('emoji-grid');
+    const gifSearchInput = document.getElementById('gif-search-input');
+    const gifSearchBtn = document.getElementById('gif-search-btn');
+    const gifResultsGrid = document.getElementById('gif-results-grid');
+
+    // Repertorio curado de emojis para Seal Void
+    const SEAL_EMOJIS = [
+      '🦭', '❤️', '🌹', '✨', '🔥', '🥺', '😍', '🥰',
+      '😘', '💗', '💓', '💞', '💕', '💘', '🌸', '💐',
+      '🍓', '🍒', '🍷', '🌙', '⭐', '🎧', '🎵', '🎶',
+      '😊', '🤭', '😂', '😭', '😢', '😡', '😴', '💤',
+      '🐾', '🫂', '🫶', '💌', '🎀', '🧸', '🍰', '🎉'
+    ];
+
+    // 1. Renderizar cuadrícula de emojis e insertar en la posición exacta del cursor
+    SEAL_EMOJIS.forEach((emoji) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'emoji-item-btn';
+      btn.textContent = emoji;
+      btn.addEventListener('click', () => {
+        insertEmojiAtCursor(chatInput, emoji);
+      });
+      emojiGrid.appendChild(btn);
+    });
+
+    function insertEmojiAtCursor(inputEl, emojiStr) {
+      inputEl.focus();
+      const start = inputEl.selectionStart ?? inputEl.value.length;
+      const end = inputEl.selectionEnd ?? inputEl.value.length;
+      const text = inputEl.value;
+      inputEl.value = text.slice(0, start) + emojiStr + text.slice(end);
+      const nextPos = start + emojiStr.length;
+      inputEl.setSelectionRange(nextPos, nextPos);
+    }
+
+    // 2. Abrir / Cerrar paneles emergentes
+    function closeAllChatPopovers() {
+      emojiPopover.classList.add('hidden');
+      gifPopover.classList.add('hidden');
+      toggleEmojiBtn.classList.remove('active');
+      toggleGifBtn.classList.remove('active');
+    }
+
+    toggleEmojiBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = emojiPopover.classList.contains('hidden');
+      closeAllChatPopovers();
+      if (isHidden) {
+        emojiPopover.classList.remove('hidden');
+        toggleEmojiBtn.classList.add('active');
+      }
+    });
+
+    toggleGifBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = gifPopover.classList.contains('hidden');
+      closeAllChatPopovers();
+      if (isHidden) {
+        gifPopover.classList.remove('hidden');
+        toggleGifBtn.classList.add('active');
+        gifSearchInput.focus();
+        if (!gifResultsGrid.children.length) {
+          fetchGifs('cute seal love');
+        }
+      }
+    });
+
+    closeEmojiBtn.addEventListener('click', closeAllChatPopovers);
+    closeGifBtn.addEventListener('click', closeAllChatPopovers);
+
+    document.addEventListener('click', (e) => {
+      if (
+        !emojiPopover.contains(e.target) &&
+        !gifPopover.contains(e.target) &&
+        e.target !== toggleEmojiBtn &&
+        e.target !== toggleGifBtn
+      ) {
+        closeAllChatPopovers();
+      }
+    });
+
+    // 3. Buscador de GIFs (API pública de Tenor con fallback curado)
+    const FALLBACK_GIFS = [
+      'https://media.tenor.com/mJ7Tkj3KIn0AAAAC/seal-cute.gif',
+      'https://media.tenor.com/2s4P4vA6cZkAAAAC/seal-happy.gif',
+      'https://media.tenor.com/5J8xR2bI-V4AAAAC/cute-seal.gif',
+      'https://media.tenor.com/9X4kL3pY_aQAAAAC/milk-and-mocha-hug.gif'
+    ];
+
+    async function fetchGifs(query = 'cute seal') {
+      const q = query.trim() || 'cute seal';
+      gifResultsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; font-size:0.78rem; color:var(--text-secondary); padding:1rem 0;">Buscando GIFs... 🦭</p>';
+      try {
+        const endpoint = `https://g.tenor.com/v1/search?q=${encodeURIComponent(q)}&key=LIVDSRZULELA&limit=12&media_filter=minimal`;
+        const res = await fetch(endpoint);
+        const data = await res.json();
+        const urls = (data.results || [])
+          .map((item) => item.media?.[0]?.tinygif?.url || item.media?.[0]?.gif?.url)
+          .filter(Boolean);
+
+        renderGifGrid(urls.length ? urls : FALLBACK_GIFS);
+      } catch (err) {
+        renderGifGrid(FALLBACK_GIFS);
+      }
+    }
+
+    function renderGifGrid(urls) {
+      gifResultsGrid.innerHTML = '';
+      urls.forEach((url) => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'GIF';
+        img.loading = 'lazy';
+        img.className = 'gif-thumb-item';
+        img.addEventListener('click', () => {
+          sendGifToChat(url);
+        });
+        gifResultsGrid.appendChild(img);
+      });
+    }
+
+    function sendGifToChat(gifUrl) {
+      const senderName = aliasInput.value.trim() || 'Foquita';
+      localStorage.setItem('seal_void_alias', senderName);
+      socket.emit('chat-message', {
+        text: `[GIF]:${gifUrl}`,
+        senderName
+      });
+      closeAllChatPopovers();
+    }
+
+    gifSearchBtn.addEventListener('click', () => {
+      fetchGifs(gifSearchInput.value);
+    });
+
+    gifSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        fetchGifs(gifSearchInput.value);
+      }
+    });
+
+    // 4. Extensión de appendChatMessage para transformar [GIF]:url en imagen dentro de la burbuja
+    const _originalAppendChatMessage = appendChatMessage;
+    appendChatMessage = function (msg) {
+      _originalAppendChatMessage(msg);
+      if (msg.type !== 'system' && typeof msg.text === 'string' && msg.text.startsWith('[GIF]:')) {
+        const gifUrl = msg.text.replace('[GIF]:', '').trim();
+        const lastBubble = chatMessagesEl.lastElementChild?.querySelector('.msg-bubble');
+        if (lastBubble && /^https?:\/\//i.test(gifUrl)) {
+          lastBubble.textContent = '';
+          const img = document.createElement('img');
+          img.src = gifUrl;
+          img.alt = 'GIF enviado en el chat';
+          img.className = 'chat-gif-image';
+          img.onload = () => {
+            chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+          };
+          lastBubble.appendChild(img);
+        }
+      }
+    };
+
   </script>
 </body>
 </html>
