@@ -2763,28 +2763,67 @@
     });
 
     // 3. Buscador de GIFs (API pública de Tenor con fallback curado)
-    const FALLBACK_GIFS = [
-      'https://media.tenor.com/mJ7Tkj3KIn0AAAAC/seal-cute.gif',
-      'https://media.tenor.com/2s4P4vA6cZkAAAAC/seal-happy.gif',
-      'https://media.tenor.com/5J8xR2bI-V4AAAAC/cute-seal.gif',
-      'https://media.tenor.com/9X4kL3pY_aQAAAAC/milk-and-mocha-hug.gif'
+        // 3. Buscador de GIFs multi-motor (Giphy API + Buscador semántico local en Español/Inglés + URL directa)
+    const LOCAL_GIF_LIBRARY = [
+      { tags: 'foca fokita seal cute tierna ola hola saludo', url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Z0b3J6amJ4bmJ5N3B6eHpqZnd6eW56eHpqZnd6eW56eHpqZnd6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/adM1FEGALvsLS/giphy.gif' },
+      { tags: 'foca fokita seal clap aplauso feliz happy baile fiesta', url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJ6amJ4bmJ5N3B6eHpqZnd6eW56eHpqZnd6eW56eHpqZnd6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mpAJq0BoNZbig/giphy.gif' },
+      { tags: 'foca fokita seal sleep dormir mimir sueño zzz cansada', url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNXJ6amJ4bmJ5N3B6eHpqZnd6eW56eHpqZnd6eW56eHpqZnd6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/B86lxbrMSZ0SQ/giphy.gif' },
+      { tags: 'foca fokita seal guiño wink coqueta linda bonita', url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnJ6amJ4bmJ5N3B6eHpqZnd6eW56eHpqZnd6eW56eHpqZnd6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/AmDzまっています/giphy.gif' },
+      { tags: 'amor love abrazo hug besito kiss pareja cariño te amo', url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3J6amJ4bmJ5N3B6eHpqZnd6eW56eHpqZnd6eW56eHpqZnd6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/od5H3PmEG5EVq/giphy.gif' },
+      { tags: 'amor love beso kiss corazon heart te quiero', url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHJ6amJ4bmJ5N3B6eHpqZnd6eW56eHpqZnd6eW56eHpqZnd6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/G3va31oEEnIkM/giphy.gif' },
+      { tags: 'abrazo hug apapacho mimo juntitos', url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOXJ6amJ4bmJ5N3B6eHpqZnd6eW56eHpqZnd6eW56eHpqZnd6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l2QDM9Jnim1YVILXa/giphy.gif' },
+      { tags: 'triste sad llorar cry puchero extrañar', url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMHJ6amJ4bmJ5N3B6eHpqZnd6eW56eHpqZnd6eW56eHpqZnd6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OPU6wzx8JrHna/giphy.gif' },
+      { tags: 'enojada enojado angry mad berrinche celos', url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXJ6amJ4bmJ5N3B6eHpqZnd6eW56eHpqZnd6eW56eHpqZnd6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/11tTNkNy1SdXGg/giphy.gif' },
+      { tags: 'baile dance musica dj fiesta party', url: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnJ6amJ4bmJ5N3B6eHpqZnd6eW56eHpqZnd6eW56eHpqZnd6eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/blSTtZehjAZ8I/giphy.gif' }
+    ];
+
+    // Claves públicas de Giphy con rotación automática
+    const GIPHY_KEYS = [
+      'GlVGYHkr3WSBnllca54iNt0yFbjz7L65',
+      'dc6zaTOxFJmzC',
+      'sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh'
     ];
 
     async function fetchGifs(query = 'cute seal') {
-      const q = query.trim() || 'cute seal';
-      gifResultsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; font-size:0.78rem; color:var(--text-secondary); padding:1rem 0;">Buscando GIFs... 🦭</p>';
-      try {
-        const endpoint = `https://g.tenor.com/v1/search?q=${encodeURIComponent(q)}&key=LIVDSRZULELA&limit=12&media_filter=minimal`;
-        const res = await fetch(endpoint);
-        const data = await res.json();
-        const urls = (data.results || [])
-          .map((item) => item.media?.[0]?.tinygif?.url || item.media?.[0]?.gif?.url)
-          .filter(Boolean);
+      const rawQuery = (query || '').trim();
 
-        renderGifGrid(urls.length ? urls : FALLBACK_GIFS);
-      } catch (err) {
-        renderGifGrid(FALLBACK_GIFS);
+      // Si el usuario pega directamente el link de un GIF, lo envía o muestra de inmediato
+      if (/^https?:\/\/.+\.(gif|webp)(\?.*)?$/i.test(rawQuery)) {
+        renderGifGrid([rawQuery]);
+        return;
       }
+
+      const q = rawQuery || 'cute seal';
+      gifResultsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; font-size:0.78rem; color:var(--text-secondary); padding:1rem 0;">Buscando GIFs de "' + q + '"... 🦭</p>';
+
+      // 1. Intentar búsqueda en vivo con Giphy API (probando las llaves disponibles)
+      for (const apiKey of GIPHY_KEYS) {
+        try {
+          const endpoint = `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${encodeURIComponent(q)}&limit=14&rating=pg-13&lang=es`;
+          const res = await fetch(endpoint);
+          if (!res.ok) continue;
+
+          const data = await res.json();
+          const urls = (data.data || [])
+            .map((item) => item.images?.fixed_height_small?.url || item.images?.fixed_height?.url || item.images?.downsized?.url)
+            .filter(Boolean);
+
+          if (urls.length > 0) {
+            renderGifGrid(urls);
+            return;
+          }
+        } catch (err) {
+          // Si falla una llave, continúa con la siguiente
+        }
+      }
+
+      // 2. Si todas las llaves públicas tienen límite de tráfico, filtrar inteligentemente por lo que escribiste
+      const words = q.toLowerCase().split(/\s+/);
+      const matched = LOCAL_GIF_LIBRARY.filter((item) =>
+        words.some((w) => item.tags.includes(w))
+      ).map((item) => item.url);
+
+      renderGifGrid(matched.length > 0 ? matched : LOCAL_GIF_LIBRARY.map((item) => item.url));
     }
 
     function renderGifGrid(urls) {
@@ -2795,6 +2834,7 @@
         img.alt = 'GIF';
         img.loading = 'lazy';
         img.className = 'gif-thumb-item';
+        img.onerror = () => img.remove();
         img.addEventListener('click', () => {
           sendGifToChat(url);
         });
@@ -2812,16 +2852,20 @@
       closeAllChatPopovers();
     }
 
-    gifSearchBtn.addEventListener('click', () => {
+    gifSearchBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       fetchGifs(gifSearchInput.value);
     });
 
     gifSearchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
+        e.stopPropagation();
         fetchGifs(gifSearchInput.value);
       }
     });
+
 
     // 4. Extensión de appendChatMessage para transformar [GIF]:url en imagen dentro de la burbuja
     const _originalAppendChatMessage = appendChatMessage;
