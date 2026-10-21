@@ -2,52 +2,60 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Seal Void — Nuestro espacio íntimo y sincronizado para escuchar música juntitos." />
-  <meta name="theme-color" content="#09080f" />
-  <title>Seal Void 🦭💜 — Nuestro Espacio Musical</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="Seal Void — Nuestro espacio musical sincronizado en tiempo real." />
+  <meta name="theme-color" content="#0b070a" />
+  <title>Seal Void 🦭🌹 — Nuestro Nidito Musical</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-deep: #09080f;
-      --bg-card: rgba(16, 13, 28, 0.78);
-      --bg-elevated: rgba(28, 22, 48, 0.85);
-      --bg-glass: rgba(20, 15, 35, 0.65);
-      --border-violet: rgba(167, 139, 250, 0.24);
-      --border-soft: rgba(255, 255, 255, 0.09);
-      --accent-primary: #8b5cf6;
-      --accent-pink: #ec4899;
-      --accent-hover: #a78bfa;
-      --accent-glow: rgba(139, 92, 246, 0.42);
-      --text-main: #f5f3ff;
-      --text-muted: #c4b5fd;
-      --text-dim: #9ca3af;
-      --success: #34d399;
+      /* 1. PALETA: NEGRO PROFUNDO, TINTO / VINO Y ROSA (CERO MORADOS/AZULES) */
+      --bg-deep: #0b070a;
+      --bg-card: rgba(22, 10, 16, 0.88);
+      --bg-elevated: rgba(34, 12, 22, 0.92);
+      --bg-input: rgba(18, 7, 12, 0.95);
+      --border-wine: rgba(165, 30, 70, 0.35);
+      --border-pink: rgba(244, 114, 182, 0.45);
+      --border-soft: rgba(255, 241, 242, 0.08);
+      --accent-pink: #f472b6;
+      --accent-rose: #fb7185;
+      --accent-wine: #881337;
+      --accent-crimson: #be123c;
+      --accent-glow: rgba(251, 113, 133, 0.38);
+      --btn-gradient: linear-gradient(135deg, #881337, #be123c, #fb7185);
+      --btn-gradient-hover: linear-gradient(135deg, #9f1239, #e11d48, #f472b6);
+      --text-main: #fff1f2;
+      --text-secondary: #fda4af;
+      --text-muted: #9f808a;
+      --online-dot: #fb7185;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* 1. FONDO MIXTO: perrito.jpg + Overlay Dark Violet + Blur sutil */
-    body {
+    html, body {
       background-color: var(--bg-deep);
-      background-image:
-        linear-gradient(135deg, rgba(9, 8, 15, 0.88) 0%, rgba(45, 17, 85, 0.82) 100%),
-        url('/perrito.jpg');
-      background-attachment: fixed;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
       color: var(--text-main);
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
+    }
+
+    body {
+      background-image:
+        linear-gradient(135deg, rgba(15, 5, 10, 0.92) 0%, rgba(50, 10, 24, 0.85) 100%),
+        url('/perrito.jpg');
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     body::before {
@@ -60,21 +68,39 @@
       z-index: 0;
     }
 
+    /* Scrollbars personalizados en tonos tinto y rosa */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 5, 10, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(190, 18, 60, 0.6);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-rose);
+    }
+
     .app-wrapper {
       position: relative;
       z-index: 1;
       max-width: 1240px;
       margin: 0 auto;
-      padding: 1.25rem 1.25rem 6rem;
+      padding: 1.25rem 1.25rem 6.5rem;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.15rem;
     }
 
-    /* CABECERA Y BRANDING SEAL VOID */
+    /* ========================================================
+       2. CABECERA Y CONTADOR DE PRESENCIA ("🦭 Fokitas en sala: X")
+       ======================================================== */
     header {
       background: var(--bg-card);
-      border: 1px solid var(--border-violet);
+      border: 1px solid var(--border-wine);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-radius: 20px;
@@ -84,7 +110,7 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 1rem;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
     }
 
     .brand {
@@ -94,10 +120,10 @@
     }
 
     .brand-badge {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 14px;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-pink));
+      background: var(--btn-gradient);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -112,17 +138,17 @@
     }
 
     .brand-titles h1 {
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 800;
-      letter-spacing: 0.04em;
-      background: linear-gradient(90deg, #ffffff, #e9d5ff, #f9a8d4);
+      letter-spacing: 0.03em;
+      background: linear-gradient(90deg, #fff1f2, #fda4af, #f472b6);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .brand-titles p {
       font-size: 0.76rem;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       opacity: 0.9;
     }
 
@@ -132,40 +158,44 @@
       flex-wrap: wrap;
       gap: 0.6rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.76rem;
+      font-size: 0.78rem;
     }
 
     .pill {
       background: var(--bg-elevated);
-      border: 1px solid var(--border-violet);
-      padding: 0.42rem 0.8rem;
+      border: 1px solid var(--border-wine);
+      padding: 0.45rem 0.9rem;
       border-radius: 999px;
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.5rem;
       color: var(--text-main);
-    }
-
-    .pill.together-timer {
-      background: linear-gradient(90deg, rgba(139, 92, 246, 0.22), rgba(236, 72, 153, 0.22));
-      border-color: rgba(236, 72, 153, 0.45);
-      color: #fce7f3;
       font-weight: 600;
+      box-shadow: inset 0 0 12px rgba(136, 19, 55, 0.25);
     }
 
     .dot-live {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 10px var(--success);
+      background: var(--online-dot);
+      box-shadow: 0 0 10px var(--online-dot);
+      animation: pulseDot 2s infinite;
     }
 
-    /* BARRA DE SALA Y PERFIL */
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(1.2); }
+    }
+
+    /* ========================================================
+       BARRA DE SALA, USUARIO Y BOTÓN "besito, abrasivo 🦭"
+       ======================================================== */
     .room-bar {
       background: var(--bg-card);
-      border: 1px solid var(--border-violet);
+      border: 1px solid var(--border-wine);
       backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-radius: 18px;
       padding: 0.9rem 1.15rem;
       display: flex;
@@ -173,6 +203,7 @@
       gap: 0.7rem;
       align-items: center;
       justify-content: space-between;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
     }
 
     .room-inputs {
@@ -183,43 +214,49 @@
     }
 
     input[type="text"] {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-violet);
+      background: var(--bg-input);
+      border: 1px solid var(--border-wine);
       color: var(--text-main);
       padding: 0.68rem 0.95rem;
       border-radius: 12px;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-family: inherit;
       outline: none;
-      transition: all 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--text-muted);
     }
 
     input[type="text"]:focus {
-      border-color: var(--accent-hover);
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+      border-color: var(--accent-pink);
+      box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
     }
 
     button {
-      background: linear-gradient(135deg, var(--accent-primary), #7c3aed);
-      color: #fff;
-      border: none;
-      padding: 0.68rem 1.05rem;
+      background: var(--btn-gradient);
+      color: var(--text-main);
+      border: 1px solid rgba(251, 113, 133, 0.3);
+      padding: 0.68rem 1.1rem;
       border-radius: 12px;
       font-size: 0.86rem;
-      font-weight: 600;
+      font-weight: 700;
       font-family: inherit;
       cursor: pointer;
       transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
+      gap: 0.45rem;
       white-space: nowrap;
+      box-shadow: 0 4px 15px rgba(136, 19, 55, 0.4);
     }
 
     button:hover {
+      background: var(--btn-gradient-hover);
       transform: translateY(-1px);
-      box-shadow: 0 6px 18px var(--accent-glow);
+      box-shadow: 0 6px 20px var(--accent-glow);
     }
 
     button:active {
@@ -228,59 +265,188 @@
 
     button.secondary {
       background: var(--bg-elevated);
-      border: 1px solid var(--border-violet);
-      color: var(--text-main);
+      border: 1px solid var(--border-wine);
+      color: var(--text-secondary);
+      box-shadow: none;
     }
 
     button.secondary:hover {
-      background: rgba(139, 92, 246, 0.22);
-      border-color: var(--accent-hover);
+      background: rgba(136, 19, 55, 0.38);
+      border-color: var(--accent-pink);
+      color: var(--text-main);
     }
 
     button.besito-btn {
-      background: linear-gradient(135deg, #ec4899, #8b5cf6);
-      box-shadow: 0 0 18px rgba(236, 72, 153, 0.45);
-      font-weight: 700;
+      background: var(--btn-gradient);
+      border: 1px solid var(--accent-pink);
+      box-shadow: 0 0 20px rgba(244, 114, 182, 0.35);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      padding: 0.72rem 1.25rem;
     }
 
     button.besito-btn:hover {
-      box-shadow: 0 0 25px rgba(236, 72, 153, 0.75);
+      box-shadow: 0 0 28px rgba(244, 114, 182, 0.65);
       transform: scale(1.03);
     }
 
-    /* LAYOUT PRINCIPAL DE 2 COLUMNAS */
+    /* ========================================================
+       LAYOUT PRINCIPAL DE 2 COLUMNAS EN ESCRITORIO
+       ======================================================== */
     .main-grid {
       display: grid;
       grid-template-columns: 1.45fr 1fr;
-      gap: 1.25rem;
+      gap: 1.2rem;
       align-items: start;
-    }
-
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-violet);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-radius: 20px;
-      padding: 1.15rem;
-      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
     }
 
     .left-col, .right-col {
       display: flex;
       flex-direction: column;
       gap: 1.15rem;
+      min-width: 0;
     }
 
-    /* REPRODUCTOR DE VIDEO */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-wine);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 20px;
+      padding: 1.15rem;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+    }
+
+    .section-title {
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* ========================================================
+       4 & 6. BUSCADOR ARRIBA + COLA + NUESTRAS FAVORITAS 🦭
+       ======================================================== */
+    .search-bar-row {
+      display: flex;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .search-bar-row input[type="text"] {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .tabs-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      border-bottom: 1px solid var(--border-wine);
+      padding-bottom: 0.6rem;
+    }
+
+    .tab-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-wine);
+      color: var(--text-muted);
+      padding: 0.48rem 0.95rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      box-shadow: none;
+    }
+
+    .tab-btn.active {
+      background: var(--btn-gradient);
+      color: var(--text-main);
+      border-color: var(--accent-pink);
+      box-shadow: 0 0 14px rgba(244, 114, 182, 0.3);
+    }
+
+    .search-results, .queue-list, .favorites-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      max-height: 220px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-right: 0.25rem;
+    }
+
+    .media-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 0.5rem 0.65rem;
+      transition: border-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .media-item:hover {
+      border-color: var(--accent-pink);
+    }
+
+    .media-thumb {
+      width: 58px;
+      height: 36px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid var(--border-wine);
+    }
+
+    .media-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .media-title {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .media-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .media-actions {
+      display: flex;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    .btn-mini {
+      padding: 0.38rem 0.65rem;
+      font-size: 0.75rem;
+      border-radius: 8px;
+    }
+
+    /* ========================================================
+       REPRODUCTOR DE YOUTUBE Y CONTROLES
+       ======================================================== */
     .player-wrapper {
       position: relative;
       width: 100%;
-      padding-top: 56.25%;
-      background: #05040a;
+      aspect-ratio: 16 / 9;
+      background: #060305;
       border-radius: 16px;
       overflow: hidden;
-      border: 1px solid var(--border-violet);
+      border: 1px solid var(--border-wine);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65);
     }
 
     #yt-player {
@@ -288,13 +454,15 @@
       inset: 0;
       width: 100%;
       height: 100%;
+      border: 0;
     }
 
     .autoplay-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(9, 8, 15, 0.88);
+      background: rgba(11, 7, 10, 0.92);
       backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -309,16 +477,16 @@
       display: none;
     }
 
-    /* 4. INDICADOR MUSICAL DINÁMICO: FOKITA DJ vs DORMIDA */
+    /* 7. INDICADOR DINÁMICO: FOKITA DJ vs MIMIR + BOTÓN DE FAVORITOS */
     .now-playing-banner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
+      gap: 0.85rem;
       margin-top: 1rem;
       padding: 0.85rem 1rem;
       background: var(--bg-elevated);
-      border: 1px solid var(--border-violet);
+      border: 1px solid var(--border-wine);
       border-radius: 16px;
       position: relative;
       overflow: hidden;
@@ -336,35 +504,78 @@
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--accent-hover);
+      color: var(--text-secondary);
       font-weight: 700;
     }
 
+    .track-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-width: 0;
+    }
+
     .track-title {
-      font-size: 0.98rem;
+      font-size: 0.96rem;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-main);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    /* Botón de corazón para guardar en Favoritas */
+    .fav-heart-btn {
+      background: rgba(136, 19, 55, 0.3);
+      border: 1px solid var(--border-wine);
+      color: var(--text-muted);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      padding: 0;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      box-shadow: none;
+      transition: all 0.25s ease;
+    }
+
+    .fav-heart-btn:hover {
+      border-color: var(--accent-pink);
+      color: var(--accent-pink);
+      transform: scale(1.08);
+    }
+
+    .fav-heart-btn.is-fav {
+      background: rgba(244, 114, 182, 0.18);
+      border-color: var(--accent-pink);
+      color: var(--accent-pink);
+      box-shadow: 0 0 14px rgba(244, 114, 182, 0.45);
+      animation: heartBeatPop 0.4s ease;
+    }
+
+    @keyframes heartBeatPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.28); }
+      100% { transform: scale(1); }
     }
 
     .seal-status-stage {
       position: relative;
-      width: 78px;
-      height: 78px;
+      width: 74px;
+      height: 74px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(139, 92, 246, 0.12);
-      border: 1px solid rgba(167, 139, 250, 0.3);
+      background: rgba(136, 19, 55, 0.22);
+      border: 1px solid var(--border-wine);
       border-radius: 16px;
     }
 
     .seal-status-img {
-      width: 64px;
-      height: 64px;
+      width: 60px;
+      height: 60px;
       object-fit: contain;
       user-select: none;
     }
@@ -401,7 +612,7 @@
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
       font-size: 0.72rem;
-      color: #ddd6fe;
+      color: var(--text-secondary);
       opacity: 0;
       animation: floatZzz 2.6s infinite ease-out;
     }
@@ -422,7 +633,7 @@
       100% { transform: translate(12px, -22px) scale(1.15); opacity: 0; }
     }
 
-    /* CONTROLES DEL REPRODUCTOR */
+    /* CONTROLES DE TRANSPORTE Y BARRA DE TIEMPO */
     .controls-bar {
       display: flex;
       flex-direction: column;
@@ -436,7 +647,7 @@
       gap: 0.75rem;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.78rem;
-      color: var(--text-muted);
+      color: var(--text-secondary);
     }
 
     input[type="range"] {
@@ -444,7 +655,7 @@
       appearance: none;
       width: 100%;
       height: 6px;
-      background: rgba(255, 255, 255, 0.14);
+      background: rgba(255, 241, 242, 0.14);
       border-radius: 999px;
       outline: none;
       cursor: pointer;
@@ -456,8 +667,8 @@
       width: 15px;
       height: 15px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-pink), var(--accent-primary));
-      box-shadow: 0 0 10px var(--accent-primary);
+      background: linear-gradient(135deg, var(--accent-crimson), var(--accent-pink));
+      box-shadow: 0 0 10px var(--accent-pink);
       cursor: pointer;
     }
 
@@ -482,10 +693,10 @@
       gap: 0.5rem;
       width: 165px;
       font-size: 0.8rem;
-      color: var(--text-muted);
+      color: var(--text-secondary);
     }
 
-    /* 6. BARRA DE REACCIONES DE FOQUITAS Y BOTÓN DE BESITO */
+    /* 5. BARRA DE 5 REACCIONES ESPECÍFICAS */
     .reactions-strip {
       display: flex;
       align-items: center;
@@ -505,103 +716,34 @@
 
     .react-btn {
       background: var(--bg-elevated);
-      border: 1px solid var(--border-violet);
-      padding: 0.48rem 0.78rem;
+      border: 1px solid var(--border-wine);
+      padding: 0.48rem 0.82rem;
       border-radius: 999px;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       cursor: pointer;
-      transition: transform 0.15s ease, background 0.2s;
+      box-shadow: none;
+      transition: transform 0.15s ease, background 0.2s, border-color 0.2s;
     }
 
     .react-btn:hover {
-      background: rgba(139, 92, 246, 0.28);
+      background: rgba(190, 18, 60, 0.35);
+      border-color: var(--accent-pink);
       transform: translateY(-2px) scale(1.06);
     }
 
-    /* BUSCADOR YT + FILA DE REPRODUCCIÓN (QUEUE) */
-    .section-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .search-results, .queue-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
-      margin-top: 0.8rem;
-      max-height: 230px;
-      overflow-y: auto;
-      padding-right: 0.25rem;
-    }
-
-    .media-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-soft);
-      border-radius: 12px;
-      padding: 0.5rem 0.65rem;
-      transition: border-color 0.2s;
-    }
-
-    .media-item:hover {
-      border-color: var(--accent-hover);
-    }
-
-    .media-thumb {
-      width: 60px;
-      height: 38px;
-      border-radius: 8px;
-      object-fit: cover;
-      flex-shrink: 0;
-    }
-
-    .media-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .media-title {
-      font-size: 0.83rem;
-      font-weight: 600;
-      color: #fff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .media-sub {
-      font-size: 0.72rem;
-      color: var(--text-dim);
-    }
-
-    .media-actions {
-      display: flex;
-      gap: 0.35rem;
-    }
-
-    .btn-mini {
-      padding: 0.38rem 0.62rem;
-      font-size: 0.75rem;
-      border-radius: 8px;
-    }
-
-    /* 5. CHAT ESTILO MENSAJERÍA (ALINEACIÓN BILATERAL) */
+    /* ========================================================
+       CHAT ESTILO MENSAJERÍA (SIN BOTONES REDUNDANTES ARRIBA)
+       ======================================================== */
     .chat-card {
       display: flex;
       flex-direction: column;
-      height: 560px;
+      height: 610px;
     }
 
     .chat-messages {
       flex: 1;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       display: flex;
       flex-direction: column;
       gap: 0.65rem;
@@ -621,33 +763,31 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Mensajes propios -> Derecha */
     .msg-row.self {
       align-self: flex-end;
       align-items: flex-end;
     }
 
     .msg-row.self .msg-bubble {
-      background: rgba(139, 92, 246, 0.8);
-      color: #ffffff;
+      background: linear-gradient(135deg, rgba(136, 19, 55, 0.92), rgba(190, 18, 60, 0.88));
+      border: 1px solid rgba(251, 113, 133, 0.4);
+      color: var(--text-main);
       border-radius: 16px 16px 4px 16px;
-      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+      box-shadow: 0 4px 15px rgba(136, 19, 55, 0.35);
     }
 
-    /* Mensajes de la pareja -> Izquierda */
     .msg-row.other {
       align-self: flex-start;
       align-items: flex-start;
     }
 
     .msg-row.other .msg-bubble {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(167, 139, 250, 0.32);
+      background: rgba(255, 241, 242, 0.07);
+      border: 1px solid var(--border-wine);
       color: var(--text-main);
       border-radius: 16px 16px 16px 4px;
     }
 
-    /* Mensajes de sistema -> Centrados */
     .msg-row.system {
       align-self: center;
       max-width: 92%;
@@ -656,13 +796,13 @@
 
     .msg-row.system .msg-system-text {
       font-size: 0.74rem;
-      color: var(--text-dim);
+      color: var(--text-muted);
       padding: 0.2rem 0.6rem;
     }
 
     .msg-meta {
       font-size: 0.68rem;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       margin-bottom: 0.2rem;
       padding: 0 0.25rem;
     }
@@ -686,92 +826,139 @@
       flex: 1;
     }
 
-    /* 2. ANIMACIÓN DE BIENVENIDA: "FOKITA SALUDO" */
-    .fokita-saludo-stage {
+    /* ========================================================
+       3. MODAL DE BIENVENIDA EN PANTALLA COMPLETA (SHOKOROL)
+       ======================================================== */
+    .shokorol-modal {
       position: fixed;
-      bottom: 22px;
-      right: 24px;
-      z-index: 120;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(11, 7, 10, 0.90);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.45s ease, visibility 0.45s ease;
+    }
+
+    .shokorol-modal.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .shokorol-modal-card {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      background: linear-gradient(160deg, rgba(28, 10, 18, 0.96), rgba(50, 10, 24, 0.92));
+      border: 1.5px solid var(--border-pink);
+      border-radius: 26px;
+      padding: 2.4rem 1.75rem 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      pointer-events: none;
-      transform: translateX(150%) translateY(40px);
-      opacity: 0;
-      transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.45s ease;
+      text-align: center;
+      gap: 1.25rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(244, 114, 182, 0.22);
     }
 
-    .fokita-saludo-stage.active {
-      transform: translateX(0) translateY(0);
-      opacity: 1;
-    }
-
-    .saludo-bubble {
-      background: #ffffff;
-      color: #1e1b4b;
-      font-weight: 800;
-      font-size: 0.92rem;
-      padding: 0.55rem 1rem;
-      border-radius: 18px;
-      margin-bottom: 8px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 2px var(--accent-primary);
-      position: relative;
-      transform: scale(0);
-      opacity: 0;
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
-      white-space: nowrap;
-    }
-
-    .saludo-bubble.pop-in {
-      transform: scale(1);
-      opacity: 1;
-    }
-
-    .saludo-bubble::after {
-      content: '';
+    .modal-close-x {
       position: absolute;
-      bottom: -7px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 7px 7px 0;
-      border-style: solid;
-      border-color: #ffffff transparent transparent;
+      top: 14px;
+      right: 14px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(136, 19, 55, 0.45);
+      border: 1px solid var(--border-pink);
+      color: var(--text-main);
+      font-size: 1.05rem;
+      font-weight: 800;
+      padding: 0;
+      cursor: pointer;
+      box-shadow: none;
     }
 
-    .fokita-saludo-img {
-      width: 125px;
-      height: auto;
-      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.6));
+    .modal-close-x:hover {
+      background: var(--accent-crimson);
+      transform: scale(1.08);
     }
 
-    /* Botón discreto en la orilla para volver a disparar el saludo */
-    .replay-saludo-trigger {
+    .fokita-flores-img {
+      width: 175px;
+      height: 175px;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.7));
+      animation: foka-flip 2.8s ease-in-out infinite alternate;
+      user-select: none;
+    }
+
+    /* Detener animación cuando el modal se cierra */
+    .shokorol-modal.hidden .fokita-flores-img {
+      animation-play-state: paused;
+    }
+
+    @keyframes foka-flip {
+      0% { transform: scaleX(1) translateY(0px); }
+      50% { transform: scaleX(1) translateY(-6px); }
+      55% { transform: scaleX(-1) translateY(-6px); }
+      100% { transform: scaleX(-1) translateY(0px); }
+    }
+
+    .shokorol-modal-text {
+      font-size: 1.22rem;
+      font-weight: 800;
+      line-height: 1.4;
+      color: var(--text-main);
+      text-shadow: 0 2px 12px rgba(244, 114, 182, 0.4);
+    }
+
+    .shokorol-enter-btn {
+      width: 100%;
+      max-width: 260px;
+      padding: 0.85rem 1.4rem;
+      font-size: 0.96rem;
+      border-radius: 999px;
+      background: var(--btn-gradient);
+      border: 1px solid var(--accent-pink);
+      box-shadow: 0 0 24px rgba(244, 114, 182, 0.45);
+    }
+
+    /* Botón flotante discreto (🌸) en la esquina inferior derecha para abrir el modal manualmente */
+    .open-flores-trigger {
       position: fixed;
       bottom: 18px;
       right: 18px;
       z-index: 110;
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: rgba(28, 22, 48, 0.85);
-      border: 1px solid var(--border-violet);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-pink);
       color: var(--text-main);
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       padding: 0;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
       cursor: pointer;
     }
 
-    .replay-saludo-trigger:hover {
-      background: var(--accent-primary);
+    .open-flores-trigger:hover {
+      background: var(--btn-gradient);
       transform: scale(1.1);
     }
 
-    /* 3. MASCOTA FIJA: "FOKITA COMPAÑERA" */
+    /* ========================================================
+       7. MASCOTA FIJA: "FOQUITA COMPAÑERA" (ESQUINA INFERIOR IZQ)
+       ======================================================== */
     .fokita-companera-widget {
       position: fixed;
-      bottom: 18px;
-      left: 20px;
+      bottom: 16px;
+      left: 18px;
       z-index: 115;
       display: flex;
       flex-direction: column;
@@ -780,16 +967,16 @@
     }
 
     .companera-bubble {
-      background: linear-gradient(135deg, rgba(30, 24, 54, 0.96), rgba(49, 29, 82, 0.96));
-      border: 1.5px solid var(--accent-hover);
-      color: #fdf4ff;
+      background: linear-gradient(135deg, rgba(28, 10, 18, 0.96), rgba(65, 12, 32, 0.96));
+      border: 1.5px solid var(--accent-pink);
+      color: var(--text-main);
       font-size: 0.84rem;
       font-weight: 700;
-      padding: 0.5rem 0.9rem;
+      padding: 0.48rem 0.9rem;
       border-radius: 16px 16px 16px 4px;
       margin-bottom: 6px;
-      margin-left: 10px;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
+      margin-left: 8px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.65);
       transition: opacity 0.35s ease, transform 0.35s ease;
       position: relative;
     }
@@ -808,9 +995,9 @@
     }
 
     .fokita-companera-img {
-      width: 92px;
+      width: 88px;
       height: auto;
-      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.65));
+      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.7));
       transition: transform 0.2s ease;
     }
 
@@ -841,7 +1028,9 @@
       100% { transform: translateY(-65px) scale(1.25); opacity: 0; }
     }
 
-    /* CAPA DE PARTÍCULAS GLOBALES (BESITOS Y REACCIONES) */
+    /* ========================================================
+       CAPA DE PARTÍCULAS GLOBALES (BESITO Y REACCIONES)
+       ======================================================== */
     .fx-layer {
       position: fixed;
       inset: 0;
@@ -855,7 +1044,7 @@
       bottom: -40px;
       font-size: 1.75rem;
       animation: riseUpScreen 2.5s ease-out forwards;
-      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
     }
 
     @keyframes riseUpScreen {
@@ -878,7 +1067,7 @@
       right: 1.25rem;
       z-index: 300;
       background: var(--bg-elevated);
-      border: 1px solid var(--accent-hover);
+      border: 1px solid var(--accent-pink);
       color: var(--text-main);
       padding: 0.7rem 1.1rem;
       border-radius: 12px;
@@ -888,7 +1077,7 @@
       transform: translateY(-12px);
       transition: all 0.25s ease;
       pointer-events: none;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
     }
 
     .toast.show {
@@ -896,354 +1085,312 @@
       transform: translateY(0);
     }
 
-    @media (max-width: 960px) {
+    /* ========================================================
+       8. DISEÑO RESPONSIVO MÓVIL DE ALTO NIVEL (< 768px)
+       ======================================================== */
+    @media (max-width: 768px) {
+      html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+        background-attachment: scroll;
+      }
+
+      .app-wrapper {
+        width: 100%;
+        max-width: 100%;
+        padding: 0.75rem 0.65rem 5.5rem;
+        gap: 0.85rem;
+        overflow-x: hidden;
+      }
+
       .main-grid {
         grid-template-columns: 1fr;
+        gap: 0.85rem;
+        width: 100%;
       }
-      .chat-card {
-        height: 460px;
+
+      .left-col, .right-col {
+        width: 100%;
+        min-width: 0;
+        gap: 0.85rem;
       }
+
+      .card, header, .room-bar {
+        padding: 0.85rem;
+        border-radius: 16px;
+        width: 100%;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.65rem;
+      }
+
+      .brand-badge {
+        width: 38px;
+        height: 38px;
+        font-size: 1.25rem;
+      }
+
+      .brand-titles h1 {
+        font-size: 1.22rem;
+      }
+
+      .brand-titles p {
+        font-size: 0.72rem;
+      }
+
+      .status-cluster {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0.4rem;
+        font-size: 0.74rem;
+      }
+
+      .pill {
+        padding: 0.36rem 0.7rem;
+      }
+
+      /* Inputs y botones a mínimo 16px para evitar auto-zoom de iOS Safari */
+      input[type="text"],
+      button,
+      .tab-btn,
+      .react-btn {
+        font-size: 16px !important;
+      }
+
+      .room-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+      }
+
+      .room-inputs {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+      }
+
+      .room-inputs input[type="text"] {
+        max-width: 100% !important;
+        width: 100%;
+      }
+
+      .room-inputs button,
+      button.besito-btn {
+        width: 100%;
+        padding: 0.75rem;
+      }
+
+      .search-bar-row {
+        flex-direction: column;
+      }
+
+      .search-bar-row input[type="text"],
+      .search-bar-row button {
+        width: 100%;
+      }
+
+      .tabs-bar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.45rem;
+      }
+
+      .tab-btn {
+        width: 100%;
+        padding: 0.55rem 0.5rem;
+        font-size: 0.82rem !important;
+      }
+
+      .player-wrapper {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 12px;
+      }
+
+      .now-playing-banner {
+        padding: 0.65rem 0.75rem;
+        gap: 0.6rem;
+      }
+
+      .track-title {
+        font-size: 0.86rem;
+      }
+
+      .fav-heart-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 1rem !important;
+      }
+
+      .actions-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+      }
+
+      .transport-btns {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.45rem;
+        width: 100%;
+      }
+
+      .transport-btns button {
+        width: 100%;
+        padding: 0.65rem 0.45rem;
+        font-size: 0.85rem !important;
+      }
+
+      .volume-group {
+        width: 100%;
+        padding: 0.2rem 0;
+      }
+
+      .reactions-strip {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .seal-reactions-group {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.35rem;
+      }
+
+      .react-btn {
+        padding: 0.5rem 0.2rem;
+        text-align: center;
+      }
+
+      /* Redimensionado de Foquitas en móvil para no tapar controles ni teclado */
+      .seal-status-stage {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+      }
+
+      .seal-status-img,
+      #seal-dj-img,
+      #seal-sleep-img {
+        width: 44px;
+        height: 44px;
+      }
+
+      .fokita-companera-widget {
+        bottom: 10px;
+        left: 10px;
+        z-index: 95;
+      }
+
       .fokita-companera-img {
-        width: 74px;
+        width: 46px;
+        height: auto;
+      }
+
+      .companera-bubble {
+        font-size: 0.72rem;
+        padding: 0.32rem 0.65rem;
+        margin-bottom: 4px;
+        margin-left: 4px;
+        max-width: 145px;
+      }
+
+      .open-flores-trigger {
+        width: 38px;
+        height: 38px;
+        bottom: 10px;
+        right: 10px;
+        font-size: 1rem !important;
+      }
+
+      .shokorol-modal-card {
+        padding: 2rem 1.25rem 1.5rem;
+      }
+
+      .fokita-flores-img {
+        width: 135px;
+        height: 135px;
+      }
+
+      .shokorol-modal-text {
+        font-size: 1.05rem;
+      }
+
+      /* Chat y listas con altura cómoda y scroll táctil suave */
+      .chat-card {
+        height: 420px;
+        max-height: 64vh;
+      }
+
+      .search-results, .queue-list, .favorites-list {
+        max-height: 195px;
+      }
+
+      .msg-row {
+        max-width: 88%;
+      }
+
+      .msg-bubble {
+        font-size: 0.9rem;
+        padding: 0.55rem 0.8rem;
+      }
+
+      .toast {
+        left: 0.75rem;
+        right: 0.75rem;
+        top: 0.75rem;
+        text-align: center;
+        font-size: 0.82rem;
       }
     }
-
-    @media (max-width: 768px) {
-  /* 5. Prevención estricta de scroll horizontal y ajuste de fondo en móviles */
-  html, body {
-    overflow-x: hidden;
-    max-width: 100vw;
-    background-attachment: scroll; /* Evita saltos de repintado en navegadores móviles */
-  }
-
-  .app-wrapper {
-    width: 100%;
-    max-width: 100%;
-    padding: 0.75rem 0.65rem 5.5rem;
-    gap: 0.85rem;
-    overflow-x: hidden;
-  }
-
-  /* 1. Layout principal a una sola columna vertical fluida */
-  .main-grid {
-    grid-template-columns: 1fr;
-    gap: 0.85rem;
-    width: 100%;
-  }
-
-  .left-col, .right-col {
-    width: 100%;
-    min-width: 0;
-    gap: 0.85rem;
-  }
-
-  .card, header, .room-bar {
-    padding: 0.85rem;
-    border-radius: 16px;
-    width: 100%;
-  }
-
-  /* Cabecera y píldoras de estado compactas */
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.65rem;
-  }
-
-  .brand-badge {
-    width: 36px;
-    height: 36px;
-    font-size: 1.2rem;
-  }
-
-  .brand-titles h1 {
-    font-size: 1.2rem;
-  }
-
-  .brand-titles p {
-    font-size: 0.72rem;
-  }
-
-  .status-cluster {
-    width: 100%;
-    justify-content: flex-start;
-    gap: 0.4rem;
-    font-size: 0.7rem;
-  }
-
-  .pill {
-    padding: 0.32rem 0.6rem;
-  }
-
-  /* Barra de sala y botón de besito adaptados al pulgar */
-  .room-bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.6rem;
-  }
-
-  .room-inputs {
-    flex-direction: column;
-    width: 100%;
-    gap: 0.5rem;
-  }
-
-  .room-inputs input[type="text"] {
-    max-width: 100% !important;
-    width: 100%;
-    font-size: 16px; /* Evita el auto-zoom forzado en iOS/Android al tocar el input */
-  }
-
-  .room-inputs button,
-  button.besito-btn {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 0.88rem;
-  }
-
-  /* 2. Reproductor de YouTube al 100% de ancho con Aspect Ratio 16:9 */
-  .player-wrapper {
-    width: 100%;
-    padding-top: 56.25%; /* Mantiene relación 16:9 exacta */
-    border-radius: 12px;
-  }
-
-  #yt-player {
-    width: 100%;
-    height: 100%;
-  }
-
-  .autoplay-overlay {
-    padding: 1rem;
-    gap: 0.6rem;
-  }
-
-  .autoplay-overlay p {
-    font-size: 0.8rem !important;
-  }
-
-  /* Controles del reproductor y reacciones cómodos para pantalla táctil */
-  .now-playing-banner {
-    padding: 0.65rem 0.75rem;
-    gap: 0.65rem;
-    margin-top: 0.75rem;
-  }
-
-  .track-title {
-    font-size: 0.86rem;
-  }
-
-  .actions-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.65rem;
-  }
-
-  .transport-btns {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.45rem;
-    width: 100%;
-  }
-
-  .transport-btns button {
-    width: 100%;
-    padding: 0.65rem 0.5rem;
-    font-size: 0.82rem;
-  }
-
-  .volume-group {
-    width: 100%;
-    padding: 0.2rem 0;
-  }
-
-  .reactions-strip {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .seal-reactions-group {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .react-btn {
-    flex: 1;
-    text-align: center;
-    padding: 0.5rem 0.25rem;
-    font-size: 0.95rem;
-  }
-
-  /* Buscador y cola sin desbordamientos */
-  #youtube-input {
-    min-width: 100%;
-    font-size: 16px;
-  }
-
-  .media-item {
-    padding: 0.45rem 0.5rem;
-    gap: 0.5rem;
-  }
-
-  .media-thumb {
-    width: 48px;
-    height: 34px;
-  }
-
-  /* 3. Redimensionado de todas las Foquitas (45px - 50px máx) para no estorbar */
-  .seal-status-stage {
-    width: 52px;
-    height: 52px;
-    border-radius: 12px;
-  }
-
-  .seal-status-img,
-  #seal-dj-img,
-  #seal-sleep-img {
-    width: 45px;
-    height: 45px;
-  }
-
-  .zzz-particle {
-    font-size: 0.6rem;
-  }
-
-  /* Fokita Compañera (Esquina inferior izquierda discreta) */
-  .fokita-companera-widget {
-    bottom: 10px;
-    left: 10px;
-    z-index: 95;
-  }
-
-  .fokita-companera-img {
-    width: 48px;
-    height: auto;
-  }
-
-  .companera-bubble {
-    font-size: 0.72rem;
-    padding: 0.32rem 0.65rem;
-    margin-bottom: 4px;
-    margin-left: 4px;
-    max-width: 145px;
-    white-space: normal;
-  }
-
-  /* Fokita Saludo y botón de repetición (Esquina inferior derecha discreta) */
-  .fokita-saludo-stage {
-    bottom: 12px;
-    right: 12px;
-    z-index: 98;
-  }
-
-  .fokita-saludo-img {
-    width: 50px;
-    height: auto;
-  }
-
-  .saludo-bubble {
-    font-size: 0.74rem;
-    padding: 0.35rem 0.7rem;
-    margin-bottom: 5px;
-  }
-
-  .replay-saludo-trigger {
-    width: 36px;
-    height: 36px;
-    bottom: 10px;
-    right: 10px;
-    font-size: 0.95rem;
-  }
-
-  /* 4. Chat bilateral optimizado para lectura y escritura con el pulgar */
-  .chat-card {
-    height: 400px;
-    max-height: 62vh;
-  }
-
-  .chat-messages {
-    padding: 0.5rem 0.25rem;
-    gap: 0.55rem;
-  }
-
-  .msg-row {
-    max-width: 88%;
-  }
-
-  .msg-bubble {
-    font-size: 0.86rem;
-    padding: 0.55rem 0.8rem;
-    line-height: 1.38;
-  }
-
-  .msg-meta {
-    font-size: 0.65rem;
-  }
-
-  .chat-input-area {
-    gap: 0.4rem;
-    padding-top: 0.6rem;
-  }
-
-  .chat-input-area input[type="text"] {
-    font-size: 16px; /* Evita zoom al abrir el teclado virtual */
-    padding: 0.65rem 0.8rem;
-  }
-
-  .chat-input-area button {
-    padding: 0.65rem 0.95rem;
-    font-size: 0.85rem;
-  }
-
-  .toast {
-    left: 0.75rem;
-    right: 0.75rem;
-    top: 0.75rem;
-    text-align: center;
-    font-size: 0.8rem;
-  }
-}
-
   </style>
 </head>
 <body>
 
-  <!-- Capa global de partículas para lluvias de besitos y reacciones -->
+  <!-- Capa global de partículas para besito, abrasivo y reacciones -->
   <div id="fx-layer" class="fx-layer"></div>
 
-  <!-- 2. ANIMACIÓN DE BIENVENIDA: FOKITA SALUDO -->
-  <div id="fokita-saludo-stage" class="fokita-saludo-stage" aria-hidden="true">
-    <div id="saludo-bubble" class="saludo-bubble">ola shokorolcito</div>
-    <img
-      src="/fokita-saludo.gif"
-      alt="Fokita saludando"
-      class="fokita-saludo-img"
-      onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><text x=%2250%%22 y=%2255%%22 font-size=%2264%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭👋</text></svg>'"
-    />
+  <!-- 3. MODAL DE BIENVENIDA EN PANTALLA COMPLETA (SOLO PARA SHOKOROL O BOTÓN MANUAL) -->
+  <div id="shokorol-modal" class="shokorol-modal hidden" role="dialog" aria-modal="true">
+    <div class="shokorol-modal-card">
+      <button id="close-modal-x" class="modal-close-x" title="Cerrar">✕</button>
+      <img
+        src="/fokita-flores.png"
+        alt="Fokita con flores para Shokorol"
+        class="fokita-flores-img"
+        onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%22160%22><text x=%2250%%22 y=%2255%%22 font-size=%2272%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭💐</text></svg>'"
+      />
+      <p class="shokorol-modal-text">ola shokorol, toma florcitas rikas para ti</p>
+      <button id="enter-nidito-btn" class="shokorol-enter-btn">entrar al nidito 🦭</button>
+    </div>
   </div>
 
-  <!-- Botón flotante discreto para volver a disparar "Fokita Saludo" -->
-  <button id="replay-saludo-btn" class="replay-saludo-trigger" title="Volver a ver a la fokita saludando">
-    🐾
+  <!-- Botón flotante discreto (🌸) para abrir el modal de florcitas cuando se desee -->
+  <button id="open-flores-btn" class="open-flores-trigger" title="Ver fokita con florcitas">
+    🌸
   </button>
 
-  <!-- 3. MASCOTA FIJA: FOKITA COMPAÑERA -->
+  <!-- 7. MASCOTA FIJA: FOQUITA COMPAÑERA -->
   <div id="fokita-companera-widget" class="fokita-companera-widget">
     <div id="companera-bubble" class="companera-bubble">que limnda eres</div>
-    <div id="companera-avatar-box" class="companera-avatar-box" title="Hazme clic para darte amorcito">
+    <div id="companera-avatar-box" class="companera-avatar-box" title="Hazme clic">
       <img
         id="fokita-companera-img"
         src="/fokita-companera.png"
         alt="Fokita compañera"
         class="fokita-companera-img"
-        onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2290%22 height=%2290%22><text x=%2250%%22 y=%2255%%22 font-size=%2254%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭💜</text></svg>'"
+        onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2290%22 height=%2290%22><text x=%2250%%22 y=%2255%%22 font-size=%2252%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭🌸</text></svg>'"
       />
     </div>
   </div>
 
   <div class="app-wrapper">
-    <!-- CABECERA -->
+    <!-- 2. CABECERA CON CONTADOR "🦭 Fokitas en sala: X" -->
     <header>
       <div class="brand">
         <div class="brand-badge">🦭</div>
@@ -1254,70 +1401,106 @@
       </div>
 
       <div class="status-cluster">
-        <div class="pill together-timer" id="together-timer">
-          <span>💜 Juntitos: 00:00:00</span>
-        </div>
         <div class="pill">
           <span class="dot-live"></span>
-          <span id="listener-count">1 en la sala</span>
+          <span id="listener-count">🦭 Fokitas en sala: 1</span>
         </div>
         <div class="pill" id="ping-pill">Ping: -- ms</div>
       </div>
     </header>
 
-    <!-- BARRA DE SALA Y APODO -->
+    <!-- BARRA DE SALA, USUARIO Y BOTÓN PRINCIPAL "besito, abrasivo 🦭" -->
     <section class="room-bar">
       <div class="room-inputs">
-        <input type="text" id="alias-input" placeholder="Tu apodo (ej. Shokorolcito)" maxlength="22" style="max-width: 195px;" />
-        <input type="text" id="room-input" placeholder="Código de sala (ej. SEAL-LOVE)" maxlength="24" style="max-width: 195px;" />
-        <button id="join-btn" class="secondary">Entrar / Cambiar</button>
-        <button id="share-btn" class="secondary">🔗 Copiar Invitación</button>
+        <input type="text" id="alias-input" placeholder="Tu apodo (ej. shokorol)" maxlength="22" style="max-width: 195px;" />
+        <input type="text" id="room-input" placeholder="Sala (ej. SEAL-LOVE)" maxlength="24" style="max-width: 195px;" />
+        <button id="join-btn" class="secondary">Cambiar Sala</button>
+        <button id="share-btn" class="secondary">🔗 Copiar Link</button>
       </div>
-      <button id="enviar-besito-btn" class="besito-btn">
-        💖 Enviar Besito / Abrazo 🦭
-      </button>
+      <button id="enviar-besito-btn" class="besito-btn">besito, abrasivo 🦭</button>
     </section>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- GRID PRINCIPAL -->
     <div class="main-grid">
-      <!-- COLUMNA IZQUIERDA: Reproductor, Fokita DJ/Sleep, Controles, Buscador y Cola -->
+      <!-- COLUMNA IZQUIERDA: 1° Buscador/Cola/Favoritas (Arriba) y 2° Reproductor (Abajo) -->
       <div class="left-col">
+
+        <!-- 4 & 6. BUSCADOR DE VIDEOS ARRIBA + PESTAÑAS DE COLA Y NUESTRAS FAVORITAS 🦭 -->
+        <section class="card">
+          <div class="section-title">
+            <span>🔎 Buscar Canción o Pegar Link de YouTube</span>
+          </div>
+          <div class="search-bar-row">
+            <input type="text" id="youtube-input" placeholder="Busca una canción o pega un link / ID de YouTube..." />
+            <button id="search-btn" class="secondary">Buscar</button>
+            <button id="load-direct-btn">Reproducir Ya</button>
+            <button id="queue-direct-btn" class="secondary">+ A la Cola</button>
+          </div>
+
+          <!-- Resultados desplegables del buscador -->
+          <div id="search-results" class="search-results" style="display: none;"></div>
+
+          <!-- Pestañas: Cola de Reproducción vs Nuestras Favoritas 🦭 -->
+          <div class="tabs-bar">
+            <button id="tab-queue-btn" class="tab-btn active">🎶 Cola (<span id="queue-count-badge">0</span>)</button>
+            <button id="tab-favs-btn" class="tab-btn">💗 Nuestras Favoritas 🦭 (<span id="favs-count-badge">0</span>)</button>
+          </div>
+
+          <!-- Vista 1: Cola en tiempo real -->
+          <div id="queue-panel">
+            <div id="queue-list" class="queue-list">
+              <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 0.75rem 0;">
+                La cola está vacía. Busca o pega una canción arriba para agregarla 🦭
+              </p>
+            </div>
+          </div>
+
+          <!-- Vista 2: Nuestras Favoritas 🦭 (LocalStorage) -->
+          <div id="favorites-panel" style="display: none;">
+            <div id="favorites-list" class="favorites-list"></div>
+          </div>
+        </section>
+
+        <!-- REPRODUCTOR DE VIDEO PRINCIPAL + FOQUITA DJ/MIMIR + 5 REACCIONES -->
         <section class="card">
           <div class="player-wrapper">
             <div id="yt-player"></div>
             <div id="autoplay-overlay" class="autoplay-overlay">
               <div style="font-size: 2.4rem;">🦭🎧</div>
-              <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 340px;">
-                Haz clic para conectar el audio de tu navegador y sincronizarte en tiempo real con tu persona favorita.
+              <p style="color: var(--text-secondary); font-size: 0.92rem; max-width: 340px;">
+                Toca el botón para conectar el audio de tu navegador y escuchar juntitos en sincronía.
               </p>
-              <button id="unlock-audio-btn">Entrar a Seal Void (Activar Audio)</button>
+              <button id="unlock-audio-btn">Conectar Audio al Nidito 🦭</button>
             </div>
           </div>
 
-          <!-- 4. INDICADOR MUSICAL DINÁMICO: FOKITA DJ vs DORMIDA -->
+          <!-- 6 & 7. BARRA DE CANCIÓN ACTUAL + BOTÓN CORAZÓN FAVORITAS + FOKITA DJ/SLEEP -->
           <div class="now-playing-banner">
             <div class="track-meta">
-              <span class="track-badge" id="playback-status-badge">⏸️ En pausa — Fokita mimida</span>
-              <div class="track-title" id="now-playing-title">Lofi Hip Hop Radio - Beats to Relax/Study to</div>
+              <span class="track-badge" id="playback-status-badge">💤 En pausa — Fokita mimida</span>
+              <div class="track-title-row">
+                <div class="track-title" id="now-playing-title">Lofi Hip Hop Radio - Beats to Relax/Study to</div>
+                <button id="fav-current-btn" class="fav-heart-btn" title="Guardar en Nuestras Favoritas 🦭">
+                  ♥
+                </button>
+              </div>
             </div>
 
             <div class="seal-status-stage" title="Estado musical de la foquita">
-              <!-- Fokita DJ (Activa en PLAYING) -->
               <img
                 id="seal-dj-img"
                 src="/fokita-dj.png"
                 alt="Fokita DJ"
                 class="seal-status-img seal-dj-dance"
                 style="display: none;"
-                onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22><text x=%2250%%22 y=%2255%%22 font-size=%2238%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭🎧</text></svg>'"
+                onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><text x=%2250%%22 y=%2255%%22 font-size=%2236%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭🎧</text></svg>'"
               />
-              <!-- Fokita Dormida (Activa en PAUSED / ENDED) -->
               <img
                 id="seal-sleep-img"
                 src="/fokita-sleep.png"
                 alt="Fokita dormida"
                 class="seal-status-img seal-sleep-calm"
-                onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22><text x=%2250%%22 y=%2255%%22 font-size=%2238%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭💤</text></svg>'"
+                onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><text x=%2250%%22 y=%2255%%22 font-size=%2236%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>🦭💤</text></svg>'"
               />
               <div id="zzz-particles" class="zzz-container">
                 <span class="zzz-particle">Z</span>
@@ -1327,7 +1510,7 @@
             </div>
           </div>
 
-          <!-- Controles de transporte -->
+          <!-- Controles de reproducción -->
           <div class="controls-bar">
             <div class="timeline-row">
               <span id="current-time">00:00</span>
@@ -1351,55 +1534,25 @@
             </div>
           </div>
 
-          <!-- 6. BARRA DE REACCIONES DE FOQUITAS -->
+          <!-- 5. BARRA DE 5 REACCIONES EXACTAS -->
           <div class="reactions-strip">
-            <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Reacciones foquita:</span>
+            <span style="font-size: 0.78rem; color: var(--text-secondary); font-weight: 600;">Reacciones:</span>
             <div class="seal-reactions-group">
-              <button class="react-btn" data-emoji="🦭✨">🦭✨</button>
-              <button class="react-btn" data-emoji="🦭💖">🦭💖</button>
-              <button class="react-btn" data-emoji="🦭💤">🦭💤</button>
-              <button class="react-btn" data-emoji="🦭🥺">🦭🥺</button>
-              <button class="react-btn" data-emoji="🦭🎉">🦭🎉</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- BUSCADOR Y CARGA DE MÚSICA + COLA DE REPRODUCCIÓN -->
-        <section class="card">
-          <div class="section-title">
-            <span>🔎 Buscar Canción o Pegar Link de YouTube</span>
-          </div>
-          <div style="display: flex; gap: 0.55rem; flex-wrap: wrap;">
-            <input type="text" id="youtube-input" placeholder="Busca una canción o pega un enlace / ID de YouTube..." style="flex: 1;" />
-            <button id="search-btn" class="secondary">Buscar</button>
-            <button id="load-direct-btn">Reproducir Ya</button>
-            <button id="queue-direct-btn" class="secondary">+ A la Cola</button>
-          </div>
-
-          <!-- Resultados de yt-search -->
-          <div id="search-results" class="search-results" style="display: none;"></div>
-
-          <!-- Cola de reproducción -->
-          <div style="margin-top: 1.1rem;">
-            <div class="section-title">
-              <span>🎶 Cola de Reproducción Sincronizada</span>
-              <span id="queue-count-badge" style="font-size: 0.76rem; color: var(--accent-hover);">0 pistas</span>
-            </div>
-            <div id="queue-list" class="queue-list">
-              <p style="font-size: 0.8rem; color: var(--text-dim); text-align: center; padding: 0.8rem 0;">
-                La cola está vacía. Añade canciones para que suenen una tras otra 💜
-              </p>
+              <button class="react-btn" data-emoji="🦭🔥" title="Fokita con fueguito">🦭🔥</button>
+              <button class="react-btn" data-emoji="🦭❤️" title="Fokita con corazón rojo">🦭❤️</button>
+              <button class="react-btn" data-emoji="🦭✨" title="Fokita con brillos">🦭✨</button>
+              <button class="react-btn" data-emoji="🦭😢" title="Fokita con cara triste">🦭😢</button>
+              <button class="react-btn" data-emoji="🦭😡" title="Fokita con cara enojada">🦭😡</button>
             </div>
           </div>
         </section>
       </div>
 
-      <!-- COLUMNA DERECHA: CHAT BILATERAL -->
+      <!-- COLUMNA DERECHA: CHAT BILATERAL LIMPIO (SIN BOTONES REDUNDANTES EN LA CABECERA) -->
       <div class="right-col">
         <section class="card chat-card">
           <div class="section-title">
             <span>💬 Nuestro Chat en Tiempo Real</span>
-            <button id="chat-besito-shortcut" class="secondary btn-mini" title="Enviar lluvia de besitos">🐾 Besito</button>
           </div>
 
           <div id="chat-messages" class="chat-messages"></div>
@@ -1429,9 +1582,10 @@
     let isPlayerReady = false;
     let audioUnlocked = false;
     let currentRoomId = '';
+    let currentVideoId = 'jfKfPfyJRdk';
+    let currentTrackTitle = 'Lofi Hip Hop Radio - Beats to Relax/Study to';
     let serverClockOffset = 0;
     let isDraggingSeek = false;
-    let sessionStartedAt = Date.now();
 
     // Flags contra bucles infinitos
     let isRemoteAction = false;
@@ -1448,12 +1602,20 @@
     const loadDirectBtn = document.getElementById('load-direct-btn');
     const queueDirectBtn = document.getElementById('queue-direct-btn');
     const searchResultsEl = document.getElementById('search-results');
+
+    // Pestañas Cola y Favoritas
+    const tabQueueBtn = document.getElementById('tab-queue-btn');
+    const tabFavsBtn = document.getElementById('tab-favs-btn');
+    const queuePanel = document.getElementById('queue-panel');
+    const favoritesPanel = document.getElementById('favorites-panel');
     const queueListEl = document.getElementById('queue-list');
+    const favoritesListEl = document.getElementById('favorites-list');
     const queueCountBadge = document.getElementById('queue-count-badge');
+    const favsCountBadge = document.getElementById('favs-count-badge');
+    const favCurrentBtn = document.getElementById('fav-current-btn');
 
     const listenerCountEl = document.getElementById('listener-count');
     const pingPillEl = document.getElementById('ping-pill');
-    const togetherTimerEl = document.getElementById('together-timer');
 
     const seekBar = document.getElementById('seek-bar');
     const currentTimeEl = document.getElementById('current-time');
@@ -1480,53 +1642,169 @@
     const chatForm = document.getElementById('chat-form');
     const chatInput = document.getElementById('chat-input');
     const enviarBesitoBtn = document.getElementById('enviar-besito-btn');
-    const chatBesitoShortcut = document.getElementById('chat-besito-shortcut');
     const fxLayer = document.getElementById('fx-layer');
 
     // =====================================================
-    // 2. SECUENCIA ANIMADA: "FOKITA SALUDO" (5 SEGUNDOS)
+    // 3. MODAL DE BIENVENIDA EN PANTALLA COMPLETA (SHOKOROL)
     // =====================================================
-    const fokitaSaludoStage = document.getElementById('fokita-saludo-stage');
-    const saludoBubble = document.getElementById('saludo-bubble');
-    const replaySaludoBtn = document.getElementById('replay-saludo-btn');
-    let saludoTimeouts = [];
+    const shokorolModal = document.getElementById('shokorol-modal');
+    const closeModalX = document.getElementById('close-modal-x');
+    const enterNiditoBtn = document.getElementById('enter-nidito-btn');
+    const openFloresBtn = document.getElementById('open-flores-btn');
 
-    function triggerFokitaSaludo() {
-      saludoTimeouts.forEach((t) => clearTimeout(t));
-      saludoTimeouts = [];
-
-      saludoBubble.classList.remove('pop-in');
-      fokitaSaludoStage.classList.add('active');
-
-      // 1. Rebote de entrada y aparición del globo "ola shokorolcito"
-      const t1 = setTimeout(() => {
-        saludoBubble.classList.add('pop-in');
-      }, 380);
-
-      // 2. Permanece visible durante 5 segundos exactos y luego se desvanece
-      const t2 = setTimeout(() => {
-        saludoBubble.classList.remove('pop-in');
-      }, 5380);
-
-      const t3 = setTimeout(() => {
-        fokitaSaludoStage.classList.remove('active');
-      }, 5650);
-
-      saludoTimeouts.push(t1, t2, t3);
+    function openShokorolModal() {
+      shokorolModal.classList.remove('hidden');
     }
 
-    replaySaludoBtn.addEventListener('click', () => {
-      triggerFokitaSaludo();
-    });
+    function closeShokorolModal() {
+      shokorolModal.classList.add('hidden');
+    }
+
+    closeModalX.addEventListener('click', closeShokorolModal);
+    enterNiditoBtn.addEventListener('click', closeShokorolModal);
+    openFloresBtn.addEventListener('click', openShokorolModal);
 
     window.addEventListener('DOMContentLoaded', () => {
-      const savedAlias = localStorage.getItem('seal_void_alias');
-      if (savedAlias) aliasInput.value = savedAlias;
-      setTimeout(triggerFokitaSaludo, 500);
+      const params = new URLSearchParams(window.location.search);
+      const urlUser = (params.get('user') || '').trim().toLowerCase();
+      const storedUser = (localStorage.getItem('seal_void_user') || '').trim().toLowerCase();
+      const savedAlias = localStorage.getItem('seal_void_alias') || '';
+
+      if (urlUser === 'shokorol' || storedUser === 'shokorol' || savedAlias.toLowerCase() === 'shokorol') {
+        localStorage.setItem('seal_void_user', 'shokorol');
+        localStorage.setItem('seal_void_alias', 'shokorol');
+        aliasInput.value = 'shokorol';
+        openShokorolModal();
+      } else if (savedAlias) {
+        aliasInput.value = savedAlias;
+      }
+
+      renderFavoritesList();
+      syncFavoriteHeartUI();
     });
 
     // =====================================================
-    // 3. MASCOTA FIJA: "FOKITA COMPAÑERA"
+    // 6. SECCIÓN DINÁMICA DE CANCIONES FAVORITAS (LOCALSTORAGE)
+    // =====================================================
+    const FAVS_STORAGE_KEY = 'seal_void_favorites_v1';
+
+    function getStoredFavorites() {
+      try {
+        const raw = localStorage.getItem(FAVS_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveStoredFavorites(list) {
+      localStorage.setItem(FAVS_STORAGE_KEY, JSON.stringify(list));
+      renderFavoritesList();
+      syncFavoriteHeartUI();
+    }
+
+    function isCurrentTrackFavorited() {
+      const favs = getStoredFavorites();
+      return favs.some((item) => item.videoId === currentVideoId);
+    }
+
+    function syncFavoriteHeartUI() {
+      if (isCurrentTrackFavorited()) {
+        favCurrentBtn.classList.add('is-fav');
+        favCurrentBtn.title = 'Quitar de Nuestras Favoritas 🦭';
+      } else {
+        favCurrentBtn.classList.remove('is-fav');
+        favCurrentBtn.title = 'Guardar en Nuestras Favoritas 🦭';
+      }
+    }
+
+    favCurrentBtn.addEventListener('click', () => {
+      if (!currentVideoId) return;
+      let favs = getStoredFavorites();
+      const exists = favs.some((item) => item.videoId === currentVideoId);
+
+      if (exists) {
+        favs = favs.filter((item) => item.videoId !== currentVideoId);
+        showToast('Eliminada de Nuestras Favoritas 🦭');
+      } else {
+        favs.unshift({
+          videoId: currentVideoId,
+          title: currentTrackTitle || `Pista (${currentVideoId})`,
+          thumbnail: `https://i.ytimg.com/vi/${currentVideoId}/hqdefault.jpg`,
+          savedAt: Date.now()
+        });
+        showToast('Guardada en Nuestras Favoritas 🦭💗');
+      }
+      saveStoredFavorites(favs);
+    });
+
+    function renderFavoritesList() {
+      const favs = getStoredFavorites();
+      favsCountBadge.textContent = String(favs.length);
+      favoritesListEl.innerHTML = '';
+
+      if (!favs.length) {
+        favoritesListEl.innerHTML = `
+          <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 0.75rem 0;">
+            Aún no hay canciones guardadas. Toca el corazón ♥ junto al título de la canción para guardarla aquí.
+          </p>
+        `;
+        return;
+      }
+
+      favs.forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'media-item';
+        row.innerHTML = `
+          <img class="media-thumb" src="${item.thumbnail || `https://i.ytimg.com/vi/${item.videoId}/hqdefault.jpg`}" alt="thumb" />
+          <div class="media-info">
+            <div class="media-title"></div>
+            <div class="media-sub">Guardada en Nuestras Favoritas 🦭</div>
+          </div>
+          <div class="media-actions">
+            <button class="btn-mini play-fav-btn" title="Reproducir en la sala">▶ Sonar</button>
+            <button class="btn-mini secondary remove-fav-btn" title="Eliminar de favoritas">✕</button>
+          </div>
+        `;
+        row.querySelector('.media-title').textContent = item.title;
+
+        row.querySelector('.play-fav-btn').addEventListener('click', () => {
+          socket.emit('change_track', {
+            videoId: item.videoId,
+            title: item.title
+          });
+          showToast(`Reproduciendo favorita: ${item.title} 🦭`);
+        });
+
+        row.querySelector('.remove-fav-btn').addEventListener('click', () => {
+          const updated = getStoredFavorites().filter((f) => f.videoId !== item.videoId);
+          saveStoredFavorites(updated);
+          showToast('Canción quitada de favoritas');
+        });
+
+        favoritesListEl.appendChild(row);
+      });
+    }
+
+    // Alternar entre pestaña de Cola y pestaña de Nuestras Favoritas
+    tabQueueBtn.addEventListener('click', () => {
+      tabQueueBtn.classList.add('active');
+      tabFavsBtn.classList.remove('active');
+      queuePanel.style.display = 'block';
+      favoritesPanel.style.display = 'none';
+    });
+
+    tabFavsBtn.addEventListener('click', () => {
+      tabFavsBtn.classList.add('active');
+      tabQueueBtn.classList.remove('active');
+      favoritesPanel.style.display = 'block';
+      queuePanel.style.display = 'none';
+      renderFavoritesList();
+    });
+
+    // =====================================================
+    // 7. MASCOTA FIJA: "FOQUITA COMPAÑERA"
     // =====================================================
     const companeraPhrases = [
       'que limnda eres',
@@ -1551,23 +1829,21 @@
       }, 320);
     }
 
-    // Cambio automático cada 35 segundos
     setInterval(() => {
       changeCompaneraPhrase(true);
     }, 35000);
 
-    // Clic sobre la Fokita Compañera: rebote alegre + 3 corazoncitos + cambio de frase
     companeraAvatarBox.addEventListener('click', () => {
       companeraImg.classList.remove('companera-bounce');
-      void companeraImg.offsetWidth; // Reflow para reiniciar animación
+      void companeraImg.offsetWidth;
       companeraImg.classList.add('companera-bounce');
 
-      const hearts = ['💜', '💖', '💕'];
+      const hearts = ['❤️', '💗', '🦭'];
       hearts.forEach((h, i) => {
         const span = document.createElement('span');
         span.className = 'companion-heart';
         span.textContent = h;
-        span.style.left = `${18 + i * 24}px`;
+        span.style.left = `${16 + i * 24}px`;
         span.style.top = '8px';
         span.style.animationDelay = `${i * 0.12}s`;
         companeraAvatarBox.appendChild(span);
@@ -1578,7 +1854,7 @@
     });
 
     // =====================================================
-    // 4. INDICADOR DINÁMICO: FOKITA DJ vs FOKITA DORMIDA
+    // 7. INDICADOR DINÁMICO: FOQUITA DJ vs FOQUITA MIMIR
     // =====================================================
     function updateSealMusicStatus(isPlaying) {
       if (isPlaying) {
@@ -1595,28 +1871,16 @@
     }
 
     // =====================================================
-    // 6. CONTADOR DE TIEMPO JUNTOS ("Juntitos: HH:MM:SS")
+    // 5. BOTÓN "besito, abrasivo 🦭" Y 5 REACCIONES EXACTAS
     // =====================================================
-    function updateTogetherClock() {
-      const elapsedSec = Math.max(0, Math.floor((Date.now() - sessionStartedAt) / 1000));
-      const hrs = String(Math.floor(elapsedSec / 3600)).padStart(2, '0');
-      const mins = String(Math.floor((elapsedSec % 3600) / 60)).padStart(2, '0');
-      const secs = String(elapsedSec % 60).padStart(2, '0');
-      togetherTimerEl.innerHTML = `<span>💜 Juntitos: ${hrs}:${mins}:${secs}</span>`;
-    }
-    setInterval(updateTogetherClock, 1000);
-
-    // =====================================================
-    // LLUVIA DE BESITOS Y PARTÍCULAS FLOTANTES
-    // =====================================================
-    function spawnFloatingParticles(symbols, count = 26, durationMs = 2500) {
+    function spawnFloatingParticles(symbols, count = 28, durationMs = 2500) {
       const intervalTime = Math.floor(durationMs / count);
       for (let i = 0; i < count; i++) {
         setTimeout(() => {
           const el = document.createElement('div');
           el.className = 'floating-fx-particle';
           el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-          el.style.left = `${Math.random() * 94 + 2}vw`;
+          el.style.left = `${Math.random() * 92 + 3}vw`;
           el.style.setProperty('--drift-x', `${(Math.random() - 0.5) * 140}px`);
           el.style.setProperty('--rot-deg', `${(Math.random() - 0.5) * 50}deg`);
           el.style.fontSize = `${1.35 + Math.random() * 1.15}rem`;
@@ -1626,18 +1890,15 @@
       }
     }
 
-    function sendBesito() {
+    enviarBesitoBtn.addEventListener('click', () => {
       const senderName = aliasInput.value.trim() || 'Tu foquita';
       localStorage.setItem('seal_void_alias', senderName);
       socket.emit('enviar-besito', { senderName });
-    }
-
-    enviarBesitoBtn.addEventListener('click', sendBesito);
-    chatBesitoShortcut.addEventListener('click', sendBesito);
+    });
 
     socket.on('recibir-besito', ({ senderName }) => {
-      spawnFloatingParticles(['💖', '🦭', '💕', '✨', '💜', '🐾'], 32, 2500);
-      showToast(`💖 ¡${senderName || 'Tu pareja'} te envió una lluvia de besitos y foquitas!`);
+      spawnFloatingParticles(['🦭', '❤️', '🌹', '✨', '🐾', '💗'], 32, 2500);
+      showToast(`🦭 ¡${senderName || 'Tu pareja'} envió un besito, abrasivo!`);
     });
 
     document.querySelectorAll('.react-btn').forEach((btn) => {
@@ -1648,11 +1909,11 @@
     });
 
     socket.on('reaction', ({ emoji }) => {
-      spawnFloatingParticles([emoji, '💜', '🦭'], 10, 1200);
+      spawnFloatingParticles([emoji, '🦭'], 12, 1300);
     });
 
     // =====================================================
-    // 5. CHAT BILATERAL (PROPIOS DERECHA / PAREJA IZQUIERDA)
+    // CHAT BILATERAL EN TIEMPO REAL
     // =====================================================
     function appendChatMessage(msg) {
       const row = document.createElement('div');
@@ -1744,9 +2005,12 @@
     function initRoomFromUrl() {
       const params = new URLSearchParams(window.location.search);
       let room = params.get('room');
+      const userParam = params.get('user');
+
       if (!room) {
         room = 'SEAL-' + Math.random().toString(36).substring(2, 6).toUpperCase();
-        window.history.replaceState({}, '', `?room=${room}`);
+        const newQuery = userParam ? `?room=${room}&user=${encodeURIComponent(userParam)}` : `?room=${room}`;
+        window.history.replaceState({}, '', newQuery);
       }
       currentRoomId = room.toUpperCase();
       roomInput.value = currentRoomId;
@@ -1767,7 +2031,7 @@
       player = new YT.Player('yt-player', {
         height: '100%',
         width: '100%',
-        videoId: 'jfKfPfyJRdk',
+        videoId: currentVideoId,
         playerVars: {
           autoplay: 0,
           controls: 0,
@@ -1803,7 +2067,6 @@
         updateSealMusicStatus(false);
       }
 
-      // Si termina la canción actual, pasar automáticamente a la siguiente de la cola
       if (event.data === YT.PlayerState.ENDED && !isRemoteAction) {
         socket.emit('skip');
         return;
@@ -1819,15 +2082,17 @@
       }
     }
 
-    function applyRoomState(state) {
-      if (state.sessionStartedAt) {
-        sessionStartedAt = state.sessionStartedAt;
-        updateTogetherClock();
+    function setTrackMetadata(videoId, title) {
+      if (videoId) currentVideoId = videoId;
+      if (title) {
+        currentTrackTitle = title;
+        nowPlayingTitle.textContent = title;
       }
+      syncFavoriteHeartUI();
+    }
 
-      if (state.title) {
-        nowPlayingTitle.textContent = state.title;
-      }
+    function applyRoomState(state) {
+      setTrackMetadata(state.videoId, state.title);
 
       if (Array.isArray(state.queue)) {
         renderQueue(state.queue);
@@ -1843,9 +2108,9 @@
       lockRemoteAction(850);
       const targetTime = computeCompensatedTime(state.trackTime, state.serverTimestamp, state.isPlaying);
       const currentVideoUrl = player.getVideoUrl() || '';
-      const currentId = extractYouTubeId(currentVideoUrl);
+      const loadedId = extractYouTubeId(currentVideoUrl);
 
-      if (currentId !== state.videoId) {
+      if (loadedId !== state.videoId) {
         if (state.isPlaying && audioUnlocked) {
           player.loadVideoById({ videoId: state.videoId, startSeconds: targetTime });
         } else {
@@ -1905,7 +2170,7 @@
     });
 
     socket.on('change_track', ({ videoId, title, trackTime, isPlaying, serverTimestamp }) => {
-      if (title) nowPlayingTitle.textContent = title;
+      setTrackMetadata(videoId, title || `YouTube Track (${videoId})`);
       updateSealMusicStatus(Boolean(isPlaying));
       if (!isPlayerReady) return;
       lockRemoteAction(900);
@@ -1928,13 +2193,13 @@
       volumeLabel.textContent = `${volume}%`;
     });
 
-    socket.on('listener_count', ({ count, sessionStartedAt: srvStart }) => {
-      listenerCountEl.textContent = count === 1 ? '1 en la sala' : `${count} en la sala`;
-      if (srvStart) sessionStartedAt = srvStart;
+    // 2. ACTUALIZACIÓN DEL CONTADOR: "🦭 Fokitas en sala: X"
+    socket.on('listener_count', ({ count }) => {
+      listenerCountEl.textContent = `🦭 Fokitas en sala: ${count || 1}`;
     });
 
     // =====================================================
-    // BUSCADOR YT-SEARCH Y GESTIÓN DE LA COLA (QUEUE)
+    // 4. BUSCADOR DE VIDEOS Y GESTIÓN DE LA COLA (ARRIBA)
     // =====================================================
     async function performYouTubeSearch(query) {
       if (!query) return;
@@ -1943,12 +2208,12 @@
         const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
         const data = await res.json();
         if (!res.ok) {
-          showToast(data.error || 'No se pudo buscar');
+          showToast(data.error || 'No se pudo realizar la búsqueda');
           return;
         }
         renderSearchResults(data.results || []);
       } catch (err) {
-        showToast('Error de red al buscar en YouTube');
+        showToast('Error al buscar en YouTube');
       } finally {
         searchBtn.textContent = 'Buscar';
       }
@@ -1982,6 +2247,7 @@
         row.querySelector('.play-now-res').addEventListener('click', () => {
           socket.emit('change_track', { videoId: item.videoId, title: item.title });
           searchResultsEl.style.display = 'none';
+          youtubeInput.value = '';
         });
 
         row.querySelector('.add-q-res').addEventListener('click', () => {
@@ -1993,7 +2259,7 @@
             thumbnail: item.thumbnail,
             addedBy: aliasInput.value.trim() || 'Foquita'
           });
-          showToast('Añadida a la cola 💜');
+          showToast('Añadida a la cola 🦭');
         });
 
         searchResultsEl.appendChild(row);
@@ -2001,13 +2267,13 @@
     }
 
     function renderQueue(queue) {
-      queueCountBadge.textContent = `${queue.length} ${queue.length === 1 ? 'pista' : 'pistas'}`;
+      queueCountBadge.textContent = String(queue.length);
       queueListEl.innerHTML = '';
 
       if (!queue.length) {
         queueListEl.innerHTML = `
-          <p style="font-size: 0.8rem; color: var(--text-dim); text-align: center; padding: 0.8rem 0;">
-            La cola está vacía. Añade canciones para que suenen una tras otra 💜
+          <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 0.75rem 0;">
+            La cola está vacía. Busca o pega una canción arriba para agregarla 🦭
           </p>
         `;
         return;
@@ -2017,18 +2283,18 @@
         const row = document.createElement('div');
         row.className = 'media-item';
         row.innerHTML = `
-          <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted); width: 20px;">#${idx + 1}</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-secondary); width: 22px;">#${idx + 1}</span>
           <img class="media-thumb" src="${item.thumbnail}" alt="thumb" />
           <div class="media-info">
             <div class="media-title"></div>
             <div class="media-sub"></div>
           </div>
           <div class="media-actions">
-            <button class="btn-mini secondary remove-q-btn" title="Quitar">✕</button>
+            <button class="btn-mini secondary remove-q-btn" title="Quitar de la cola">✕</button>
           </div>
         `;
         row.querySelector('.media-title').textContent = item.title;
-        row.querySelector('.media-sub').textContent = `Por: ${item.addedBy || 'Foquita'}`;
+        row.querySelector('.media-sub').textContent = `Añadida por: ${item.addedBy || 'Foquita'}`;
         row.querySelector('.remove-q-btn').addEventListener('click', () => {
           socket.emit('remove-queue', item.id);
         });
@@ -2042,11 +2308,27 @@
       performYouTubeSearch(val);
     });
 
+    youtubeInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const val = youtubeInput.value.trim();
+        if (!val) return;
+        const videoId = extractYouTubeId(val);
+        if (videoId) {
+          socket.emit('change_track', { videoId, title: `Pista de YouTube (${videoId})` });
+          youtubeInput.value = '';
+        } else {
+          performYouTubeSearch(val);
+        }
+      }
+    });
+
     loadDirectBtn.addEventListener('click', () => {
       const val = youtubeInput.value.trim();
+      if (!val) return;
       const videoId = extractYouTubeId(val);
       if (videoId) {
-        socket.emit('change_track', { videoId, title: `YouTube Track (${videoId})` });
+        socket.emit('change_track', { videoId, title: `Pista de YouTube (${videoId})` });
         youtubeInput.value = '';
       } else {
         performYouTubeSearch(val);
@@ -2055,6 +2337,7 @@
 
     queueDirectBtn.addEventListener('click', () => {
       const val = youtubeInput.value.trim();
+      if (!val) return;
       const videoId = extractYouTubeId(val);
       if (!videoId) {
         performYouTubeSearch(val);
@@ -2070,7 +2353,7 @@
     });
 
     // =====================================================
-    // EVENTOS DE BOTONES DE INTERFAZ Y CONTROLES
+    // CONTROLES DE REPRODUCCIÓN Y SALA
     // =====================================================
     unlockAudioBtn.addEventListener('click', () => {
       audioUnlocked = true;
@@ -2083,17 +2366,20 @@
       if (!code) return;
       const alias = aliasInput.value.trim() || 'Foquita';
       localStorage.setItem('seal_void_alias', alias);
+      if (alias.toLowerCase() === 'shokorol') {
+        localStorage.setItem('seal_void_user', 'shokorol');
+      }
       currentRoomId = code;
       window.history.replaceState({}, '', `?room=${currentRoomId}`);
       socket.emit('join_room', { roomId: currentRoomId, alias });
-      triggerFokitaSaludo();
-      showToast(`Conectados en la sala ${currentRoomId} 🦭💜`);
+      showToast(`Conectados en la sala ${currentRoomId} 🦭`);
     });
 
     shareBtn.addEventListener('click', () => {
-      const shareUrl = `${window.location.origin}/?room=${currentRoomId}`;
+      // Genera el link directo con ?user=shokorol para que al abrirlo le salgan sus florcitas
+      const shareUrl = `${window.location.origin}/?room=${currentRoomId}&user=shokorol`;
       navigator.clipboard.writeText(shareUrl).then(() => {
-        showToast('Enlace de nuestra sala copiado al portapapeles 💜');
+        showToast('Link para Shokorol copiado al portapapeles 🦭🌸');
       });
     });
 
@@ -2122,7 +2408,7 @@
     resyncBtn.addEventListener('click', () => {
       calibrateClock();
       socket.emit('sync-state');
-      showToast('Sincronizado al milisegundo con tu pareja 🦭✨');
+      showToast('Sincronizado al milisegundo 🦭✨');
     });
 
     seekBar.addEventListener('input', () => {

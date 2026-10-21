@@ -3,7 +3,7 @@ const http = require('http');
 const path = require('path');
 const { Server } = require('socket.io');
 
-// Carga segura de yt-search (con fallback en caso de que no esté instalado aún)
+// Carga segura de yt-search
 let yts = null;
 try {
   yts = require('yt-search');
@@ -69,7 +69,7 @@ app.get('/api/search', async (req, res) => {
 // ==========================================
 // ESTADO EN MEMORIA DE SALAS (Single Source of Truth)
 // ==========================================
-// roomId -> { videoId, title, isPlaying, trackTime, lastUpdatedAt, volume, queue: [], sessionStartedAt }
+// roomId -> { videoId, title, isPlaying, trackTime, lastUpdatedAt, volume, queue: [], favorites: [], sessionStartedAt }
 const rooms = new Map();
 
 function getEffectiveTrackTime(room) {
@@ -87,6 +87,7 @@ function buildSyncPayload(roomId, room) {
     trackTime: getEffectiveTrackTime(room),
     volume: room.volume,
     queue: room.queue,
+    favorites: room.favorites,
     sessionStartedAt: room.sessionStartedAt,
     serverTimestamp: Date.now()
   };
@@ -132,6 +133,7 @@ io.on('connection', (socket) => {
         lastUpdatedAt: Date.now(),
         volume: 80,
         queue: [],
+        favorites: [],
         sessionStartedAt: Date.now()
       });
     }
@@ -139,11 +141,9 @@ io.on('connection', (socket) => {
     const room = rooms.get(currentRoom);
     const statePayload = buildSyncPayload(currentRoom, room);
 
-    // Emitir tanto 'sync-state' como 'room_state' para compatibilidad total
     socket.emit('sync-state', statePayload);
     socket.emit('room_state', statePayload);
 
-    // Notificar en el chat de la sala
     io.to(currentRoom).emit('chat-message', {
       type: 'system',
       text: `🦭 ${userAlias} entró al nidito (${currentRoom})`,
@@ -153,7 +153,7 @@ io.on('connection', (socket) => {
     updateRoomListeners(currentRoom);
   });
 
-  // 3. Solicitud explícita de sincronización ('sync-state' / 'request_sync')
+  // 3. Solicitud explícita de sincronización
   const handleSyncRequest = () => {
     if (!currentRoom || !rooms.has(currentRoom)) return;
     const room = rooms.get(currentRoom);
@@ -236,7 +236,7 @@ io.on('connection', (socket) => {
 
     io.to(currentRoom).emit('chat-message', {
       type: 'system',
-      text: `🎵 Reproduciendo ahora: ${room.title}`,
+      text: `🎵 Sonando ahora: ${room.title}`,
       timestamp: now
     });
   });
@@ -301,7 +301,6 @@ io.on('connection', (socket) => {
         timestamp: now
       });
     } else {
-      // Si no hay cola, pausamos al final
       room.isPlaying = false;
       room.lastUpdatedAt = now;
       io.to(currentRoom).emit('pause', {
@@ -319,7 +318,15 @@ io.on('connection', (socket) => {
     io.to(currentRoom).emit('queue-updated', { queue: room.queue });
   });
 
-  // 10. VOLUMEN
+  // 10. SINCRONIZACIÓN DE "NUESTRAS FAVORITAS 🦭" ENTRE AMBOS
+  socket.on('sync-favorites', (favList) => {
+    if (!currentRoom || !rooms.has(currentRoom) || !Array.isArray(favList)) return;
+    const room = rooms.get(currentRoom);
+    room.favorites = favList.slice(0, 100);
+    socket.to(currentRoom).emit('favorites-updated', { favorites: room.favorites });
+  });
+
+  // 11. VOLUMEN
   socket.on('change_volume', (data) => {
     if (!currentRoom || !rooms.has(currentRoom)) return;
     const room = rooms.get(currentRoom);
@@ -328,7 +335,7 @@ io.on('connection', (socket) => {
     socket.to(currentRoom).emit('change_volume', { volume: vol });
   });
 
-  // 11. CHAT BILATERAL EN TIEMPO REAL
+  // 12. CHAT BILATERAL EN TIEMPO REAL
   socket.on('chat-message', (data) => {
     if (!currentRoom || !data?.text) return;
     const cleanText = String(data.text).trim().slice(0, 500);
@@ -346,7 +353,7 @@ io.on('connection', (socket) => {
     });
   });
 
-  // 12. BESITO / ABRAZO EN TIEMPO REAL ('enviar-besito')
+  // 13. BOTÓN "besito, abrasivo 🦭" EN TIEMPO REAL
   socket.on('enviar-besito', (data) => {
     if (!currentRoom) return;
     const senderName = data?.senderName || userAlias;
@@ -359,12 +366,12 @@ io.on('connection', (socket) => {
 
     io.to(currentRoom).emit('chat-message', {
       type: 'system',
-      text: `💖 ${senderName} envió una lluvia de besitos y foquitas 🦭✨`,
+      text: `🦭 ${senderName} envió un besito, abrasivo 🌹✨`,
       timestamp: Date.now()
     });
   });
 
-  // 13. BARRA DE REACCIONES DE FOQUITAS EN TIEMPO REAL
+  // 14. BARRA DE 5 REACCIONES DE FOQUITAS EN TIEMPO REAL
   socket.on('reaction', (data) => {
     if (!currentRoom || !data?.emoji) return;
     io.to(currentRoom).emit('reaction', {
@@ -404,5 +411,5 @@ function updateRoomListeners(roomId) {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`🦭 [Seal Void] Servidor íntimo activo en el puerto ${PORT}`);
+  console.log(`🦭 [Seal Void] Servidor activo en el puerto ${PORT}`);
 });
